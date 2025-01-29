@@ -21,3 +21,5 @@ router.get("/lyrics/:wordsInLyrics", getSongsByLyrics);
 
 // Fetch all songs with words in keywords
 router.get("/keywords/:words", getSongsByKeywords);
+
+module.exports = router;
