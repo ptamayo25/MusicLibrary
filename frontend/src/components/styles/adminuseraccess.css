@@ -2,6 +2,9 @@ nav {
   text-align: end;
   padding: 0.5rem 1rem;
 }
+#user-role {
+  padding: 0.25rem;
+}
 .header {
     display: flex;
     justify-content: space-between;
@@ -31,5 +34,4 @@ nav {
     text-decoration: underline;
     text-decoration-thickness: 0.15rem;
     text-underline-offset: 0.5rem;
-  }
-  
+}

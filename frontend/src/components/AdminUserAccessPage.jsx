@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import LogoImage from "../assets/uucnhlogo.png";
 import "./styles/adminuseraccess.css";
 import "./styles/buttons.css";
@@ -8,6 +9,7 @@ import "./styles/buttons.css";
 //TODO - Save button to save and update changes
 
 const AdminUserAccess = () => {
+  const [userAccess, setUserAccess] = useState("");
   const handleLogout = () => {
     console.log("Logging out...");
   };
@@ -16,7 +18,7 @@ const AdminUserAccess = () => {
       <section className="header-container">
         <header className="header">
           <img className="uucnhlogo" src={LogoImage} alt="Logo" />
-          <button className="logout-button" onClick={handleLogout}>
+          <button className="logout-button admin-button" onClick={handleLogout}>
             Logout
           </button>
         </header>
@@ -53,12 +55,25 @@ const AdminUserAccess = () => {
             <div id="email" className="grid-item">
               Dis@emailemailemailemail.com
             </div>
+
             <div id="user-access" className="grid-item">
-              OutOutOut
+              <div className="user-dropdown">
+                <select
+                  id="user-role"
+                  value={userAccess}
+                  onChange={(e) => setUserAccess(e.target.value)}
+                >
+                  <option value="">Select </option>
+                  <option value="admin">Admin</option>
+                  <option value="subadmin">Sub-Admin</option>
+                  <option value="user">User</option>
+                </select>
+              </div>
             </div>
           </div>
         </tbody>
       </section>
+      <button className="save-button admin-button">Save</button>
     </>
   );
 };
