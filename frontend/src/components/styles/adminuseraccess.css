@@ -1,0 +1,37 @@
+nav {
+  text-align: end;
+  padding: 0.5rem 1rem;
+}
+#user-role {
+  padding: 0.25rem;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 5px;
+}
+.heading {
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding-left: 1rem;
+}
+.uunchlogo {
+    left: 0;
+    top: 0;
+}
+.header-container {
+  background-color: rgb(233, 230, 225);
+}
+.useraccess-grid-container {
+    display: grid;
+    grid-template-columns: 2.5fr 2.5fr 4fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+.grid-title {
+    text-decoration: underline;
+    text-decoration-thickness: 0.15rem;
+    text-underline-offset: 0.5rem;
+}

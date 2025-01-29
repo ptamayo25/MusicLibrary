@@ -1,0 +1,24 @@
+.admin-button:hover {
+    box-shadow: 1px 1px 1px #3347ff;
+    font-weight: bold;
+}
+.admin-button:active {
+    opacity: 0.8;
+}
+.logout-button {
+    background-color: #ff4d4d;
+    border: none;
+}
+.logout-button:hover {
+    background-color: #ff3333;
+}
+.logout-button:active {
+    background-color: #ff1a1a;
+}
+.save-button {
+    background-color: #6ca7dd;
+    color: black;
+    border: none;
+    position: fixed;
+    bottom: 2rem;
+}

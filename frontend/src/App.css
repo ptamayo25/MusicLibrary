@@ -1,24 +1,12 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
   text-align: center;
 }
-
-/*User Access Style */
-.useraccess-grid-container {
-  display: grid;
-  grid-template-columns: 2.5fr 2.5fr 4fr 1fr;
-  gap: 1em;
-  margin-top: 1em;
+.left-align {
+  text-align: left;
 }
-.grid-title {
-  text-decoration: underline;
-  text-decoration-thickness: 0.15rem;
-  text-underline-offset: 0.5rem;
-}
-/* User Access Style*/
-
 .logo {
   height: 6em;
   padding: 1.5em;

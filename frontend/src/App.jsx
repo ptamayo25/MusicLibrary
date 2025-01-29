@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      Just going to put some files in here to test. 🧪👋
+      {/* Just going to put some files in here to test. 🧪👋 */}
       <AdminUserAccessPage />
       {/* <div>
         <a href="https://vite.dev" target="_blank">
