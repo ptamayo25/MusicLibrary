@@ -3,7 +3,7 @@
 ## Figma
 https://www.figma.com/design/ERPQiFDJ7deooGsHRjCMZF/Figma-basics?node-id=604-100&m=dev&t=Zv80YP0aGpAsIMxB-1
 
-## Combon
+## Kanban
 https://github.com/users/nkepner/projects/2/views/1
 
 ## Features/Functionality
