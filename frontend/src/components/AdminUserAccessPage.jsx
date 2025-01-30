@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import LogoImage from "../assets/uucnhlogo.png";
 import "./styles/adminuseraccess.css";
 import "./styles/buttons.css";
 
-//TODO - Add function to logout and update link to home page
+//TODO - Add function to logout
+//TODO - Update link to home page
 //TODO - Add function to update user access
-//TODO - Dropdown for user access
 //TODO - Save button to save and update changes
 
 const AdminUserAccess = () => {
