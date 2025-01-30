@@ -1,4 +1,5 @@
 import "./styles/songdetail.css";
+
 const SongDetailsNoLyrics = () => {
   return (
     <>
