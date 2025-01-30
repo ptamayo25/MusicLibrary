@@ -1,5 +1,8 @@
 # Library Management
 
+## Figma
+https://www.figma.com/design/ERPQiFDJ7deooGsHRjCMZF/Figma-basics?node-id=604-100&m=dev&t=Zv80YP0aGpAsIMxB-1
+
 ## Features/Functionality
 
 - CRUD/Methods

@@ -21,3 +21,4 @@ export function useAuthContext() {
   // This hook can be used in any component nested within the AuthProvider to access the authentication data and functions.
   return useContext(AuthContext);
 }
+
