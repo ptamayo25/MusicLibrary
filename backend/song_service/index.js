@@ -2,6 +2,7 @@ require("dotenv").config(); // Load environment variables from .env file
 const mongoose = require("mongoose");
 
 const express = require("express");
+const songRoutes = require("./routes/songRoutes");
 
 const app = express();
 
@@ -9,7 +10,12 @@ app.get("/", (req, res) => {
   res.send("Song Service is running.");
 });
 
+
 const PORT = process.env.PORT;
+
+app.use(express.json());
+// Routes
+app.use("/api/songs", songRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {
