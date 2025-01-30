@@ -13,9 +13,3 @@ const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Auth Service running on port ${PORT}`);
 });
-
-
-
-
-
-
