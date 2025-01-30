@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import LogoImage from "../assets/uucnhlogo.png";
 import "./styles/adminuseraccess.css";
 import "./styles/buttons.css";
 
-//TODO - Add function to logout and update link to home page
+//TODO - Add function to logout
+//TODO - Update link to home page
 //TODO - Add function to update user access
-//TODO - Dropdown for user access
 //TODO - Save button to save and update changes
 
 const AdminUserAccess = () => {
@@ -18,7 +17,7 @@ const AdminUserAccess = () => {
       <section className="header-container">
         <header className="header">
           <img className="uucnhlogo" src={LogoImage} alt="Logo" />
-          <button className="logout-button admin-button" onClick={handleLogout}>
+          <button className="logout-button hover-button" onClick={handleLogout}>
             Logout
           </button>
         </header>
@@ -73,7 +72,7 @@ const AdminUserAccess = () => {
           </div>
         </tbody>
       </section>
-      <button className="save-button admin-button">Save</button>
+      <button className="save-button hover-button">Save</button>
     </>
   );
 };
