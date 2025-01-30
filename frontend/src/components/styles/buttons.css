@@ -1,8 +1,8 @@
-.admin-button:hover {
+.hover-button:hover {
     box-shadow: 1px 1px 1px #3347ff;
     font-weight: bold;
 }
-.admin-button:active {
+.hover-button:active {
     opacity: 0.8;
 }
 .logout-button {
@@ -21,4 +21,19 @@
     border: none;
     position: fixed;
     bottom: 2rem;
+}
+.edit-button {
+    position: absolute;
+    top: 2rem;
+    right: 5rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
 }
