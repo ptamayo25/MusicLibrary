@@ -5,15 +5,16 @@ import AdminUserAccessPage from "../components/AdminUserAccessPage";
 import MusicProgram from "../components/MusicProgram";
 import Login from "../components/Login";
 import AddSongForm from "../components/AddNewSong";
-import Navigation from "../components/Navigation/Navigation";
+// import Navigation from "../components/Navigation/Navigation";
 import ErrorPage from "../components/Errorpage";
+import FoundationLayout from "../components/FoundationLayout";
 
 //TODO We will need to make a protected route for admin access page and music program page
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigation />,
+    element: <FoundationLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
