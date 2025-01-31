@@ -1,5 +1,5 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+// import App from "../App";
 import Homepage from "../components/Homepage";
 import AdminUserAccessPage from "../components/AdminUserAccessPage";
 import MusicProgram from "../components/MusicProgram";
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <App />,
+        element: <Navigate to="/musicLibrary" />,
       },
       {
         path: "musicLibrary",
