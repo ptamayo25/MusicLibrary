@@ -1,6 +1,7 @@
 // Imports
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navigation.module.css";
+import LogoImage from "../../assets/uucnhlogo.png";
 // import { useAuthContext } from "../contexts/AuthContext";
 import { useState } from "react";
 
@@ -45,12 +46,8 @@ function Navigation() {
     <nav className={styles.navigation}>
       {/* Brand/logo container */}
       <div className={styles.navigation__brand}>
-        <img
-          src="../../assets/uucnhlogo.png"
-          alt="UUCNH Logo"
-          key="logoImage"
-        />
-        UUCNH Music Library
+        <img src={LogoImage} alt="UUCNH Logo" key="logoImage" />
+        Music Library
       </div>{" "}
       {/* Button to toggle the mobile menu */}
       <button

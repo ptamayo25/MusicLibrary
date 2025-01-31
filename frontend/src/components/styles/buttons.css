@@ -37,3 +37,13 @@
 .edit-button:hover {
     background-color: #0056b3;
 }
+
+.search-button {
+    background-color: #22b7ad;
+    color: white;
+    border: none;
+    padding: 0rem 0.5rem;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
