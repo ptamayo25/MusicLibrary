@@ -1,8 +1,11 @@
 require("dotenv").config(); // Load environment variables from .env file
 
 const express = require("express");
-
+const cors = require("cors");
 const app = express();
+
+app.use(cors()); //Will need to change this when we add authorization/authentication
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("API Gateway is running.");
@@ -13,14 +16,12 @@ app.listen(PORT, () => {
   console.log(`API Gateway is running on port ${PORT}`);
 });
 
-// const express = require("express"); // Import the Express.js framework for building the API Gateway
-// //const cors = require("cors"); // Middleware to enable Cross-Origin Resource Sharing (CORS)
-// //const bodyParser = require("body-parser"); // Middleware to parse incoming JSON request bodies
-// //const gatewayRoutes = require("./routes/gatewayRoutes"); // Import API Gateway routes
-// //const logger = require("./gatewayLogger/logger"); // Import the custom logger middleware to log requests and responses
-// //const loggerMiddleware = require("./gatewayLogger/logger").middleware;
+//const bodyParser = require("body-parser"); // Middleware to parse incoming JSON request bodies
+//const gatewayRoutes = require("./routes/gatewayRoutes"); // Import API Gateway routes
+//const logger = require("./gatewayLogger/logger"); // Import the custom logger middleware to log requests and responses
+//const loggerMiddleware = require("./gatewayLogger/logger").middleware;
 
-// // Initialize the Express.js application
+// Initialize the Express.js application
 // const app = express();
 
 // // Set the port from environment variables, or use 5000 as a default
