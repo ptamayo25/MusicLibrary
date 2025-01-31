@@ -15,13 +15,9 @@
     "@mui/material": "^6.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-<<<<<<< HEAD
     "react-error-boundary": "^5.0.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.4"
-=======
-    "react-redux": "^9.2.0"
->>>>>>> 394172fc195e061cd3f17a62bf0a2b1db9786fde
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
