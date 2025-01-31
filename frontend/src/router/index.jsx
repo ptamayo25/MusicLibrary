@@ -1,13 +1,15 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 // import App from "../App";
 import Homepage from "../components/Homepage";
-import AdminUserAccessPage from "../components/AdminUserAccessPage";
+import AdminUserAccessPage from "../components/AdminUserAccessPage/AdminUserAccessPage";
 import MusicProgram from "../components/MusicProgram";
 import Login from "../components/Login";
 import AddSongForm from "../components/AddNewSong";
 // import Navigation from "../components/Navigation/Navigation";
 import ErrorPage from "../components/Errorpage";
 import FoundationLayout from "../components/FoundationLayout";
+import SongDetails from "../components/SongDetailsLyrics/SongDetails";
+import Lyrics from "../components/SongDetailsLyrics/Lyrics";
 
 //TODO We will need to make a protected route for admin access page and music program page
 
@@ -26,7 +28,15 @@ export const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
-        path: "userAccess",
+        path: "songDetails",
+        element: <SongDetails />,
+      },
+      {
+        path: "lyrics",
+        element: <Lyrics />,
+      },
+      {
+        path: "adminuserAccess",
         element: (
           // <ProtectedRoute>
           <AdminUserAccessPage />

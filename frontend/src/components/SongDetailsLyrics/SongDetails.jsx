@@ -1,4 +1,4 @@
-import "./styles/songdetail.css";
+import "./SongDetails.css";
 
 const SongDetailsNoLyrics = () => {
   return (
