@@ -1,6 +1,7 @@
-import LogoImage from "../assets/uucnhlogo.png";
-import "./styles/adminuseraccess.css";
-import "./styles/buttons.css";
+import LogoImage from "../../assets/uucnhlogo.png";
+
+import "./AdminUserAccess.css";
+import "../styles/buttons.css";
 import { useState } from "react";
 
 //TODO - Add function to logout
