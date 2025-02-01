@@ -76,3 +76,15 @@
     font: bold 20px 'Roboto', sans-serif;
     margin: 10px;
 }
+
+/* can remove search results styling below once the search results component plugged in. */
+.search-results ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-results li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}

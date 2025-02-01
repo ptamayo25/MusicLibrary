@@ -3,8 +3,12 @@ const mongoose = require("mongoose");
 
 const express = require("express");
 const songRoutes = require("./routes/songRoutes");
+const cors = require("cors"); //can remove once moved over to api gateway
 
 const app = express();
+
+app.use(cors()); //can remove once moved over to api gateway
+app.use(express.json()); //can remove once moved over to api gateway
 
 app.get("/", (req, res) => {
   res.send("Song Service is running.");
