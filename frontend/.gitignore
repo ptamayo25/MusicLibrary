@@ -5,6 +5,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+package-lock.json
 
 # Logs
 logs

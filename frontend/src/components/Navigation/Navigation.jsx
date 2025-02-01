@@ -15,7 +15,7 @@ function Navigation() {
   const navItems = [
     { path: "/musicLibrary", label: "Music Library" }, //links to song library page
     { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page
-    { path: "/userAccess", label: "User Access" }, // links to admin user access page
+    { path: "/adminuserAccess", label: "User Access" }, // links to admin user access page
   ];
 
   // Function to toggle the menu's open/closed state
