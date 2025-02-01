@@ -12,10 +12,12 @@ function Navigation() {
 
   // Define an array of navigation items, each with a path and a label to display
   const navItems = [
-    { path: "/musicLibrary", label: "Music Library" }, //links to song library page
-    { path: "/userAccess", label: "User Access" }, // links to admin user access page
-    { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page
-    { path: "/login", label: "Logout" }, //links to login page
+    { path: "/musicLibrary", label: "Music Library" },
+    { path: "/adminuserAccess", label: "User Access" },
+    { path: "/musicPrograms", label: "Music Programs" },
+    { path: "/login", label: "Logout" },
+    { path: "/songDetails", label: "Song Details No lyrics" },
+    { path: "/lyrics", label: "Song with lyrics" },
   ];
 
   // Function to toggle the menu's open/closed state
