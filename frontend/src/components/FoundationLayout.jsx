@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
-import SearchInput from "./SearchInput";
+import SearchInput from "./SearchInput/SearchInput";
 
 const FoundationLayout = () => {
   return (
