@@ -19,7 +19,7 @@ app.use("/api/songs", songRoutes);
 mongoose
   .connect(process.env.MONGO_URI, {})
   .then(() => {
-    console.log("Blog Service connected to MongoDB");
+    console.log("SONG Service connected to MongoDB");
   })
   .catch((err) => {
     console.error("Database connection error:", err);

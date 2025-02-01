@@ -1,0 +1,78 @@
+.search-bar input {
+    width: 90%;
+    height: 30px;
+    padding: 5px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #22b7ad;
+    border-radius: 4px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 90%;
+    /* border: 2px solid black; */
+    border-radius: 5px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 50%;
+    height: 50px;
+    /* border: 2px solid black; */
+}
+
+.sort-dropdown {
+    width: 50%;
+    height: 50px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    /* border: 2px solid #22b7ad;*/
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.add-song {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 20%;
+    height: 50px;
+    /* border: 2px solid black; */
+}
+
+.theme-tags {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 15%;
+    height: 30px;
+    /* border: 2px solid black; */
+}
+
+.search-input {
+    border: 1px solid #22b7ad;
+    border-radius: 10px;
+    margin: 5px;
+
+}
+
+#theme-header {
+    display: block;
+    justify-content: left;
+    font: bold 20px 'Roboto', sans-serif;
+    margin: 10px;
+}
