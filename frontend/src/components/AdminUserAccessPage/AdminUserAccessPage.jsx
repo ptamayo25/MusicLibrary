@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import "./AdminUserAccess.css";
 import "../styles/buttons.css";
 import { useState } from "react";
+import Alert from "@mui/material/Alert";
+import CheckIcon from "@mui/icons-material/Check";
 
 //TODO - Add function to logout
 //TODO - Update link to home page
@@ -10,10 +12,21 @@ import { useState } from "react";
 //TODO - Save button to save and update changes
 
 const AdminUserAccess = () => {
-  const [userAccess, setUserAccess] = useState("");
+  const [isselectedUser, setIsSelectedUser] = useState(false);
+  // const [isDropdownVisible, setIsDropDownVisible] = useState(false);
+  const [isSuccessNotification, setIsSuccessNotification] = useState(false);
   // const handleLogout = () => {
   //   console.log("Logging out...");
   // };
+
+  const handleSave = () => {
+    setIsSuccessNotification(true);
+
+    setTimeout(() => {
+      setIsSuccessNotification(false);
+    }, 3000);
+  };
+
   return (
     <>
       <section className="header-container">
@@ -43,7 +56,7 @@ const AdminUserAccess = () => {
           </div>
         </thead>
         <tbody>
-          <div className="useraccess-grid-container">
+          <div className="useraccess-grid-container selected-user">
             <div id="first-name" className="grid-item">
               JustJustJustJustJust
             </div>
@@ -54,12 +67,16 @@ const AdminUserAccess = () => {
               Dis@emailemailemailemail.com
             </div>
 
-            <div id="user-access" className="grid-item">
+            <div
+              id="user-access"
+              className="grid-item"
+              onClick={() => setIsSelectedUser(true)}
+            >
               <div className="user-dropdown">
                 <select
                   id="user-role"
-                  value={userAccess}
-                  onChange={(e) => setUserAccess(e.target.value)}
+                  value={isselectedUser}
+                  onChange={(e) => setIsSelectedUser(e.target.value)}
                 >
                   <option value="">Select </option>
                   <option value="admin">Admin</option>
@@ -71,7 +88,14 @@ const AdminUserAccess = () => {
           </div>
         </tbody>
       </section>
-      <button className="save-button hover-button">Save</button>
+      {isSuccessNotification && (
+        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+          User access has been updated successfully!
+        </Alert>
+      )}
+      <button onClick={handleSave} className="save-button hover-button">
+        Save
+      </button>
     </>
   );
 };
