@@ -3,10 +3,10 @@ import { Outlet } from "react-router-dom";
 // import SearchInput from "./SearchInput/SearchInput";
 import SongDetail from "../components/SongDetailsLyrics/SongDetails";
 // import DeleteSongModal from "./DeleteSongModal/DeleteSongModal";
-import { useState } from "react";
+// import { useState } from "react";
 
 const FoundationLayout = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  // const [isOpen, setIsOpen] = useState(true);//used only to test the DeleteSongModal
 
   return (
     <div className="layout">
