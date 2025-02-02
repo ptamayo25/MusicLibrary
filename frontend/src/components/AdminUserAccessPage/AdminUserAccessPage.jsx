@@ -6,22 +6,20 @@ import { useState } from "react";
 import Alert from "@mui/material/Alert";
 import CheckIcon from "@mui/icons-material/Check";
 
-//TODO - Add function to logout
-//TODO - Update link to home page
-//TODO - Add function to update user access
 //TODO - Save button to save and update changes
+//TODO - Need dropdown to save user access
 
 const AdminUserAccess = () => {
-  const [isselectedUser, setIsSelectedUser] = useState(false);
-  // const [isDropdownVisible, setIsDropDownVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState("User"); //Default value for now, need to get user access data from backend
+  const [temporarySelectedUser, setTemporarySelectedUser] =
+    useState(selectedUser);
   const [isSuccessNotification, setIsSuccessNotification] = useState(false);
-  // const handleLogout = () => {
-  //   console.log("Logging out...");
-  // };
+  const [isDropdownVisible, setIsDropDownVisible] = useState(false);
 
   const handleSave = () => {
     setIsSuccessNotification(true);
-
+    setSelectedUser(temporarySelectedUser);
+    localStorage.setItem("userAccess", temporarySelectedUser);
     setTimeout(() => {
       setIsSuccessNotification(false);
     }, 3000);
@@ -70,24 +68,30 @@ const AdminUserAccess = () => {
             <div
               id="user-access"
               className="grid-item"
-              onClick={() => setIsSelectedUser(true)}
+              onClick={() => setIsDropDownVisible(true)}
             >
-              <div className="user-dropdown">
-                <select
-                  id="user-role"
-                  value={isselectedUser}
-                  onChange={(e) => setIsSelectedUser(e.target.value)}
-                >
-                  <option value="">Select </option>
-                  <option value="admin">Admin</option>
-                  <option value="subadmin">Sub-Admin</option>
-                  <option value="user">User</option>
-                </select>
-              </div>
+              {isDropdownVisible ? (
+                <div className="user-dropdown">
+                  <select
+                    id="user-role"
+                    value={temporarySelectedUser}
+                    onChange={(e) => setTemporarySelectedUser(e.target.value)}
+                    onBlur={() => setIsDropDownVisible(false)}
+                    autoFocus
+                  >
+                    <option value="Admin">Admin</option>
+                    <option value="Sub-Admin">Sub-Admin</option>
+                    <option value="User">User</option>
+                  </select>
+                </div>
+              ) : (
+                <span> {temporarySelectedUser} </span>
+              )}
             </div>
           </div>
         </tbody>
       </section>
+
       {isSuccessNotification && (
         <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
           User access has been updated successfully!
