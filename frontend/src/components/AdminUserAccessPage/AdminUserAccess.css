@@ -42,3 +42,15 @@ header {
     text-decoration-thickness: 0.15rem;
     text-underline-offset: 0.5rem;
 }
+.selected-user {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.selected-user:hover {
+  background-color: #efebeb;
+}
+.selected-user:active {
+  background-color: rgb(203, 201, 201);
+}

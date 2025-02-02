@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 // import Navigation from "../components/Navigation/Navigation";
 // import SearchInput from "./SearchInput/SearchInput";
-// import SongDetail from "../components/SongDetailsLyrics/SongDetails";
+import SongDetail from "../components/SongDetailsLyrics/SongDetails";
 // import DeleteSongModal from "./DeleteSongModal/DeleteSongModal";
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ const FoundationLayout = () => {
         setIsOpen={setIsOpen}
       /> */}
 
-      {/* <SongDetail /> */}
+      <SongDetail />
       <Outlet />
 
       {/* <footer>
