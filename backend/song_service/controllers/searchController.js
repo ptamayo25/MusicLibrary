@@ -9,7 +9,6 @@ exports.getSongsBySearch = async (req, res) => {
     const { sortType, words } = req.body;
 
     console.log("request body", req.body);
-    console.log(sortType, words);
 
     if (words === null || !sortType) {
       return res.status(400).json({ message: "Missing search parameters" });
@@ -40,7 +39,7 @@ exports.getSongsBySearch = async (req, res) => {
     ];
 
     if (songs.length === 0) {
-      return res.status(404).json({ message: "No songs found" });
+      return [];
     }
     res.json(sortResults(songs, sortType));
   } catch (error) {
