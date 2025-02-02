@@ -15,7 +15,7 @@ const SongDetailsNoLyrics = () => {
         }
         console.log("Fetching song with ID:", songId);
         const response = fetch(
-          `${import.meta.env.VITE_API_URL}/api/songs/${songId}`,
+          `${import.meta.env.VITE_SONG_SERVICE_URL}/api/songs/${songId}`,
           {
             method: "GET",
             headers: {

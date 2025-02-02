@@ -1,6 +1,6 @@
 nav {
   text-align: end;
-  padding: 0.5rem 1rem;
+  /* padding: 0.5rem 1rem; */
 }
 #user-role {
   padding: 0.25rem;
@@ -17,6 +17,13 @@ header {
     font-weight: 600;
     padding-left: 1rem;
 }
+.links:hover {
+  font-weight: bold;
+}
+.links:active {
+  font-weight: italic;
+}
+
 .uunchlogo {
     left: 0;
     top: 0;

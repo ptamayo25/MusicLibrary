@@ -14,7 +14,7 @@ function Navigation() {
   // Define an array of navigation items, each with a path and a label to display
   const navItems = [
     { path: "/musicLibrary", label: "Music Library" }, //links to song library page
-    { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page
+    // { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page STRETCH GOAL
     { path: "/adminuserAccess", label: "User Access" }, // links to admin user access page
   ];
 

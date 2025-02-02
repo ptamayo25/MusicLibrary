@@ -1,5 +1,5 @@
 import LogoImage from "../../assets/uucnhlogo.png";
-
+import { Link } from "react-router-dom";
 import "./AdminUserAccess.css";
 import "../styles/buttons.css";
 import { useState } from "react";
@@ -11,21 +11,18 @@ import { useState } from "react";
 
 const AdminUserAccess = () => {
   const [userAccess, setUserAccess] = useState("");
-  const handleLogout = () => {
-    console.log("Logging out...");
-  };
+  // const handleLogout = () => {
+  //   console.log("Logging out...");
+  // };
   return (
     <>
       <section className="header-container">
         <header className="header">
           <img className="uucnhlogo" src={LogoImage} alt="Logo" />
-          <button className="logout-button hover-button" onClick={handleLogout}>
-            Logout
-          </button>
+          <Link className="links" to="/">
+            Back to Music Library
+          </Link>
         </header>
-        <nav>
-          <a> Home </a> {/* LINK TO BE UPDATED WHEN CREATED  */}
-        </nav>
       </section>
       <section>
         <h3> UUCNH Music Library User Privilege Update</h3>
