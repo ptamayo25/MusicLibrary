@@ -1,21 +1,21 @@
 // Imports
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navigation.module.css";
-import { useAuthContext } from "../contexts/AuthContext";
+import LogoImage from "../../assets/uucnhlogo.png";
+// import { useAuthContext } from "../contexts/AuthContext";
 import { useState } from "react";
 
 // Define the Navigation functional component
 function Navigation() {
   const navigate = useNavigate(); // useNavigate hook for programmatic navigation within the application
-  const { logout } = useAuthContext(); // Access the logout function from the AuthContext
+  // const { logout } = useAuthContext(); // Access the logout function from the AuthContext
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Use useState to manage whether the navigation menu is open (for mobile view)
 
   // Define an array of navigation items, each with a path and a label to display
   const navItems = [
     { path: "/musicLibrary", label: "Music Library" }, //links to song library page
-    { path: "/userAccess", label: "User Access" }, // links to admin user access page
-    { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page
-    { path: "/login", label: "Logout" }, //links to login page
+    // { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page STRETCH GOAL
+    { path: "/adminuserAccess", label: "User Access" }, // links to admin user access page
   ];
 
   // Function to toggle the menu's open/closed state
@@ -26,7 +26,7 @@ function Navigation() {
   const handleLogout = async () => {
     try {
       console.log("Logging out..."); // Log the logout process
-      await logout(); // Call the logout function from AuthContext
+      // await logout(); // Call the logout function from AuthContext
       console.log("User state cleared successfully."); // Log successful logout
       // Redirect the user to the login page after logout
       navigate("/login");
@@ -46,12 +46,8 @@ function Navigation() {
     <nav className={styles.navigation}>
       {/* Brand/logo container */}
       <div className={styles.navigation__brand}>
-        <img
-          src="../../assets/uucnhlogo.png"
-          alt="UUCNH Logo"
-          key="logoImage"
-        />
-        UUCNH Music Library
+        <img src={LogoImage} alt="UUCNH Logo" key="logoImage" />
+        Music Library
       </div>{" "}
       {/* Button to toggle the mobile menu */}
       <button

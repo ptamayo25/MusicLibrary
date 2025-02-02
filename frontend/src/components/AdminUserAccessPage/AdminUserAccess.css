@@ -1,6 +1,6 @@
 nav {
   text-align: end;
-  padding: 0.5rem 1rem;
+  /* padding: 0.5rem 1rem; */
 }
 #user-role {
   padding: 0.25rem;
@@ -17,6 +17,13 @@ header {
     font-weight: 600;
     padding-left: 1rem;
 }
+.links:hover {
+  font-weight: bold;
+}
+.links:active {
+  font-weight: italic;
+}
+
 .uunchlogo {
     left: 0;
     top: 0;
@@ -34,4 +41,16 @@ header {
     text-decoration: underline;
     text-decoration-thickness: 0.15rem;
     text-underline-offset: 0.5rem;
+}
+.selected-user {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.selected-user:hover {
+  background-color: #efebeb;
+}
+.selected-user:active {
+  background-color: rgb(203, 201, 201);
 }

@@ -3,13 +3,16 @@ const mongoose = require("mongoose");
 
 const express = require("express");
 const songRoutes = require("./routes/songRoutes");
+const cors = require("cors"); //can remove once moved over to api gateway
 
 const app = express();
+
+app.use(cors()); //can remove once moved over to api gateway
+app.use(express.json()); //can remove once moved over to api gateway
 
 app.get("/", (req, res) => {
   res.send("Song Service is running.");
 });
-
 
 const PORT = process.env.PORT;
 
@@ -17,12 +20,10 @@ app.use(express.json());
 // Routes
 app.use("/api/songs", songRoutes);
 
-
 mongoose
-  .connect(process.env.MONGO_URI, {
-  })
+  .connect(process.env.MONGO_URI, {})
   .then(() => {
-    console.log("Blog Service connected to MongoDB");
+    console.log("SONG Service connected to MongoDB");
   })
   .catch((err) => {
     console.error("Database connection error:", err);
@@ -32,4 +33,3 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Song Service running on port ${PORT}`);
 });
-

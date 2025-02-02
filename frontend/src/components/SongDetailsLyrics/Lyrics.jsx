@@ -1,5 +1,5 @@
 import SongDetails from "./SongDetails";
-import "./styles/buttons.css";
+import "../styles/buttons.css";
 
 const Lyrics = ({ lyrics }) => {
   return (
