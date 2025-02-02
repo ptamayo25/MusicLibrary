@@ -3,6 +3,7 @@ import react from "react";
 import { useState } from "react";
 import "../styles/buttons.css";
 import "./searchInput.css";
+import SongList from "../SongList/SongList";
 
 function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,6 +75,8 @@ function SearchInput() {
     console.log("Add Song button clicked");
   };
 
+
+
   return (
     <>
       <div className="search-input">
@@ -137,9 +140,10 @@ function SearchInput() {
       </div>
       {/* display results temporarily as list until search results component done */}
       <br />
-      <div className="search-results">
+      {/* <div className="search-results">
         {searchResults.length > 0 ? (
           <ul>
+            
             {searchResults.map((song, index) => (
               <li key={index}>
                 <strong>{song.title}</strong> by {song.composer}
@@ -149,7 +153,8 @@ function SearchInput() {
         ) : (
           <p>No results found</p>
         )}
-      </div>
+      </div> */}
+      <SongList songs={searchResults} />
     </>
   );
 }
