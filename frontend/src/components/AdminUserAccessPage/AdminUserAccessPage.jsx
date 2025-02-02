@@ -54,44 +54,41 @@ const AdminUserAccess = () => {
           </div>
         </thead>
         <tbody>
-          <div className="useraccess-grid-container selected-user">
-            <div id="first-name" className="grid-item">
-              JustJustJustJustJust
-            </div>
-            <div id="last-name" className="grid-item">
-              TestingTestingTesting
-            </div>
-            <div id="email" className="grid-item">
-              Dis@emailemailemailemail.com
-            </div>
+          <div onClick={() => setIsDropDownVisible(true)}>
+            <div className="useraccess-grid-container selected-user">
+              <div id="first-name" className="grid-item">
+                JustJustJustJustJust
+              </div>
+              <div id="last-name" className="grid-item">
+                TestingTestingTesting
+              </div>
+              <div id="email" className="grid-item">
+                Dis@emailemailemailemail.com
+              </div>
 
-            <div
-              id="user-access"
-              className="grid-item"
-              onClick={() => setIsDropDownVisible(true)}
-            >
-              {isDropdownVisible ? (
-                <div className="user-dropdown">
-                  <select
-                    id="user-role"
-                    value={temporarySelectedUser}
-                    onChange={(e) => setTemporarySelectedUser(e.target.value)}
-                    onBlur={() => setIsDropDownVisible(false)}
-                    autoFocus
-                  >
-                    <option value="Admin">Admin</option>
-                    <option value="Sub-Admin">Sub-Admin</option>
-                    <option value="User">User</option>
-                  </select>
-                </div>
-              ) : (
-                <span> {temporarySelectedUser} </span>
-              )}
+              <div id="user-access" className="grid-item">
+                {isDropdownVisible ? (
+                  <div className="user-dropdown">
+                    <select
+                      id="user-role"
+                      value={temporarySelectedUser}
+                      onChange={(e) => setTemporarySelectedUser(e.target.value)}
+                      onBlur={() => setIsDropDownVisible(false)}
+                      autoFocus
+                    >
+                      <option value="Admin">Admin</option>
+                      <option value="Sub-Admin">Sub-Admin</option>
+                      <option value="User">User</option>
+                    </select>
+                  </div>
+                ) : (
+                  <span> {temporarySelectedUser} </span>
+                )}
+              </div>
             </div>
           </div>
         </tbody>
       </section>
-
       {isSuccessNotification && (
         <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
           User access has been updated successfully!
