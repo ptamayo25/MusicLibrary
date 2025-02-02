@@ -3,17 +3,28 @@ import { Link } from "react-router-dom";
 import "./AdminUserAccess.css";
 import "../styles/buttons.css";
 import { useState } from "react";
+import Alert from "@mui/material/Alert";
+import CheckIcon from "@mui/icons-material/Check";
 
-//TODO - Add function to logout
-//TODO - Update link to home page
-//TODO - Add function to update user access
 //TODO - Save button to save and update changes
+//TODO - Need dropdown to save user access
 
 const AdminUserAccess = () => {
-  const [userAccess, setUserAccess] = useState("");
-  // const handleLogout = () => {
-  //   console.log("Logging out...");
-  // };
+  const [selectedUser, setSelectedUser] = useState("User"); //Default value for now, need to get user access data from backend
+  const [temporarySelectedUser, setTemporarySelectedUser] =
+    useState(selectedUser);
+  const [isSuccessNotification, setIsSuccessNotification] = useState(false);
+  const [isDropdownVisible, setIsDropDownVisible] = useState(false);
+
+  const handleSave = () => {
+    setIsSuccessNotification(true);
+    setSelectedUser(temporarySelectedUser);
+    localStorage.setItem("userAccess", temporarySelectedUser);
+    setTimeout(() => {
+      setIsSuccessNotification(false);
+    }, 3000);
+  };
+
   return (
     <>
       <section className="header-container">
@@ -43,35 +54,49 @@ const AdminUserAccess = () => {
           </div>
         </thead>
         <tbody>
-          <div className="useraccess-grid-container">
-            <div id="first-name" className="grid-item">
-              JustJustJustJustJust
-            </div>
-            <div id="last-name" className="grid-item">
-              TestingTestingTesting
-            </div>
-            <div id="email" className="grid-item">
-              Dis@emailemailemailemail.com
-            </div>
+          <div onClick={() => setIsDropDownVisible(true)}>
+            <div className="useraccess-grid-container selected-user">
+              <div id="first-name" className="grid-item">
+                JustJustJustJustJust
+              </div>
+              <div id="last-name" className="grid-item">
+                TestingTestingTesting
+              </div>
+              <div id="email" className="grid-item">
+                Dis@emailemailemailemail.com
+              </div>
 
-            <div id="user-access" className="grid-item">
-              <div className="user-dropdown">
-                <select
-                  id="user-role"
-                  value={userAccess}
-                  onChange={(e) => setUserAccess(e.target.value)}
-                >
-                  <option value="">Select </option>
-                  <option value="admin">Admin</option>
-                  <option value="subadmin">Sub-Admin</option>
-                  <option value="user">User</option>
-                </select>
+              <div id="user-access" className="grid-item">
+                {isDropdownVisible ? (
+                  <div className="user-dropdown">
+                    <select
+                      id="user-role"
+                      value={temporarySelectedUser}
+                      onChange={(e) => setTemporarySelectedUser(e.target.value)}
+                      onBlur={() => setIsDropDownVisible(false)}
+                      autoFocus
+                    >
+                      <option value="Admin">Admin</option>
+                      <option value="Sub-Admin">Sub-Admin</option>
+                      <option value="User">User</option>
+                    </select>
+                  </div>
+                ) : (
+                  <span> {temporarySelectedUser} </span>
+                )}
               </div>
             </div>
           </div>
         </tbody>
       </section>
-      <button className="save-button hover-button">Save</button>
+      {isSuccessNotification && (
+        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+          User access has been updated successfully!
+        </Alert>
+      )}
+      <button onClick={handleSave} className="save-button hover-button">
+        Save
+      </button>
     </>
   );
 };
