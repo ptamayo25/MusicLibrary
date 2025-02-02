@@ -148,8 +148,8 @@ exports.register = async (req, res) => {
   }
 };
 
-// Handle updating user access level
-exports.updateAccess = async (req, res) => {
+// Handle updating user access level for a single user
+exports.updateAccessOne = async (req, res) => {
   const { email, access } = req.body; // Extract email and access from request
 
   try {
@@ -172,8 +172,36 @@ exports.updateAccess = async (req, res) => {
   }
 };
 
+//Handle updating user access level for multiple users
+exports.updateAccessMany = async (req, res) => {
+  const usersToUpdate = req.body; // Extract users to update from request
+
+  try {
+    const updatedUsers = await Promise.all(
+      usersToUpdate.map(async (user) => {
+        const { email, access } = user;
+        const existingUser = await User.findOne({ email }); // Find the user by email
+        if (!existingUser) {
+          return { email, message: "User not found" }; // Return error if user not found
+        }
+        existingUser.access = access; // Update the user's access level
+        await existingUser.save(); // Save the updated user to the database
+
+        return { email, message: "User access updated successfully" }; // Return success message
+      })
+    );
+
+    res.status(200).json({ updatedUsers }); // Send response with updated users
+  } catch (error) {
+    console.error("Error updating user access:", error);
+    res
+      .status(500)
+      .json({ message: "Error updating user access", error: error.message }); // Return error
+  }
+};
+
 // TODO: Implement user login
 
 // TODO: Implemet user logout
 
-// TODO: Implement delete user
+// TODO: Implement delete One user

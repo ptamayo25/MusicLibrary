@@ -2,7 +2,11 @@
 const express = require("express");
 
 //function imports
-const { register, updateAccess } = require("../controllers/userController");
+const {
+  register,
+  updateAccessOne,
+  updateAccessMany,
+} = require("../controllers/userController");
 
 const router = express.Router();
 
@@ -11,8 +15,9 @@ router.post("/register", register);
 //TODO: implement login
 
 //protected routes
-router.post("/updateAccess", updateAccess);
+router.post("/updateOne", updateAccessOne);
 //TODO: implement delete user
 //TODO: implement logout
+router.post("/updateMany", updateAccessMany);
 
 module.exports = router;
