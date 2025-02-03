@@ -1,5 +1,5 @@
 //write function for search input
-import react from "react";
+// import react from "react";
 import { useState } from "react";
 import "../styles/buttons.css";
 import "./searchInput.css";
@@ -11,25 +11,25 @@ function SearchInput() {
   const [searchResults, setSearchResults] = useState([]);
 
   //faking themes for now
-  const themes = [
-    "Christmas",
-    "Easter",
-    "Pentecost",
-    "Advent",
-    "Lent",
-    "Thanksgiving",
-    "Patriotic",
-    "Wedding",
-    "Funeral",
-    "Baptism",
-    "Communion",
-    "General",
-    "Children",
-    "Youth",
-    "Adult",
-    "Community",
-    "Peace",
-  ];
+  // const themes = [
+  //   "Christmas",
+  //   "Easter",
+  //   "Pentecost",
+  //   "Advent",
+  //   "Lent",
+  //   "Thanksgiving",
+  //   "Patriotic",
+  //   "Wedding",
+  //   "Funeral",
+  //   "Baptism",
+  //   "Communion",
+  //   "General",
+  //   "Children",
+  //   "Youth",
+  //   "Adult",
+  //   "Community",
+  //   "Peace",
+  // ];
 
   const handleSearch = async (event) => {
     if (event) {
@@ -75,8 +75,6 @@ function SearchInput() {
     console.log("Add Song button clicked");
   };
 
-
-
   return (
     <>
       <div className="search-input">
@@ -115,17 +113,18 @@ function SearchInput() {
             </button>
           </div>
         </div>
-        <div classname="theme-tags">
+        <div className="theme-tags">
           {/* checkboxes for themes */}
-          <label id="theme-header" htmlFor="themes">
+          {/* <label id="theme-header" htmlFor="themes">
             Themes:
           </label>
-          <br />
-          {themes.map((theme) => {
+          <br /> */}
+          {/* {themes.map((theme) => {
             const lowerCaseTheme = theme.toLowerCase();
             return (
               <div className="theme-tags">
                 <input
+                  key = {theme}
                   className="theme-checkbox"
                   type="checkbox"
                   id={theme}
@@ -135,7 +134,7 @@ function SearchInput() {
                 <label htmlFor={lowerCaseTheme}>{theme}</label>
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
       {/* display results temporarily as list until search results component done */}
