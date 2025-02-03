@@ -1,6 +1,6 @@
 header {
     display: grid;
-    grid-template-columns: 2fr 1.5fr;
+    /* grid-template-columns: 2fr 1.5fr; */
     margin: 1rem;
 }
 
@@ -8,9 +8,9 @@ span {
     padding-right: 1.25rem;
 }
 
-.song-details-container{
+/* .song-details-container{
     background-color: rgb(225, 230, 228);
-}
+} */
 .title-column {
     display: flex;
     align-items: center;
@@ -27,12 +27,13 @@ span {
 
 .details {
     display: grid;
-    grid-template-columns: 3fr 2fr 2fr;
+    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 3fr 2fr 2fr; */
     gap: 1rem;
-}
-.date-performed {
+} 
+/* .date-performed {
     grid-column: span 2;
-}
+} */
 .lyrics-details-container {
     height: 100vh;
 }
@@ -43,10 +44,30 @@ span {
     font-weight: bold;
     text-align: right;
     padding-right: 1rem;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
 }
 
-.value {
-    text-align: left;
-    font-size: 1.5rem;
+.modal {
+    position: fixed;
+    background: rgb(236, 228, 228 );
+    border: 1px solid #333;
+    z-index: 10000;
+    opacity: 0.98;
+    width: 99%;
+    
+}
+.modal-overlay {
+    /* background: url('../../assets/tengyartunsplash.jpg') center/cover no-repeat; */
+    z-index: 100000;
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #000;
 }
