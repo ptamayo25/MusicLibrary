@@ -1,128 +1,41 @@
+const user = require("../models/user");
 const User = require("../models/user"); // Import the User model
 
-//Fake user data for testing purposes
-const users = [
-  {
-    firstName: "Fake_John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Jane",
-    lastName: "Smith",
-    email: "jane.smith@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_Michael",
-    lastName: "Johnson",
-    email: "michael.johnson@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Emily",
-    lastName: "Davis",
-    email: "emily.davis@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_Daniel",
-    lastName: "Brown",
-    email: "daniel.brown@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Jessica",
-    lastName: "Wilson",
-    email: "jessica.wilson@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_David",
-    lastName: "Martinez",
-    email: "david.martinez@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Sarah",
-    lastName: "Anderson",
-    email: "sarah.anderson@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_James",
-    lastName: "Taylor",
-    email: "james.taylor@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Laura",
-    lastName: "Thomas",
-    email: "laura.thomas@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_Robert",
-    lastName: "Harris",
-    email: "robert.harris@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Megan",
-    lastName: "Clark",
-    email: "megan.clark@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_William",
-    lastName: "Lewis",
-    email: "william.lewis@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Emma",
-    lastName: "Robinson",
-    email: "emma.robinson@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_Alexander",
-    lastName: "Walker",
-    email: "alexander.walker@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Olivia",
-    lastName: "Hall",
-    email: "olivia.hall@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_Ethan",
-    lastName: "Allen",
-    email: "ethan.allen@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Sophia",
-    lastName: "Young",
-    email: "sophia.young@example.com",
-    access: "subadmin",
-  },
-  {
-    firstName: "Fake_Benjamin",
-    lastName: "King",
-    email: "benjamin.king@example.com",
-    access: "user",
-  },
-  {
-    firstName: "Fake_Isabella",
-    lastName: "Wright",
-    email: "isabella.wright@example.com",
-    access: "subadmin",
-  },
-];
+// Handle getting all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await User.find(); // Find all users in the database
+    if (!allUsers || allUsers.length === 0) {
+      return res.status(404).json({ message: "No users found" }); // Return error if no users found
+    }
+    res.status(200).json(allUsers); // Send response with all users
+  } catch (error) {
+    console.error("Error getting all users:", error);
+    res
+      .status(500)
+      .json({ message: "Error getting all users", error: error.message }); // Return error
+  }
+};
+
+// Handle getting a single user by ID
+exports.getUserById = async (req, res) => {
+  const { id } = req.params; // Extract user ID from request
+
+  try {
+    const user = await User.findById(id); // Find the user by ID
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" }); // Return error if user not found
+    }
+
+    res.status(200).json(user); // Send response with user details
+  } catch (error) {
+    console.error("Error getting user by ID:", error);
+    res
+      .status(500)
+      .json({ message: "Error getting user by ID", error: error.message }); // Return error
+  }
+};
 
 // Handle user registration TODO: implement oauth and token generation
 exports.register = async (req, res) => {
@@ -131,7 +44,9 @@ exports.register = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email }); // Check if the user already exists
     if (existingUser) {
-      return res.status(409).json({ message: "User already exists" }); // Return error if user exists
+      return res
+        .status(409)
+        .json({ message: "User already exists. Verify email." }); // Return error if user exists
     }
     const user = new User({ firstName, lastName, email, access }); // Create a new user instance
     await user.save(); // Save the user to the database
@@ -148,6 +63,22 @@ exports.register = async (req, res) => {
   }
 };
 
+// Handle user registration for multiple users (for faking data purposes)
+exports.registerMany = async (req, res) => {
+  try {
+    const newUsers = await User.insertMany(users); // Insert multiple users into the database
+    if (!newUsers) {
+      return res
+        .status(500)
+        .json({ message: "Error registering multiple users" }); // Return error if users not created
+    }
+    res.status(201).json({ message: "Users registered successfully" }); // Send success message
+  } catch (error) {
+    console.error("Error registering multiple users:", error);
+    res.status(500).json({ message: "Error registering multiple users" }); // Return error
+  }
+};
+
 // Handle updating user access level for a single user
 exports.updateAccessOne = async (req, res) => {
   const { email, access } = req.body; // Extract email and access from request
@@ -155,7 +86,9 @@ exports.updateAccessOne = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email }); // Find the user by email
     if (!existingUser) {
-      return res.status(404).json({ message: "User not found" }); // Return error if user not found
+      return res
+        .status(404)
+        .json({ message: "User not found to update access" }); // Return error if user not found
     }
     existingUser.access = access; // Update the user's access level
     await existingUser.save(); // Save the updated user to the database
@@ -182,7 +115,7 @@ exports.updateAccessMany = async (req, res) => {
         const { email, access } = user;
         const existingUser = await User.findOne({ email }); // Find the user by email
         if (!existingUser) {
-          return { email, message: "User not found" }; // Return error if user not found
+          return { email, message: "User not found to update access" }; // Return error if user not found
         }
         existingUser.access = access; // Update the user's access level
         await existingUser.save(); // Save the updated user to the database
@@ -204,4 +137,20 @@ exports.updateAccessMany = async (req, res) => {
 
 // TODO: Implemet user logout
 
-// TODO: Implement delete One user
+// Handle deleting a single user by ID
+exports.deleteOne = async (req, res) => {
+  const { id } = req.params; // Extract user ID from request
+
+  try {
+    const user = await User.findByIdAndDelete(id); // Find and delete the user by ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found to delete" }); // Return error if user not found
+    }
+    res.status(200).json({ message: "User deleted successfully" }); // Send success message
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res
+      .status(500)
+      .json({ message: "Error deleting user", error: error.message }); // Return error
+  }
+};

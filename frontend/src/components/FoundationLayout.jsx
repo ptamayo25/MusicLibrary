@@ -8,17 +8,18 @@ import SongDetail from "../components/SongDetailsLyrics/SongDetails";
 const FoundationLayout = () => {
   // const [isOpen, setIsOpen] = useState(true);//used only to test the DeleteSongModal
 
+const results = { title: "songtitle", _id: "679bb0826750867b7a1d992b" }
   return (
     <div className="layout">
       {/* <Navigation />
 
       <SearchInput /> */}
 
-      {/* <DeleteSongModal
-        song={{ title: "songtitle", _id: "679bb0826750867b7a1d992b" }}
+      <DeleteSongModal
+        song={results}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-      /> */}
+      />
 
       <SongDetail />
       <Outlet />
