@@ -172,6 +172,19 @@ exports.updateAccess = async (req, res) => {
   }
 };
 
+//Handle getting all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error getting all users:", error);
+    res
+      .status(500)
+      .json({ message: "Error getting all users", error: error.message });
+  }
+};
+
 // TODO: Implement user login
 
 // TODO: Implemet user logout
