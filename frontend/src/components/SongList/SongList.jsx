@@ -1,9 +1,19 @@
 import "./SongList.css";
 import React, { useState, useEffect } from 'react';
 
+const handleEditClick = (songId) => {
+    console.log('Edit clicked for song with ID:', songId);
+};
+
+const handleDeleteClick = (songId) => {
+    console.log('Delete clicked for song with ID:', songId);
+};
+
+const handleTitleClick = (songId) => {
+    console.log('Title clicked for song with ID:', songId);
+};
 
 const SongList = ({ songs }) => {
-
     const headers = ['Title', 'Composer', 'Arranger', 'Keywords', 'Last Performed', ' ', ' '];
 
     return (
@@ -21,22 +31,26 @@ const SongList = ({ songs }) => {
                 <tbody>
                     {songs.length > 0 ? (
                         songs.map((song, index) => (
-                            <tr key={index}>
-                                <td>{song.title || 'N/A'}</td>
+                            <tr key={song._id}>
+                            <td>
+                              {/* Apply the underlined class to the title */}
+                              <span className="underlined" onClick={() => handleTitleClick(song._id)}>
+                                {song.title || "N/A"}
+                              </span>
+                            </td>
                                 <td>{song.composer || 'N/A'}</td>
                                 <td>{song.arranger || 'N/A'}</td>
                                 <td>{song.keywords ? song.keywords.join(', ') : 'N/A'}</td>
                                 <td>{song.lastPerformed ? new Date(song.lastPerformed).toLocaleDateString() : 'N/A'}</td>
                                 <td>
-                                    {/* Button inside the table cell */}
-                                    <button onClick={() => handleButtonClick(song.id)}>edit</button>
+                                    {/* Correctly passing song.id */}
+                                    <button onClick={() => handleEditClick(song._id)}>edit</button>
                                 </td>
                                 <td>
-                                    {/* Button inside the table cell */}
-                                    <button onClick={() => handleButtonClick(song.id)}>delete</button>
+                                    {/* Correctly passing song.id */}
+                                    <button onClick={() => handleDeleteClick(song._id)}>delete</button>
                                 </td>
                             </tr>
-
                         ))
                     ) : (
                         <tr>
@@ -45,7 +59,7 @@ const SongList = ({ songs }) => {
                     )}
                 </tbody>
             </table>
-        </div>
+        </div >
     );
 };
 
