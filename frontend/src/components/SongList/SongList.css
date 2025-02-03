@@ -1,0 +1,38 @@
+/* Table.css */
+.table-container {
+    overflow-x: auto; /* Allow horizontal scrolling if the table overflows */
+    padding: 20px;
+  }
+  
+  .table {
+    width: 100%; /* Make the table take up full width of the container */
+    border-collapse: collapse; /* Collapses the table borders */
+  }
+  
+  .table-header {
+    background-color: #22b7ad; /* Light gray background for header */
+    text-align: left; /* Align header text to the left */
+    padding: 10px; /* Add padding for header cells */
+    font-weight: bold;
+    border-bottom: 2px solid rgba(81, 81, 182, 0.5); /* Border to separate header from body */
+  }
+  
+  th, td {
+    text-align: left; 
+    padding: 8px;
+    border: 1px solid rgba(81, 81, 182, 0.2); /* Border for both header and body cells */
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: rgba(81, 81, 182, 0.15); /* Alternate row color for better readability */
+  }
+  
+  tbody tr:hover {
+    background-color: #5e53c6; /* Hover effect on rows */
+  }
+
+  .underlined {
+    text-decoration: underline;
+    cursor: pointer;  /* Optional: adds a pointer cursor to indicate it's clickable */
+    color: rgb(40, 155, 165)
+  }
