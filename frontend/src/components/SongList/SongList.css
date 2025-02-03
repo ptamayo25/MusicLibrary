@@ -30,3 +30,9 @@
   tbody tr:hover {
     background-color: #5e53c6; /* Hover effect on rows */
   }
+
+  .underlined {
+    text-decoration: underline;
+    cursor: pointer;  /* Optional: adds a pointer cursor to indicate it's clickable */
+    color: rgb(40, 155, 165)
+  }
