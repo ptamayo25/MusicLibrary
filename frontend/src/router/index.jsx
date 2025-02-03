@@ -8,7 +8,7 @@ import AddSongForm from "../components/AddNewSong";
 // import Navigation from "../components/Navigation/Navigation";
 import ErrorPage from "../components/Errorpage";
 import FoundationLayout from "../components/FoundationLayout";
-import SongDetails from "../components/SongDetailsLyrics/SongDetails";
+// import SongDetailsNoLyrics from "../components/SongDetailsLyrics/SongDetails";
 import Lyrics from "../components/SongDetailsLyrics/Lyrics";
 
 //TODO We will need to make a protected route for admin access page and music program page
@@ -27,10 +27,10 @@ export const router = createBrowserRouter([
         path: "musicLibrary",
         element: <Homepage />,
       },
-      {
-        path: "songDetails",
-        element: <SongDetails />,
-      },
+      // {
+      //   path: "songDetails",
+      //   element: <SongDetailsNoLyrics />,
+      // },
       {
         path: "lyrics",
         element: <Lyrics />,

@@ -19,11 +19,12 @@ const PORT = process.env.PORT;
 app.use(express.json());
 // Routes
 app.use("/api/songs", songRoutes);
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URI, {})
   .then(() => {
-    console.log("SONG Service connected to MongoDB");
+    console.log("Song Service connected to MongoDB");
   })
   .catch((err) => {
     console.error("Database connection error:", err);
