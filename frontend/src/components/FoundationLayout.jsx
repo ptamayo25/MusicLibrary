@@ -26,7 +26,7 @@ const FoundationLayout = () => {
       <SearchInput /> */}
 
       {/* <DeleteSongModal
-        song={{ title: "songtitle", _id: "679bb0826750867b7a1d992b" }}
+        song={results}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       /> */}
