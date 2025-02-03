@@ -5,12 +5,12 @@ const Lyrics = ({ lyrics }) => {
   return (
     <div>
       <div className="song-details-container lyrics-details-container">
-        <button className="edit-button hover-button">Edit Details</button>
+        {/* <button className="edit-button hover-button">Edit Details</button> */}
         {lyrics ? (
           <div className="lyrics-container">
             <SongDetails />
             <h1 className="lyrics"> Lyrics </h1>
-            <p>{lyrics}</p>
+            {/* <p>{lyrics}</p> */}
           </div>
         ) : (
           <div className="lyrics-container">

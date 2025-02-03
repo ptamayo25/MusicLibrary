@@ -1,45 +1,45 @@
 import "./SongDetails.css";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import { useParams } from "react-router-dom";
 
 const SongDetailsNoLyrics = () => {
-  const { songId } = useParams();
-  const [song, setSong] = useState("");
+  // const { songId } = useParams();
+  // const [song, setSong] = useState("");
 
-  useEffect(() => {
-    const fetchSong = async () => {
-      try {
-        if (!songId) {
-          console.log("Song ID not found.");
-          return;
-        }
-        console.log("Fetching song with ID:", songId);
-        const response = fetch(
-          `${import.meta.env.VITE_SONG_SERVICE_URL}/api/songs/${songId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch song");
-        }
-        const data = await response.json();
-        setSong(data.song);
-      } catch (error) {
-        console.error(error);
-        alert("Failed to fetch song. Please try again.");
-      }
-    };
+  // useEffect(() => {
+  //   const fetchSong = async () => {
+  //     try {
+  //       if (!songId) {
+  //         console.log("Song ID not found.");
+  //         return;
+  //       }
+  //       console.log("Fetching song with ID:", songId);
+  //       const response = fetch(
+  //         `${import.meta.env.VITE_SONG_SERVICE_URL}/api/songs/${songId}`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch song");
+  //       }
+  //       const data = await response.json();
+  //       setSong(data.song);
+  //     } catch (error) {
+  //       console.error(error);
+  //       alert("Failed to fetch song. Please try again.");
+  //     }
+  //   };
 
-    fetchSong();
-  }, [songId]);
+  //   fetchSong();
+  // }, [songId]);
 
-  if (!song) {
-    return;
-  }
+  // if (!song) {
+  //   return;
+  // }
 
   return (
     <>
@@ -48,7 +48,7 @@ const SongDetailsNoLyrics = () => {
           <section className="title-column">
             <p className="title">
               Title
-              {song.title}
+              {/* {song.title} */}
             </p>
           </section>
 
@@ -59,14 +59,14 @@ const SongDetailsNoLyrics = () => {
 
                 <span>
                   Testinggg
-                  {song.composer}
+                  {/* {song.composer} */}
                 </span>
               </p>
               <p className="voicing">
                 <span className="bold">Voicing:</span>
                 <span>
                   SBAT Solo
-                  {song.voicing}
+                  {/* {song.voicing} */}
                 </span>
               </p>
               {/* <p className="music-length">
@@ -78,14 +78,14 @@ const SongDetailsNoLyrics = () => {
                 <span className="bold">Arranger:</span>
                 <span>
                   Testinggggggg
-                  {song.arranger}
+                  {/* {song.arranger} */}
                 </span>
               </p>
               <p className="date-performed">
                 <span className="bold">Date Performed:</span>
                 <span>
                   12/12/1212
-                  {song.lastPerformed}
+                  {/* {song.lastPerformed} */}
                 </span>
               </p>
             </div>
