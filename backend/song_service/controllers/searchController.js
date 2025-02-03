@@ -50,19 +50,19 @@ exports.getSongsBySearch = async (req, res) => {
 
 function sortResults(songs, sortType) {
   switch (sortType) {
-    case "composerAtoZ":
+    case "composerA-Z":
       // Sort by composer A to Z
       return songs.sort((a, b) => a.composer.localeCompare(b.composer, undefined, { sensitivity: 'base' }));
 
-    case "composerZtoA":
+    case "composerZ-A":
       // Sort by composer Z to A
       return songs.sort((a, b) => b.composer.localeCompare(a.composer, undefined, { sensitivity: 'base' }));
 
-    case "titleAtoZ":
+    case "titleA-Z":
       // Sort by title A to Z
       return songs.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
 
-    case "titleZtoA":
+    case "titleZ-A":
       // Sort by title Z to A
       return songs.sort((a, b) => b.title.localeCompare(a.title, undefined, { sensitivity: 'base' }));
 
