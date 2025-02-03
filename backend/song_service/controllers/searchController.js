@@ -46,8 +46,37 @@ exports.getSongsBySearch = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+ 
 
 function sortResults(songs, sortType) {
-  // TODO write sorting algorithm
-  return songs;
+  switch (sortType) {
+    case "composerAtoZ":
+      // Sort by composer A to Z
+      return songs.sort((a, b) => a.composer.localeCompare(b.composer, undefined, { sensitivity: 'base' }));
+
+    case "composerZtoA":
+      // Sort by composer Z to A
+      return songs.sort((a, b) => b.composer.localeCompare(a.composer, undefined, { sensitivity: 'base' }));
+
+    case "titleAtoZ":
+      // Sort by title A to Z
+      return songs.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+
+    case "titleZtoA":
+      // Sort by title Z to A
+      return songs.sort((a, b) => b.title.localeCompare(a.title, undefined, { sensitivity: 'base' }));
+
+    case "mostRecent":
+      // Sort by most to least recent performance (descending order)
+      return songs.sort((a, b) => new Date(b.datePerformed) - new Date(a.datePerformed));
+
+    case "leastRecent":
+      // Sort by least to most recent performance (ascending order)
+      return songs.sort((a, b) => new Date(a.datePerformed) - new Date(b.datePerformed));
+
+    default:
+      // Return unsorted songs if the sortType is not recognized
+      return songs;
+  }
 }
+
