@@ -49,19 +49,45 @@ const AdminUserAccess = () => {
     setIsDropDownVisible(true);
   };
 
-  const handleSave = () => {
-    setIsSuccessNotification(true);
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user._id === selectedUserId
-          ? { ...user, access: temporarySelectedUser }
-          : user
-      )
-    );
-    setSelectedUserId(null);
-    setTimeout(() => {
-      setIsSuccessNotification(false);
-    }, 3000);
+  const handleSave = async () => {
+    try {
+      const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL;
+
+      if (!authUrl) {
+        console.log("URL not found.");
+        return;
+      }
+
+      const response = await fetch(`${authUrl}/api/users/updateOne`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: users.find((user) => user._id === selectedUserId).email,
+          access: temporarySelectedUser,
+        }),
+      });
+
+      if (response.ok) {
+        setIsSuccessNotification(true);
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === selectedUserId
+              ? { ...user, access: temporarySelectedUser }
+              : user
+          )
+        );
+        setSelectedUserId(null);
+        setTimeout(() => {
+          setIsSuccessNotification(false);
+        }, 3000);
+      } else {
+        console.error("Failed to update user access");
+      }
+    } catch (error) {
+      console.error("Error updating user access:", error);
+    }
   };
 
   return (
