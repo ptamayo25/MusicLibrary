@@ -7,6 +7,7 @@ const { getSongsBySearch } = require("../controllers/searchController");
 //Import CRTUD functions from songController
 const {
   createSong,
+  createManySongs,
   getSongs,
   getSongById,
   updateSong,
@@ -15,6 +16,7 @@ const {
 
 // Correct: Define a POST route for /song
 router.post("/", createSong);
+router.post("/bulkadd", createManySongs);
 router.get("/", getSongs);
 router.get("/:id", getSongById);
 router.patch("/:id", updateSong);
