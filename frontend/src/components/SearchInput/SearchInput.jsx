@@ -1,6 +1,6 @@
 //write function for search input
 // import react from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/buttons.css";
 import "./searchInput.css";
 import SongList from "../SongList/SongList";
@@ -8,34 +8,58 @@ import SongList from "../SongList/SongList";
 function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortType, setSortType] = useState("default");
-  const [themeTags, setThemeTags] = useState([]);
+  const [themeSelected, setThemeSelected] = useState([]);
+  const [themesDisplayed, setThemesDisplayed] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
+  useEffect(() => {
+    const handleOnLoad = async () => {
+      try {
+        //Grab themes from backend
+        const apiUrl = import.meta.env.VITE_SONG_SERVICE_URL;
+        const response = await fetch(`${apiUrl}/api/songs/themes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+        console.log("response", response);
+        if (!response.ok) {
+          console.error("Failed to fetch themes");
+        }
+        const data = await response.json();
+        console.log("data", data);
 
-  //Grab themes from backend
-  
+        const themes = data.uniqueThemes;
+        console.log("themes", themes);
+        setThemesDisplayed(themes);
+      } catch (error) {
+        console.error("Error fetching themes", error);
+      }
+    };
+    handleOnLoad();
+  }, []);
 
+  // handleOnLoad();
 
   // faking themes for now
-  const themesDisplayed = [
-    "Christmas",
-    "Easter",
-    "Pentecost",
-    "Advent",
-    "Lent",
-    "Thanksgiving",
-    "Patriotic",
-    "Wedding",
-    "Funeral",
-    "Baptism",
-    "Communion",
-    "General",
-    "Children",
-    "Youth",
-    "Adult",
-    "Community",
-    "Peace",
-  ];
+  // const themesDisplayed = [
+  //   "Christmas",
+  //   "Easter",
+  //   "Pentecost",
+  //   "Advent",
+  //   "Lent",
+  //   "Thanksgiving",
+  //   "Patriotic",
+  //   "Wedding",
+  //   "Funeral",
+  //   "Baptism",
+  //   "Communion",
+  //   "General",
+  //   "Children",
+  //   "Youth",
+  //   "Adult",
+  //   "Community",
+  //   "Peace",
+  // ];
 
   const handleSearch = async (event) => {
     if (event) {
@@ -54,7 +78,7 @@ function SearchInput() {
         body: JSON.stringify({
           words: searchTerm,
           sortType,
-          themes: themeTags,
+          themes: themeSelected,
         }),
       });
 
@@ -85,7 +109,16 @@ function SearchInput() {
     console.log("Add Song button clicked");
   };
 
-  const handleThemeChange = () => {};
+  const handleThemeChange = (event) => {
+    const { value, checked } = event.target;
+    setThemeSelected((prevThemes) => {
+      if (checked) {
+        return [...prevThemes, value];
+      } else {
+        return prevThemes.filter((theme) => theme !== value);
+      }
+    });
+  };
 
   return (
     <>
@@ -132,20 +165,25 @@ function SearchInput() {
           </label>
           <br />
           {themesDisplayed.map((theme) => {
-            const lowerCaseTheme = theme.toLowerCase();
-            return (
-              <div className="theme-tags">
-                <input
-                  key={theme}
-                  className="theme-checkbox"
-                  type="checkbox"
-                  id={theme}
-                  name={theme}
-                  value={theme}
-                />
-                <label htmlFor={lowerCaseTheme}>{theme}</label>
-              </div>
-            );
+            if (theme !== null) {
+              const lowerCaseTheme = theme.toLowerCase();
+              const themeProperCased =
+                theme.charAt(0).toUpperCase() + theme.slice(1);
+              return (
+                <div className="theme-tags">
+                  <input
+                    key={theme}
+                    className="theme-checkbox"
+                    type="checkbox"
+                    id={theme}
+                    name={theme}
+                    value={theme}
+                    onChange={handleThemeChange}
+                  />
+                  <label htmlFor={lowerCaseTheme}>{themeProperCased}</label>
+                </div>
+              );
+            }
           })}
         </div>
       </div>
