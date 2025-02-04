@@ -1,5 +1,4 @@
 //write function for search input
-import react from "react";
 import { useState } from "react";
 import "../styles/buttons.css";
 import "./searchInput.css";
