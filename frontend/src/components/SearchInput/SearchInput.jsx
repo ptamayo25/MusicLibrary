@@ -18,23 +18,46 @@ function SearchInput() {
       try {
         //Grab themes from backend
         const apiUrl = import.meta.env.VITE_SONG_SERVICE_URL;
-        const response = await fetch(`${apiUrl}/api/songs/themes`, {
+        const themesResponse = await fetch(`${apiUrl}/api/songs/themes`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
         });
-        console.log("response", response);
-        if (!response.ok) {
+        console.log("response", themesResponse);
+        if (!themesResponse.ok) {
           console.error("Failed to fetch themes");
         }
-        const data = await response.json();
+        const data = await themesResponse.json();
 
         const themes = data.uniqueThemes.filter((theme) => theme !== null);
 
         setThemesDisplayed(themes);
+
+        //Do pull for all songs on load
+
+        const songsResponse = await fetch(`${apiUrl}/api/songs/search`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            words: searchTerm,
+            sortType,
+            themes: themeSelected,
+          }),
+        });
+
+        if (songsResponse.ok) {
+          const data = await songsResponse.json();
+          if (data.length === 0) {
+            console.log("No results found");
+          }
+          setSearchResults(data);
+        } else {
+          console.error("Failed to fetch songs");
+        }
       } catch (error) {
         console.error("Error fetching themes", error);
       }
     };
+
     handleOnLoad();
   }, []);
 
@@ -84,6 +107,9 @@ function SearchInput() {
 
       if (response.ok) {
         const data = await response.json();
+        if (data.length === 0) {
+          console.log("No results found");
+        }
         setSearchResults(data);
       } else {
         console.error("Failed to fetch data");

@@ -72,9 +72,14 @@ exports.getSongsBySearch = async (req, res) => {
       ...songsByKeywords,
     ];
 
+    console.log("Song matches found: ", songs);
+
     if (songs.length === 0) {
       return songs; //return empty array if no songs found
     }
+
+    console.log("Song matches found: ", songs);
+
     return res.json(sortResults(songs, sortType));
   } catch (error) {
     return res.status(500).json({ message: error.message });
