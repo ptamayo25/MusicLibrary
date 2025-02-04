@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 // import Navigation from "../components/Navigation/Navigation";
 // import SearchInput from "./SearchInput/SearchInput";
-import SongDetailsNoLyrics from "../components/SongDetailsLyrics/SongDetails";
+// import SongDetailsNoLyrics from "../components/SongDetailsLyrics/SongDetails";
 // import DeleteSongModal from "./DeleteSongModal/DeleteSongModal";
 // import { useState } from "react";
 
@@ -31,7 +31,7 @@ const FoundationLayout = () => {
         setIsOpen={setIsOpen}
       /> */}
 
-      <SongDetailsNoLyrics song={result} />
+      {/* <SongDetailsNoLyrics song={result} /> */}
       <Outlet />
 
       {/* <footer>

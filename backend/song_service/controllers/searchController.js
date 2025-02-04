@@ -7,7 +7,7 @@ const Song = require("../models/song"); //update if Nancy changes name of schema
 exports.getSongsBySearch = async (req, res) => {
   try {
     const { sortType, words } = req.body;
-
+    console.log("Received sortType:", sortType);
     console.log("request body", req.body);
 
     if (words === null || !sortType) {
@@ -22,7 +22,7 @@ exports.getSongsBySearch = async (req, res) => {
     const songsByTitle = await Song.find({
       title: { $regex: words.trim(), $options: "i" },
     }).exec();
-    const songByComposer = await Song.find({
+    const songsByComposer = await Song.find({
       composer: { $regex: words.trim(), $options: "i" },
     }).exec();
     const songsByLyrics = await Song.find({
@@ -33,7 +33,7 @@ exports.getSongsBySearch = async (req, res) => {
     }).exec();
     const songs = [
       ...songsByTitle,
-      ...songByComposer,
+      ...songsByComposer,
       ...songsByLyrics,
       ...songsByKeywords,
     ];
@@ -41,41 +41,61 @@ exports.getSongsBySearch = async (req, res) => {
     if (songs.length === 0) {
       return [];
     }
+    console.log(`sortType = ${sortType}`);
     res.json(sortResults(songs, sortType));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
- 
+
 
 function sortResults(songs, sortType) {
   switch (sortType) {
-    case "composerAtoZ":
-      // Sort by composer A to Z
-      return songs.sort((a, b) => a.composer.localeCompare(b.composer, undefined, { sensitivity: 'base' }));
+    case "composerA-Z":
+      console.log("composerA-Z")
+      return songs.sort((a, b) => {
+        if (a.composer === "N/A") return 1;
+        if (b.composer === "N/A") return -1;
+        return a.composer.localeCompare(b.composer, undefined, { sensitivity: 'base' });
+      });
 
-    case "composerZtoA":
-      // Sort by composer Z to A
-      return songs.sort((a, b) => b.composer.localeCompare(a.composer, undefined, { sensitivity: 'base' }));
+    case "composerZ-A":
+      return songs.sort((a, b) => {
+        if (a.composer === "N/A") return 1;
+        if (b.composer === "N/A") return -1;
+        return b.composer.localeCompare(a.composer, undefined, { sensitivity: 'base' });
+      });
 
-    case "titleAtoZ":
-      // Sort by title A to Z
-      return songs.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+    case "titleA-Z":
+      return songs.sort((a, b) => {
+        if (a.title === "N/A") return 1;
+        if (b.title === "N/A") return -1;
+        console.log("titleA-Z")
+        return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+      });
 
-    case "titleZtoA":
-      // Sort by title Z to A
-      return songs.sort((a, b) => b.title.localeCompare(a.title, undefined, { sensitivity: 'base' }));
+    case "titleZ-A":
+      return songs.sort((a, b) => {
+        if (a.title === "N/A") return 1;
+        if (b.title === "N/A") return -1;
+        return b.title.localeCompare(a.title, undefined, { sensitivity: 'base' });
+      });
 
     case "mostRecent":
-      // Sort by most to least recent performance (descending order)
-      return songs.sort((a, b) => new Date(b.datePerformed) - new Date(a.datePerformed));
+      return songs.sort((a, b) => {
+        if (!a.lastPerformed) return 1;
+        if (!b.lastPerformed) return -1;
+        return new Date(b.lastPerformed) - new Date(a.lastPerformed);
+      });
 
-    case "leastRecent":
-      // Sort by least to most recent performance (ascending order)
-      return songs.sort((a, b) => new Date(a.datePerformed) - new Date(b.datePerformed));
+      case "leastRecent":
+        return songs.sort((a, b) => {
+          if (!a.lastPerformed) return 1;
+          if (!b.lastPerformed) return -1;
+          return new Date(a.lastPerformed) - new Date(b.lastPerformed);
+        });
 
     default:
-      // Return unsorted songs if the sortType is not recognized
       return songs;
   }
 }
