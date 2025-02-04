@@ -1,0 +1,134 @@
+.form-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  color: rgb(0, 0, 0)
+}
+
+/* Form Layout - Flexbox */
+.form-layout {
+  display: flex;
+  gap: 20px;
+}
+
+/* Left Side - Standard Inputs */
+.form-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Right Side - Lyrics Section */
+.form-right {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-right textarea {
+  height: 100%;
+  min-height: 300px; /* Adjust for larger text input */
+  width: 100%;
+  resize: vertical;
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* General Styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+input,
+textarea {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Submit Button */
+.submit-button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background: #0056b3;
+}
+
+
+/* Keywords Input */
+.keyword-input {
+  display: flex;
+  gap: 10px;
+}
+
+.keyword-input input {
+  flex: 1;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.keyword-input button {
+  padding: 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.keyword-input button:hover {
+  background: #0056b3;
+}
+
+/* Display Added Keywords */
+.keyword-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.keyword {
+  background: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.keyword button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 14px;
+  margin-left: 5px;
+  cursor: pointer;
+}
