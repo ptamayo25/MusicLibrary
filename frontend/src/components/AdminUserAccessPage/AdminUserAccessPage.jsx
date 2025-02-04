@@ -102,6 +102,15 @@ const AdminUserAccess = () => {
       </section>
       <section>
         <h3> UUCNH Music Library User Privilege Update</h3>
+
+        <div className="success-notification">
+          {isSuccessNotification && (
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+              User access has been updated successfully!
+            </Alert>
+          )}
+        </div>
+
         <div className="useraccess-grid-container">
           <div className="grid-title grid-item">First Name</div>
           <div className="grid-title grid-item">Last Name</div>
@@ -139,11 +148,6 @@ const AdminUserAccess = () => {
           </div>
         ))}
       </section>
-      {isSuccessNotification && (
-        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-          User access has been updated successfully!
-        </Alert>
-      )}
       <button onClick={handleSave} className="save-button hover-button">
         Save
       </button>

@@ -42,6 +42,12 @@ header {
     text-decoration-thickness: 0.15rem;
     text-underline-offset: 0.5rem;
 }
+.success-notification {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  
+}
 .selected-user {
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
