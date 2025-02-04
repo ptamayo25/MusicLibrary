@@ -11,6 +11,7 @@ function SearchInput() {
   const [themeSelected, setThemeSelected] = useState([]);
   const [themesDisplayed, setThemesDisplayed] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
 
   useEffect(() => {
     const handleOnLoad = async () => {
@@ -26,10 +27,9 @@ function SearchInput() {
           console.error("Failed to fetch themes");
         }
         const data = await response.json();
-        console.log("data", data);
 
-        const themes = data.uniqueThemes;
-        console.log("themes", themes);
+        const themes = data.uniqueThemes.filter((theme) => theme !== null);
+
         setThemesDisplayed(themes);
       } catch (error) {
         console.error("Error fetching themes", error);
@@ -165,25 +165,23 @@ function SearchInput() {
           </label>
           <br />
           {themesDisplayed.map((theme) => {
-            if (theme !== null) {
-              const lowerCaseTheme = theme.toLowerCase();
-              const themeProperCased =
-                theme.charAt(0).toUpperCase() + theme.slice(1);
-              return (
-                <div className="theme-tags">
-                  <input
-                    key={theme}
-                    className="theme-checkbox"
-                    type="checkbox"
-                    id={theme}
-                    name={theme}
-                    value={theme}
-                    onChange={handleThemeChange}
-                  />
-                  <label htmlFor={lowerCaseTheme}>{themeProperCased}</label>
-                </div>
-              );
-            }
+            const lowerCaseTheme = theme.toLowerCase();
+            const themeProperCased =
+              theme.charAt(0).toUpperCase() + theme.slice(1);
+            return (
+              <div className="theme-tags">
+                <input
+                  key={theme}
+                  className="theme-checkbox"
+                  type="checkbox"
+                  id={theme}
+                  name={theme}
+                  value={theme}
+                  onChange={handleThemeChange}
+                />
+                <label htmlFor={lowerCaseTheme}>{themeProperCased}</label>
+              </div>
+            );
           })}
         </div>
       </div>
