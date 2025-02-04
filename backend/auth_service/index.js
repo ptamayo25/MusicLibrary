@@ -1,7 +1,6 @@
 //package imports
 require("dotenv").config(); // Load environment variables from .env file
 const express = require("express");
-
 const { OAuth2Client } = require("google-auth-library");
 const http = require("http");
 const url = require("url");
@@ -22,12 +21,6 @@ const userRoutes = require("./routes/userRoutes");
 //initialize express app
 const app = express();
 const PORT = process.env.PORT;
-
-
-//middleware setup
-app.use(cors());
-app.use(bodyParser.json());
-
 
 // const client = new OAuth2Client(
 //   process.env.GOOGLE_CLIENT_ID,
