@@ -4,7 +4,7 @@ const express = require("express");
 const { OAuth2Client } = require("google-auth-library");
 const http = require("http");
 const url = require("url");
-const open = require("open");
+// const open = require("open");
 const destroyer = require("server-destroy");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -16,6 +16,10 @@ const userRoutes = require("./routes/userRoutes");
 //initialize express app
 const app = express();
 const PORT = process.env.PORT;
+
+//middleware setup
+app.use(cors());
+app.use(bodyParser.json());
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -56,11 +60,6 @@ app.get("/auth/google", (req, res) => {
   res.redirect(authorizeUrl);
 });
 
-
-//middleware setup
-app.use(cors());
-app.use(bodyParser.json());
-
 //mount routes
 app.use("/api/users", userRoutes);
 
@@ -76,7 +75,6 @@ mongoose
   .catch((err) => {
     console.error("Database connection error:", err);
   });
-
 
 app.listen(PORT, () => {
   console.log(`Auth Service running on port ${PORT}`);
