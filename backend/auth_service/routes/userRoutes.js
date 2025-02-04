@@ -6,6 +6,7 @@ const {
   register,
   updateAccess,
   getAllUsers,
+  logoutUser,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -20,5 +21,6 @@ router.get("/getAllUsers", getAllUsers);
 
 //TODO: implement delete user
 //TODO: implement logout
+router.post("/logout", logoutUser);
 
 module.exports = router;

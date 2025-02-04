@@ -188,5 +188,16 @@ exports.getAllUsers = async (req, res) => {
 // TODO: Implement user login
 
 // TODO: Implemet user logout
+exports.logout = async (req, res) => {
+  try {
+    // Will add more here later...
+    // Clear the session
+
+    res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.error("Error logging out", error);
+    res.status(500).json({ message: "Failed to log out" });
+  }
+};
 
 // TODO: Implement delete user
