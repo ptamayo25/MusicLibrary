@@ -108,7 +108,7 @@ exports.updateSong = async (req, res) => {
 
     const updatedData = {};
     if (title) updatedData.title = title;
-    if (composer) updatedData.content = composer;
+    if (composer) updatedData.composer = composer;
     if (arranger) updatedData.arranger = arranger;
     if (copies) updatedData.copies = copies;
     if (voicing) updatedData.voicing = voicing;

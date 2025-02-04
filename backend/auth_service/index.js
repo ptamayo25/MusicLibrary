@@ -1,6 +1,11 @@
 //package imports
 require("dotenv").config(); // Load environment variables from .env file
 const express = require("express");
+const { OAuth2Client } = require("google-auth-library");
+const http = require("http");
+const url = require("url");
+// const open = require("open");
+const destroyer = require("server-destroy");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -23,6 +28,7 @@ const PORT = process.env.PORT;
 //   process.env.GOOGLE_REDIRECT_URI
 // );
 
+
 //Download OAuth2 configuration from Google
 // const keys = require('./oauth2.keys.json');
 
@@ -44,6 +50,7 @@ app.get("/", (req, res) => {
 // https://developers.google.com/identity/protocols/oauth2/scopes
 //3. Send access token to an API in a Authorization request header
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization
+
 // app.get("/auth/google", (req, res) => {
 //   const authorizeUrl = client.generateAuthUrl({
 //     access_type: "offline",
@@ -56,9 +63,6 @@ app.get("/", (req, res) => {
 //   res.redirect(authorizeUrl);
 // });
 
-//middleware setup
-app.use(cors());
-app.use(bodyParser.json());
 
 //mount routes
 app.use("/api/users", userRoutes);
