@@ -4,7 +4,7 @@ import Homepage from "../components/Homepage";
 import AdminUserAccessPage from "../components/AdminUserAccessPage/AdminUserAccessPage";
 import MusicProgram from "../components/MusicProgram";
 import Login from "../components/Login";
-import AddSongForm from "../components/AddNewSong";
+import AddSongForm from "../components/AddForm/AddForm";
 // import Navigation from "../components/Navigation/Navigation";
 import ErrorPage from "../components/Errorpage";
 import FoundationLayout from "../components/FoundationLayout";

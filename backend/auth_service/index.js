@@ -1,14 +1,13 @@
 //package imports
 require("dotenv").config(); // Load environment variables from .env file
 const express = require("express");
-<<<<<<< HEAD
+
 const { OAuth2Client } = require("google-auth-library");
 const http = require("http");
 const url = require("url");
 // const open = require("open");
 const destroyer = require("server-destroy");
-=======
->>>>>>> 1a9bc6ccb5f47c3478aaa5c3758e54406ea61e26
+
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -25,7 +24,6 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT;
 
-<<<<<<< HEAD
 //middleware setup
 app.use(cors());
 app.use(bodyParser.json());
@@ -35,13 +33,22 @@ const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_SECRET,
   process.env.GOOGLE_REDIRECT_URI
 );
-=======
+
 // const client = new OAuth2Client(
 //   process.env.GOOGLE_CLIENT_ID,
 //   process.env.GOOGLE_CLIENT_SECRET,
 //   process.env.GOOGLE_REDIRECT_URI
 // );
->>>>>>> 1a9bc6ccb5f47c3478aaa5c3758e54406ea61e26
+
+//middleware setup
+app.use(cors());
+app.use(bodyParser.json());
+
+// const client = new OAuth2Client(
+//   process.env.GOOGLE_CLIENT_ID,
+//   process.env.GOOGLE_CLIENT_SECRET,
+//   process.env.GOOGLE_REDIRECT_URI
+// );
 
 //Download OAuth2 configuration from Google
 // const keys = require('./oauth2.keys.json');
