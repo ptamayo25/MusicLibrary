@@ -11,7 +11,7 @@ const AdminUserAccess = () => {
   const [temporarySelectedUser, setTemporarySelectedUser] = useState("");
   const [isSuccessNotification, setIsSuccessNotification] = useState(false);
   const [isDropdownVisible, setIsDropDownVisible] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUserEmail, setSelectedUserEmail] = useState(null);
 
   const fetchAllUsers = async () => {
     try {
@@ -45,7 +45,7 @@ const AdminUserAccess = () => {
   }, []);
 
   const handleUserClick = (user) => {
-    setSelectedUserId(user._id);
+    setSelectedUserEmail(user.email);
     setIsDropDownVisible(true);
   };
 
@@ -64,7 +64,7 @@ const AdminUserAccess = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: users.find((user) => user._id === selectedUserId).email,
+          email: selectedUserEmail,
           access: temporarySelectedUser,
         }),
       });
@@ -73,12 +73,12 @@ const AdminUserAccess = () => {
         setIsSuccessNotification(true);
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user._id === selectedUserId
+            user.email === selectedUserEmail
               ? { ...user, access: temporarySelectedUser }
               : user
           )
         );
-        setSelectedUserId(null);
+        setSelectedUserEmail(null);
         setTimeout(() => {
           setIsSuccessNotification(false);
         }, 3000);
@@ -89,7 +89,7 @@ const AdminUserAccess = () => {
       console.error("Error updating user access:", error);
     }
   };
-
+  console.log(users);
   return (
     <>
       <section className="header-container">
@@ -127,7 +127,7 @@ const AdminUserAccess = () => {
             <div className="grid-item">{user.lastName}</div>
             <div className="grid-item">{user.email}</div>
             <div className="grid-item">
-              {selectedUserId === user._id && isDropdownVisible ? (
+              {selectedUserEmail === user.email && isDropdownVisible ? (
                 <select
                   id="user-role"
                   value={temporarySelectedUser}
@@ -135,6 +135,9 @@ const AdminUserAccess = () => {
                   onBlur={() => setIsDropDownVisible(false)}
                   autoFocus
                 >
+                  <option value="" disabled selected>
+                    Select one
+                  </option>
                   <option value="Admin">Admin</option>
                   <option value="Subadmin">Subadmin</option>
                   <option value="User">User</option>
@@ -156,3 +159,24 @@ const AdminUserAccess = () => {
 };
 
 export default AdminUserAccess;
+
+// const [selectedUserId, setSelectedUserId] = useStat
+// e(null);
+
+// setSelectedUserId(user._id);
+
+// email: users.find((user) => user._id === selectedUserId).email,
+
+// setUsers((prevUsers) =>
+//   prevUsers.map((user) =>
+//     user._id === selectedUserId
+//       ? { ...user, access: temporarySelectedUser }
+//       : user
+//   )
+// );
+// setSelectedUserId(null);
+
+{
+  /* {selectedUserId === user._id && 
+isDropdownVisible ? ( */
+}
