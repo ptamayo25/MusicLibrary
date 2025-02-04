@@ -62,24 +62,6 @@ textarea {
   resize: vertical;
 }
 
-/* Submit Button */
-.submit-button {
-  margin-top: 15px;
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.submit-button:hover {
-  background: #0056b3;
-}
-
-
 /* Keywords Input */
 .keyword-input {
   display: flex;
@@ -131,4 +113,29 @@ textarea {
   font-size: 14px;
   margin-left: 5px;
   cursor: pointer;
+}
+
+.submit-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center horizontally */
+  margin-top: 20px; /* Space above the button */
+  width: 100%;
+}
+
+/* Submit Button */
+.submit-button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background: #0056b3;
 }
