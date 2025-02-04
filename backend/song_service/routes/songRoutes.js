@@ -27,6 +27,6 @@ router.delete("/:id", deleteSong);
 
 // Route for searching songs
 router.post("/search", getSongsBySearch);
-router.get("/themes", getThemes);
+router.post("/themes", getThemes);
 
 module.exports = router;

@@ -142,9 +142,11 @@ function sortResults(songs, sortType) {
 
 //function for returning all themes in the database
 exports.getThemes = async (req, res) => {
+  console.log("Getting themes...");
   try {
-    const themes = await Song.distinct("themes");
-    res.json({ themes });
+    const uniqueThemes = await Song.distinct("themes");
+    console.log("Unique themes found: ", uniqueThemes);
+    res.json({ uniqueThemes });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
