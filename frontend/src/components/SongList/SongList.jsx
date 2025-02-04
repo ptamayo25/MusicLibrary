@@ -3,19 +3,26 @@
 import "./SongList.css";
 import React, { useState } from 'react';
 import DeleteSongModal from "../DeleteSongModal/DeleteSongModal"; // Import the modal component
+import UpdateForm from "../UpdateForm/UpdateForm";
 
 const SongList = ({ songs }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedSong, setSelectedSong] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedSong, setSelectedSongForDelete] = useState(null);
 
-    const handleEditClick = (songId) => {
-        console.log('Edit clicked for song with ID:', songId);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
+
+    const handleEditClick = (song) => {
+        setSelectedSongForUpdate(song);  // Set song to update
+        setIsUpdateModalOpen(true);     // Open the update modal
     };
 
     const handleDeleteClick = (song) => {
-        setSelectedSong(song);  // Set the selected song
-        setIsModalOpen(true);   // Open the modal
+        setSelectedSongForDelete(song);  // Set song to delete
+        setIsDeleteModalOpen(true);     // Open the delete modal
     };
+
+
 
     const handleTitleClick = (songId) => {
         console.log('Title clicked for song with ID:', songId);
@@ -66,10 +73,19 @@ const SongList = ({ songs }) => {
 
             {/* Render DeleteSongModal */}
             {selectedSong && (
-                <DeleteSongModal 
-                    song={selectedSong} 
-                    isOpen={isModalOpen} 
-                    setIsOpen={setIsModalOpen} 
+                <DeleteSongModal
+                    song={selectedSong}
+                    isOpen={isDeleteModalOpen}
+                    setIsOpen={setIsDeleteModalOpen}
+                />
+            )}
+
+            {/* Render DeleteSongModal */}
+            {selectedSongForUpdate && (
+                <UpdateForm
+                    song={selectedSongForUpdate}
+                    isOpen={isUpdateModalOpen}
+                    setIsOpen={setIsUpdateModalOpen}
                 />
             )}
         </div>
