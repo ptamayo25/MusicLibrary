@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 // Import the searchSongs function from the searchController
-const { getSongsBySearch } = require("../controllers/searchController");
+const {
+  getSongsBySearch,
+  getThemes,
+} = require("../controllers/searchController");
 
 //Import CRTUD functions from songController
 const {
@@ -22,5 +25,6 @@ router.delete("/:id", deleteSong);
 
 // Route for searching songs
 router.post("/search", getSongsBySearch);
+router.get("/themes", getThemes);
 
 module.exports = router;

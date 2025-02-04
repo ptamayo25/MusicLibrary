@@ -48,37 +48,44 @@ exports.getSongsBySearch = async (req, res) => {
   }
 };
 
-
 function sortResults(songs, sortType) {
   switch (sortType) {
     case "composerA-Z":
-      console.log("composerA-Z")
+      console.log("composerA-Z");
       return songs.sort((a, b) => {
         if (a.composer === "N/A") return 1;
         if (b.composer === "N/A") return -1;
-        return a.composer.localeCompare(b.composer, undefined, { sensitivity: 'base' });
+        return a.composer.localeCompare(b.composer, undefined, {
+          sensitivity: "base",
+        });
       });
 
     case "composerZ-A":
       return songs.sort((a, b) => {
         if (a.composer === "N/A") return 1;
         if (b.composer === "N/A") return -1;
-        return b.composer.localeCompare(a.composer, undefined, { sensitivity: 'base' });
+        return b.composer.localeCompare(a.composer, undefined, {
+          sensitivity: "base",
+        });
       });
 
     case "titleA-Z":
       return songs.sort((a, b) => {
         if (a.title === "N/A") return 1;
         if (b.title === "N/A") return -1;
-        console.log("titleA-Z")
-        return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+        console.log("titleA-Z");
+        return a.title.localeCompare(b.title, undefined, {
+          sensitivity: "base",
+        });
       });
 
     case "titleZ-A":
       return songs.sort((a, b) => {
         if (a.title === "N/A") return 1;
         if (b.title === "N/A") return -1;
-        return b.title.localeCompare(a.title, undefined, { sensitivity: 'base' });
+        return b.title.localeCompare(a.title, undefined, {
+          sensitivity: "base",
+        });
       });
 
     case "mostRecent":
@@ -88,15 +95,24 @@ function sortResults(songs, sortType) {
         return new Date(b.lastPerformed) - new Date(a.lastPerformed);
       });
 
-      case "leastRecent":
-        return songs.sort((a, b) => {
-          if (!a.lastPerformed) return 1;
-          if (!b.lastPerformed) return -1;
-          return new Date(a.lastPerformed) - new Date(b.lastPerformed);
-        });
+    case "leastRecent":
+      return songs.sort((a, b) => {
+        if (!a.lastPerformed) return 1;
+        if (!b.lastPerformed) return -1;
+        return new Date(a.lastPerformed) - new Date(b.lastPerformed);
+      });
 
     default:
       return songs;
   }
 }
 
+//function for returning all themes in the database
+exports.getThemes = async (req, res) => {
+  try {
+    const themes = await Song.distinct("themes");
+    res.json({ themes });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

@@ -8,28 +8,34 @@ import SongList from "../SongList/SongList";
 function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortType, setSortType] = useState("default");
+  const [themeTags, setThemeTags] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
-  //faking themes for now
-  // const themes = [
-  //   "Christmas",
-  //   "Easter",
-  //   "Pentecost",
-  //   "Advent",
-  //   "Lent",
-  //   "Thanksgiving",
-  //   "Patriotic",
-  //   "Wedding",
-  //   "Funeral",
-  //   "Baptism",
-  //   "Communion",
-  //   "General",
-  //   "Children",
-  //   "Youth",
-  //   "Adult",
-  //   "Community",
-  //   "Peace",
-  // ];
+
+  //Grab themes from backend
+  
+
+
+  // faking themes for now
+  const themesDisplayed = [
+    "Christmas",
+    "Easter",
+    "Pentecost",
+    "Advent",
+    "Lent",
+    "Thanksgiving",
+    "Patriotic",
+    "Wedding",
+    "Funeral",
+    "Baptism",
+    "Communion",
+    "General",
+    "Children",
+    "Youth",
+    "Adult",
+    "Community",
+    "Peace",
+  ];
 
   const handleSearch = async (event) => {
     if (event) {
@@ -45,7 +51,11 @@ function SearchInput() {
       const response = await fetch(`${apiUrl}/api/songs/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ words: searchTerm, sortType }),
+        body: JSON.stringify({
+          words: searchTerm,
+          sortType,
+          themes: themeTags,
+        }),
       });
 
       if (response.ok) {
@@ -74,6 +84,8 @@ function SearchInput() {
     //TODO: add functionality to have modal pop up to add song once add song modal component is created
     console.log("Add Song button clicked");
   };
+
+  const handleThemeChange = () => {};
 
   return (
     <>
@@ -113,18 +125,18 @@ function SearchInput() {
             </button>
           </div>
         </div>
-        <div className="theme-tags">
+        <div className="theme-container">
           {/* checkboxes for themes */}
-          {/* <label id="theme-header" htmlFor="themes">
+          <label id="theme-header" htmlFor="themes">
             Themes:
           </label>
-          <br /> */}
-          {/* {themes.map((theme) => {
+          <br />
+          {themesDisplayed.map((theme) => {
             const lowerCaseTheme = theme.toLowerCase();
             return (
               <div className="theme-tags">
                 <input
-                  key = {theme}
+                  key={theme}
                   className="theme-checkbox"
                   type="checkbox"
                   id={theme}
@@ -134,7 +146,7 @@ function SearchInput() {
                 <label htmlFor={lowerCaseTheme}>{theme}</label>
               </div>
             );
-          })} */}
+          })}
         </div>
       </div>
       {/* display results temporarily as list until search results component done */}

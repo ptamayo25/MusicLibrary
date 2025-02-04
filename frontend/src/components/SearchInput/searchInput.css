@@ -77,15 +77,11 @@
     margin: 10px;
 }
 
-/* can remove search results styling below once the search results component plugged in. */
-.search-results ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-
-.search-results li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
+.theme-tags {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 15%;
+    height: 30px;
+    /* border: 2px solid black; */
 }
