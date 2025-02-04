@@ -33,9 +33,9 @@ header {
 }
 .useraccess-grid-container {
     display: grid;
-    grid-template-columns: 2.5fr 2.5fr 4fr 1fr;
+    grid-template-columns: 2.5fr 2.5fr 4fr 2fr;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 .grid-title {
     text-decoration: underline;
@@ -43,7 +43,6 @@ header {
     text-underline-offset: 0.5rem;
 }
 .selected-user {
-  padding: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
 }
