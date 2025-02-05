@@ -1,0 +1,186 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Music Library Song Service API",
+    "version": "1.0.0",
+    "description": "API documentation for the Music Library project's song service API."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4002"
+    }
+  ],
+  "paths": {
+    "/api/songs/": {
+      "get": {
+        "summary": "Get all songs in Music library",
+        "description": "Returns an array of song objects for all songs in database.",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/songs" }
+              }
+            }
+          },
+          "404": {
+            "description": "Error loading page"
+          }
+        }
+      }
+    },
+    "/api/songs/{id}": {
+      "get": {
+        "summary": "Get a song by ID",
+        "description": "Returns a song object for a song with the given ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of song to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/song" }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found"
+          }
+        }
+      }
+    },
+    "/api/songs/search": {
+      "post": {}
+    }
+  },
+  "components": {
+    "schemas": {
+      "song": {
+        "type": "object",
+        "properties": {
+          "song": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "composer": {
+                "type": "string"
+              },
+              "arranger": {
+                "type": "string"
+              },
+              "copies": {
+                "type": "integer"
+              },
+              "voicing": {
+                "type": "string"
+              },
+              "instrumentation": {
+                "type": "string"
+              },
+              "keywords": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "lyrics": {
+                "type": "string"
+              },
+              "lastPerformed": {
+                "type": "string",
+                "format": "date"
+              },
+              "comments": {
+                "type": "string"
+              },
+              "themes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "__v": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "songs": {
+        "type": "object",
+        "properties": {
+          "songs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "composer": {
+                  "type": "string"
+                },
+                "arranger": {
+                  "type": "string"
+                },
+                "copies": {
+                  "type": "integer"
+                },
+                "voicing": {
+                  "type": "string"
+                },
+                "instrumentation": {
+                  "type": "string"
+                },
+                "keywords": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "lyrics": {
+                  "type": "string"
+                },
+                "lastPerformed": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "comments": {
+                  "type": "string"
+                },
+                "themes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "__v": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

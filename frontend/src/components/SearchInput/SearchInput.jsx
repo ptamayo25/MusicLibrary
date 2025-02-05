@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import "../styles/buttons.css";
 import "./searchInput.css";
 import SongList from "../SongList/SongList";
+import AddForm from "../AddForm/AddForm";
 
 function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -131,8 +132,7 @@ function SearchInput() {
   };
 
   const handleAddSong = () => {
-    //TODO: add functionality to have modal pop up to add song once add song modal component is created
-    console.log("Add Song button clicked");
+    setIsAddSongModalOpen(true);
   };
 
   const handleThemeChange = (event) => {
@@ -211,22 +211,7 @@ function SearchInput() {
           })}
         </div>
       </div>
-      {/* display results temporarily as list until search results component done */}
-      <br />
-      {/* <div className="search-results">
-        {searchResults.length > 0 ? (
-          <ul>
-            
-            {searchResults.map((song, index) => (
-              <li key={index}>
-                <strong>{song.title}</strong> by {song.composer}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No results found</p>
-        )}
-      </div> */}
+      <AddForm isOpen={isAddSongModalOpen} setIsOpen={setIsAddSongModalOpen} />
       <SongList songs={searchResults} />
     </>
   );
