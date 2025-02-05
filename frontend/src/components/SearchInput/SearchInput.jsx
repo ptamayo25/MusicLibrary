@@ -146,16 +146,16 @@ function SearchInput() {
     });
   };
 
-  const handleThemeChange = (event) => {
-    const { value, checked } = event.target;
-    setThemeSelected((prevThemes) => {
-      if (checked) {
-        return [...prevThemes, value];
-      } else {
-        return prevThemes.filter((theme) => theme !== value);
-      }
-    });
-  };
+  // const handleThemeChange = (event) => {
+  //   const { value, checked } = event.target;
+  //   setThemeSelected((prevThemes) => {
+  //     if (checked) {
+  //       return [...prevThemes, value];
+  //     } else {
+  //       return prevThemes.filter((theme) => theme !== value);
+  //     }
+  //   });
+  // };
 
   return (
     <>
