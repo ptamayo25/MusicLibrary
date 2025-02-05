@@ -2,7 +2,7 @@ import "./SongList.css";
 import React, { useState } from 'react';
 import DeleteSongModal from "../DeleteSongModal/DeleteSongModal"; // Import the modal component
 import UpdateForm from "../UpdateForm/UpdateForm";
-import AddForm from "../AddForm/AddForm";
+import from "../AddForm/AddForm";
 
 const SongList = ({ songs }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

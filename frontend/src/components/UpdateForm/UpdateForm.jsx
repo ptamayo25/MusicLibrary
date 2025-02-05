@@ -17,7 +17,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
   const [keywords, setKeywords] = useState([]);
   const [keywordInput, setKeywordInput] = useState("");
 
-  // Prefill form when song data is available
+  // Prefill form 
   useEffect(() => {
     if (song) {
       setFormData({
@@ -75,7 +75,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
           typeof value === "string" ? value.trim() !== "" : value !== null && value !== undefined
         )
       );
-      
+
 
       const response = await fetch(`${apiUrl}/api/songs/${songid}`, {
         method: "PATCH",
@@ -111,8 +111,8 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
             {/* Left Side - Standard Inputs & Keywords */}
             <div className="form-left">
               {[
-                { label: "* Title", name: "title", type: "text" },
-                { label: "* Composer", name: "composer", type: "text" },
+                { label: "* Title", name: "title", type: "text", required: true },
+                { label: "* Composer", name: "composer", type: "text", required: true },
                 { label: "Arranger", name: "arranger", type: "text" },
                 { label: "Copies", name: "copies", type: "number" },
                 { label: "Voicing", name: "voicing", type: "text" },
@@ -127,7 +127,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                     name={field.name}
                     value={formData[field.name]}
                     onChange={handleChange}
-                    required
+                    required={field.required || false}
                   />
                 </div>
               ))}
@@ -176,7 +176,6 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                 name="lyrics"
                 value={formData.lyrics || ""}
                 onChange={handleChange}
-                required={formData.lyrics.trim().length === 0}
               />
             </div>
           </div>
