@@ -1,16 +1,16 @@
 require("dotenv").config(); // Load environment variables from .env file
+require("./passport"); // Import passport.js file
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes"); // Import file
 
+const cookieSession = require("cookie-session");
+const passport = require("passport");
+
 // Google OAuth2 packages
 // const { OAuth2Client } = require("google-auth-library");
-// const http = require("http");
-// const url = require("url");
-// const open = require("open");
-// const destroyer = require("server-destroy");
 
 //initialize express app
 const app = express();
@@ -54,17 +54,14 @@ mongoose
 
 //Download OAuth2 configuration from Google
 // const keys = require('./oauth2.keys.json');
-
 // async function main() {
 //   const oAuth2Client = await getAutheticatedClient(); // Getting the OAuth2 client
 // }
-
 //In controller.
 // Test auth service is runing
 // app.get("/", (req, res) => {
 //   res.send("Auth Service is running.");
 // });
-
 // app.get("/auth/google", (req, res) => {
 //   const authorizeUrl = client.generateAuthUrl({
 //     access_type: "offline",
@@ -76,6 +73,59 @@ mongoose
 //   });
 //   res.redirect(authorizeUrl);
 // });
+
+app.use(
+  cookieSession({
+    name: "google-auth-session",
+    keys: ["key1", "key2"],
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", (req, res) => {
+  res.json({ message: "You are not logged in" });
+});
+
+app.get("/failed", (req, res) => {
+  res.send("Failed");
+});
+app.get("/success", (req, res) => {
+  res.send(`Welcome ${req.user.email}`);
+});
+app.get("/logout", (req, res) => {
+  req.session = null;
+  req.logout();
+  res.redirect("/");
+});
+
+app.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "openid",
+    ],
+    // scope: ["email", "profile", "openid"],
+  })
+);
+
+app.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/failed",
+  }),
+  function (req, res) {
+    res.redirect("/success");
+  }
+);
+
+app.get("/logout", (req, res) => {
+  req.session = null;
+  req.logout();
+  res.redirect("/");
+});
 
 app.listen(PORT, () => {
   console.log(`Auth Service running on port ${PORT}`);

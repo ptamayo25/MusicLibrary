@@ -7,9 +7,10 @@ const {
   updateAccess,
   getAllUsers,
   logoutUser,
-  googleLogin,
-  googleAuth,
-  googleGetUser,
+  loggedIn,
+  // googleLogin,
+  // googleAuth,
+  // googleGetUser,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -18,9 +19,11 @@ const router = express.Router();
 router.post("/register", register);
 
 //login
-router.get("/login", googleLogin);
-router.get("/auth/google", googleAuth);
-router.get("/auth/loggedin", googleGetUser);
+// router.get("/")
+// router.get("/loggedIn", loggedIn);
+// router.get("/login", googleLogin);
+// router.get("/auth/google", googleAuth);
+// router.get("/auth/loggedin", googleGetUser);
 
 //protected routes
 router.post("/updateAccess", updateAccess);
@@ -28,6 +31,6 @@ router.get("/getAllUsers", getAllUsers);
 
 //TODO: implement delete user
 //TODO: implement logout
-router.post("/logout", logoutUser);
+// router.post("/logout", logoutUser);
 
 module.exports = router;
