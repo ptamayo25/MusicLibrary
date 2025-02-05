@@ -1,6 +1,6 @@
 //write function for search input
 // import react from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/buttons.css";
 import "./searchInput.css";
 import SongList from "../SongList/SongList";
@@ -8,10 +8,63 @@ import SongList from "../SongList/SongList";
 function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortType, setSortType] = useState("default");
+  const [themeSelected, setThemeSelected] = useState([]);
+  const [themesDisplayed, setThemesDisplayed] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
 
-  //faking themes for now
-  // const themes = [
+  useEffect(() => {
+    const handleOnLoad = async () => {
+      try {
+        //Grab themes from backend
+        const apiUrl = import.meta.env.VITE_SONG_SERVICE_URL;
+        const themesResponse = await fetch(`${apiUrl}/api/songs/themes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+        console.log("response", themesResponse);
+        if (!themesResponse.ok) {
+          console.error("Failed to fetch themes");
+        }
+        const data = await themesResponse.json();
+
+        const themes = data.uniqueThemes.filter((theme) => theme !== null);
+
+        setThemesDisplayed(themes);
+
+        //Do pull for all songs on load
+
+        const songsResponse = await fetch(`${apiUrl}/api/songs/search`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            words: searchTerm,
+            sortType,
+            themes: themeSelected,
+          }),
+        });
+
+        if (songsResponse.ok) {
+          const data = await songsResponse.json();
+          if (data.length === 0) {
+            console.log("No results found");
+          }
+          setSearchResults(data);
+        } else {
+          console.error("Failed to fetch songs");
+        }
+      } catch (error) {
+        console.error("Error fetching themes", error);
+      }
+    };
+
+    handleOnLoad();
+  }, []);
+
+  // handleOnLoad();
+
+  // faking themes for now
+  // const themesDisplayed = [
   //   "Christmas",
   //   "Easter",
   //   "Pentecost",
@@ -45,11 +98,18 @@ function SearchInput() {
       const response = await fetch(`${apiUrl}/api/songs/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ words: searchTerm, sortType }),
+        body: JSON.stringify({
+          words: searchTerm,
+          sortType,
+          themes: themeSelected,
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
+        if (data.length === 0) {
+          console.log("No results found");
+        }
         setSearchResults(data);
       } else {
         console.error("Failed to fetch data");
@@ -73,6 +133,17 @@ function SearchInput() {
   const handleAddSong = () => {
     //TODO: add functionality to have modal pop up to add song once add song modal component is created
     console.log("Add Song button clicked");
+  };
+
+  const handleThemeChange = (event) => {
+    const { value, checked } = event.target;
+    setThemeSelected((prevThemes) => {
+      if (checked) {
+        return [...prevThemes, value];
+      } else {
+        return prevThemes.filter((theme) => theme !== value);
+      }
+    });
   };
 
   return (
@@ -113,28 +184,31 @@ function SearchInput() {
             </button>
           </div>
         </div>
-        <div className="theme-tags">
+        <div className="theme-container">
           {/* checkboxes for themes */}
-          {/* <label id="theme-header" htmlFor="themes">
+          <label id="theme-header" htmlFor="themes">
             Themes:
           </label>
-          <br /> */}
-          {/* {themes.map((theme) => {
+          <br />
+          {themesDisplayed.map((theme) => {
             const lowerCaseTheme = theme.toLowerCase();
+            const themeProperCased =
+              theme.charAt(0).toUpperCase() + theme.slice(1);
             return (
               <div className="theme-tags">
                 <input
-                  key = {theme}
+                  key={theme}
                   className="theme-checkbox"
                   type="checkbox"
                   id={theme}
                   name={theme}
                   value={theme}
+                  onChange={handleThemeChange}
                 />
-                <label htmlFor={lowerCaseTheme}>{theme}</label>
+                <label htmlFor={lowerCaseTheme}>{themeProperCased}</label>
               </div>
             );
-          })} */}
+          })}
         </div>
       </div>
       {/* display results temporarily as list until search results component done */}

@@ -12,6 +12,7 @@ exports.createSong = async (req, res) => {
     lyrics,
     lastPerformed,
     comments,
+    themes,
   } = req.body;
 
   // Validate required fields
@@ -32,6 +33,7 @@ exports.createSong = async (req, res) => {
       lyrics,
       lastPerformed,
       comments,
+      themes,
     });
 
     await song.save();
@@ -43,6 +45,30 @@ exports.createSong = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to create song", error: error.message });
+  }
+};
+
+//Handle adding many songs at once (bulk insert) to allow for testing can be commented out for production
+exports.createManySongs = async (req, res) => {
+  const songs = req.body;
+  try {
+    // Validate required fields
+    songs.map((song) => {
+      if (!song.title || !song.composer) {
+        return res
+          .status(400)
+          .json({ message: "Title and composer are required" });
+      }
+    });
+    // Create and save the song
+    const newSongs = await Song.insertMany(songs);
+    if (!newSongs) {
+      return res.status(500).json({ message: "Error creating multiple songs" });
+    }
+    res.status(201).json({ message: "Songs created successfully", newSongs });
+  } catch (error) {
+    console.error("Error creating multiple songs:", error);
+    res.status(500).json({ message: "Error creating multiple songs" });
   }
 };
 
