@@ -9,11 +9,13 @@ const SongList = ({ songs }) => {
     const [selectedSong, setSelectedSongForDelete] = useState(null);
     
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+    const [selectedSongForDetail, setSelectedSongForDetail] = useState(null);
 
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
 
-    const handleEditClick = () => {// Set song to update
+    const handleEditClick = (song) => {
+        setSelectedSongForUpdate(song);  // Set song to update
         setIsUpdateModalOpen(true);     // Open the update modal
     };
 
@@ -23,10 +25,12 @@ const SongList = ({ songs }) => {
     };
 
 
-
-    const handleTitleClick = (songId) => {
-        console.log('Title clicked for song with ID:', songId);
+    const handleTitleClick = (song) => {
+        console.log("🔍 Title clicked for song:", song);
+        setSelectedSongForDetail(song);
+        setIsDetailModalOpen(true);
     };
+    
 
     const headers = ['Title', 'Composer', 'Arranger', 'Keywords', 'Last Performed', ' ', ' '];
 
@@ -89,9 +93,9 @@ const SongList = ({ songs }) => {
                 />
             )}
 
-            {isDetailModalOpen && (
+            {isDetailModalOpen && setSelectedSongForDetail && (
                 <SongDetailsNoLyrics
-                    song={selectedSong}
+                    song={selectedSongForDetail}
                     isOpen={isDetailModalOpen}
                     setIsOpen={setIsDetailModalOpen}
                 />
