@@ -22,12 +22,14 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT;
 
+//middleware
+app.use(cors());
+
 // const client = new OAuth2Client(
 //   process.env.GOOGLE_CLIENT_ID,
 //   process.env.GOOGLE_CLIENT_SECRET,
 //   process.env.GOOGLE_REDIRECT_URI
 // );
-
 
 //Download OAuth2 configuration from Google
 // const keys = require('./oauth2.keys.json');
@@ -62,7 +64,6 @@ app.get("/", (req, res) => {
 //   });
 //   res.redirect(authorizeUrl);
 // });
-
 
 //mount routes
 app.use("/api/users", userRoutes);
