@@ -1,6 +1,6 @@
 /* Table.css */
 .table-container {
-    overflow-x: auto; /* Allow horizontal scrolling if the table overflows */
+    /* overflow-x: auto; Allow horizontal scrolling if the table overflows */
     padding: 20px;
   }
   

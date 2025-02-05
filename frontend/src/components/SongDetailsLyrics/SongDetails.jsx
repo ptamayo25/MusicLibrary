@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import "./SongDetails.css";
-import { useState } from "react";
+// import { useState } from "react";
 
-const SongDetailsNoLyrics = ({ song }) => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+const SongDetailsNoLyrics = ({ song, isModalOpen, setIsModalOpen }) => {
+  // const [isModalOpen, setIsModalOpen] = useState(true);
   const songDetails = [
     { label: "Composer", value: song.composer || "None" },
     { label: "Arranger", value: song.arranger || "None" },
@@ -23,7 +23,7 @@ const SongDetailsNoLyrics = ({ song }) => {
     <>
       {isModalOpen && (
         <div
-          className="modal modal-overlay"
+          className="song-detail-modal modal-overlay"
           onClick={() => setIsModalOpen(false)}
         >
           <div className="song-details-container">
@@ -37,21 +37,21 @@ const SongDetailsNoLyrics = ({ song }) => {
               <section className="title-column">
                 <p className="title bold"> {song.title}</p>
               </section>
-              <section className="details-column">
-                <div className="details">
-                  {songDetails.map((detail, index) => (
-                    <p
-                      key={index}
-                      className={detail.label.toLowerCase().replace(" ", "-")}
-                    >
-                      <span className="label">{detail.label}:</span>
-                      <span className="value">
-                        {detail.value ? detail.value : "None"}
-                      </span>
-                    </p>
-                  ))}
-                </div>
-              </section>
+              {/* <section className="details-column"> */}
+              <div className="details">
+                {songDetails.map((detail, index) => (
+                  <p
+                    key={index}
+                    className={detail.label.toLowerCase().replace(" ", "-")}
+                  >
+                    <span className="label">{detail.label}:</span>
+                    <span className="value">
+                      {detail.value ? detail.value : "None"}
+                    </span>
+                  </p>
+                ))}
+              </div>
+              {/* </section> */}
               <h2> Lyrics</h2>
               {song.lyrics || "None"}
             </header>
