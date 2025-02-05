@@ -185,19 +185,64 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// TODO: Implement user login
+// OAuth with Google
+//Documentation for your reference for OAuth2 and Google APIs
+// Console Cloud Google - https://console.cloud.google.com/
+//1. Protocol for OAuth2 - https://developers.google.com/identity/protocols/oauth2
+//2. Scopes - define access->user data for Google APIs - https://developers.google.com/identity/protocols/oauth2/scopes
+//3. Send access token to an API in a Authorization request header
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization
 
-// TODO: Implemet user logout
-exports.logout = async (req, res) => {
+// 1. Auth service directs to Google OAuth: getting user's email, profile, and openid
+exports.googleAuth = async (req, res) => {
+  const url = client.generateAuthUrl({
+    access_type: "offline",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "openid",
+    ],
+  });
+  res.redirect(url);
+};
+
+// 2. Google redirects back to auth service
+exports.googleAuthCallback = async (req, res) => {
+  const { code } = req.query; // Code from Google to exchange for tokens
+  if (!code) {
+    return res.status(401).send("Code not provided");
+  }
   try {
-    // Will add more here later...
-    // Clear the session
-
-    res.status(200).json({ message: "User logged out successfully" });
+    const { tokens } = await client.getToken(code);
+    req.session.tokens = tokens;
+    res.redirect("http://localhost:5173/musicLibrary");
   } catch (error) {
-    console.error("Error logging out", error);
-    res.status(500).json({ message: "Failed to log out" });
+    res.status(500).send("Error during authenticaiton");
   }
 };
+// 3. Getting user info and check if user is authenticated
+exports.googleGetUser = async (req, res) => {
+  if (!req.session.tokens) {
+    return res.status(401).send("User not authenticated");
+  }
+  client.setCredentials(req.session.tokens);
+  const userInfo = await client.request({
+    url: "https://www.googleapis.com/oauth2/v2/userinfo",
+  });
+  res.send(userInfo.data);
+};
+
+// TODO: Implemet user logout
+// exports.logout = async (req, res) => {
+//   try {
+//     // Will add more here later...
+//     // Clear the session
+
+//     res.status(200).json({ message: "User logged out successfully" });
+//   } catch (error) {
+//     console.error("Error logging out", error);
+//     res.status(500).json({ message: "Failed to log out" });
+//   }
+// };
 
 // TODO: Implement delete user

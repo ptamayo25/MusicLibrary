@@ -87,6 +87,11 @@ function Navigation() {
           </li>
         ))}
       </ul>
+      {/* Route to Login page */}
+      {/* I added this mainly for testing purpose (whoever is working on this can remove it)
+       */}
+      {/* <button onClick={() => navigate("/")}>Login Test</button> */}
+      <button onClick={() => navigate("/login")}>Login Test</button>
       {/* Display the logout button */}
       <button className={styles.logoutButton} onClick={handleLogout}>
         Logout
