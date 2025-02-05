@@ -2,19 +2,19 @@ import "./SongList.css";
 import React, { useState } from 'react';
 import DeleteSongModal from "../DeleteSongModal/DeleteSongModal"; // Import the modal component
 import UpdateForm from "../UpdateForm/UpdateForm";
-import from "../AddForm/AddForm";
+import SongDetailsNoLyrics from "../SongDetailsLyrics/SongDetails";
 
 const SongList = ({ songs }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedSong, setSelectedSongForDelete] = useState(null);
     
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
-    // const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    // const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
 
     const handleEditClick = () => {// Set song to update
-        setIsAddModalOpen(true);     // Open the update modal
+        setIsUpdateModalOpen(true);     // Open the update modal
     };
 
     const handleDeleteClick = (song) => {
@@ -80,20 +80,20 @@ const SongList = ({ songs }) => {
                 />
             )}
 
-            {/* {isUpdateModalOpen && selectedSongForUpdate && (
+            {isUpdateModalOpen && selectedSongForUpdate && (
                 <UpdateForm
                     isOpen={isUpdateModalOpen}
                     setIsOpen={setIsUpdateModalOpen}
                     song={selectedSongForUpdate}
                     songid={selectedSongForUpdate?._id} // Correctly passing song ID
                 />
-            )} */}
+            )}
 
-            {isAddModalOpen && (
-                <AddForm
+            {isDetailModalOpen && (
+                <SongDetailsNoLyrics
                     song={selectedSong}
-                    isOpen={isAddModalOpen}
-                    setIsOpen={setIsAddModalOpen}
+                    isOpen={isDetailModalOpen}
+                    setIsOpen={setIsDetailModalOpen}
                 />
             )}
         </div>
