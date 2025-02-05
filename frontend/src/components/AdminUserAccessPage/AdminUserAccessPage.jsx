@@ -5,6 +5,7 @@ import "../styles/buttons.css";
 import { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
 import CheckIcon from "@mui/icons-material/Check";
+import Navigation from "../Navigation/Navigation";
 
 const AdminUserAccess = () => {
   const [users, setUsers] = useState([]);
@@ -92,14 +93,15 @@ const AdminUserAccess = () => {
   console.log(users);
   return (
     <>
-      <section className="header-container">
+      {/* <section className="header-container">
         <header className="header">
           <img className="uucnhlogo" src={LogoImage} alt="Logo" />
           <Link className="links" to="/">
             Back to Music Library
           </Link>
         </header>
-      </section>
+      </section> */}
+      <Navigation />
       <section>
         <h3> UUCNH Music Library User Privilege Update</h3>
 

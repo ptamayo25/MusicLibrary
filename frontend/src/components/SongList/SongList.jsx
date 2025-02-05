@@ -1,107 +1,124 @@
 import "./SongList.css";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import DeleteSongModal from "../DeleteSongModal/DeleteSongModal"; // Import the modal component
 import UpdateForm from "../UpdateForm/UpdateForm";
 import SongDetailsNoLyrics from "../SongDetailsLyrics/SongDetails";
 
 const SongList = ({ songs }) => {
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [selectedSong, setSelectedSongForDelete] = useState(null);
-    
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
-    const [selectedSongForDetail, setSelectedSongForDetail] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedSong, setSelectedSongForDelete] = useState(null);
 
-    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedSongForDetail, setSelectedSongForDetail] = useState(null);
 
-    const handleEditClick = (song) => {
-        setSelectedSongForUpdate(song);  // Set song to update
-        setIsUpdateModalOpen(true);     // Open the update modal
-    };
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
 
-    const handleDeleteClick = (song) => {
-        setSelectedSongForDelete(song);  // Set song to delete
-        setIsDeleteModalOpen(true);     // Open the delete modal
-    };
+  const handleEditClick = (song) => {
+    setSelectedSongForUpdate(song); // Set song to update
+    setIsUpdateModalOpen(true); // Open the update modal
+  };
 
+  const handleDeleteClick = (song) => {
+    setSelectedSongForDelete(song); // Set song to delete
+    setIsDeleteModalOpen(true); // Open the delete modal
+  };
 
-    const handleTitleClick = (song) => {
-        console.log("🔍 Title clicked for song:", song);
-        setSelectedSongForDetail(song);
-        setIsDetailModalOpen(true);
-    };
-    
+  const handleTitleClick = (song) => {
+    console.log("🔍 Title clicked for song:", song);
+    setSelectedSongForDetail(song);
+    setIsDetailModalOpen(true);
+  };
 
-    const headers = ['Title', 'Composer', 'Arranger', 'Keywords', 'Last Performed', ' ', ' '];
+  const headers = [
+    "Title",
+    "Composer",
+    "Arranger",
+    "Keywords",
+    "Last Performed",
+    " ",
+    " ",
+  ];
 
-    return (
-        <div className="table-container">
-            <table className="table">
-                <thead>
-                    <tr>
-                        {headers.map((header, index) => (
-                            <th key={index} className="table-header">
-                                {header}
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {songs.length > 0 ? (
-                        songs.map((song) => (
-                            <tr key={song._id}>
-                                <td>
-                                    <span className="underlined" onClick={() => handleTitleClick(song._id)}>
-                                        {song.title || "N/A"}
-                                    </span>
-                                </td>
-                                <td>{song.composer || 'N/A'}</td>
-                                <td>{song.arranger || 'N/A'}</td>
-                                <td>{song.keywords ? song.keywords.join(', ') : 'N/A'}</td>
-                                <td>{song.lastPerformed ? new Date(song.lastPerformed).toLocaleDateString() : 'N/A'}</td>
-                                <td>
-                                    <button onClick={() => handleEditClick(song)}>edit</button>
-                                </td>
-                                <td>
-                                    <button onClick={() => handleDeleteClick(song)}>delete</button>
-                                </td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan={headers.length}>No songs available</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-
-            {/* Render DeleteSongModal */}
-            {selectedSong && (
-                <DeleteSongModal
-                    song={selectedSong}
-                    isOpen={isDeleteModalOpen}
-                    setIsOpen={setIsDeleteModalOpen}
-                />
+  return (
+    <>
+      <div className="table-container">
+        <table className="table">
+          <thead>
+            <tr>
+              {headers.map((header, index) => (
+                <th key={index} className="table-header">
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {songs.length > 0 ? (
+              songs.map((song) => (
+                <tr key={song._id}>
+                  <td>
+                    <span
+                      className="underlined"
+                      onClick={() => handleTitleClick(song)}
+                    >
+                      {song.title || "N/A"}
+                    </span>
+                  </td>
+                  <td>{song.composer || "N/A"}</td>
+                  <td>{song.arranger || "N/A"}</td>
+                  <td>{song.keywords ? song.keywords.join(", ") : "N/A"}</td>
+                  <td>
+                    {song.lastPerformed
+                      ? new Date(song.lastPerformed).toLocaleDateString()
+                      : "N/A"}
+                  </td>
+                  <td>
+                    <button onClick={() => handleEditClick(song)}>edit</button>
+                  </td>
+                  <td>
+                    <button onClick={() => handleDeleteClick(song)}>
+                      delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={headers.length}>No songs available</td>
+              </tr>
             )}
+          </tbody>
+        </table>
 
-            {isUpdateModalOpen && selectedSongForUpdate && (
-                <UpdateForm
-                    isOpen={isUpdateModalOpen}
-                    setIsOpen={setIsUpdateModalOpen}
-                    song={selectedSongForUpdate}
-                    songid={selectedSongForUpdate?._id} // Correctly passing song ID
-                />
-            )}
+        {/* Render DeleteSongModal */}
+        {selectedSong && (
+          <DeleteSongModal
+            song={selectedSong}
+            isOpen={isDeleteModalOpen}
+            setIsOpen={setIsDeleteModalOpen}
+          />
+        )}
 
-            {isDetailModalOpen && setSelectedSongForDetail && (
-                <SongDetailsNoLyrics
-                    song={selectedSongForDetail}
-                    isOpen={isDetailModalOpen}
-                    setIsOpen={setIsDetailModalOpen}
-                />
-            )}
-        </div>
-    );
+        {isUpdateModalOpen && selectedSongForUpdate && (
+          <UpdateForm
+            isOpen={isUpdateModalOpen}
+            setIsOpen={setIsUpdateModalOpen}
+            song={selectedSongForUpdate}
+            songid={selectedSongForUpdate?._id} // Correctly passing song ID
+          />
+        )}
+      </div>
+
+      {isDetailModalOpen && setSelectedSongForDetail && (
+        <SongDetailsNoLyrics
+          song={selectedSongForDetail}
+          isModalOpen={isDetailModalOpen}
+          setIsModalOpen={setIsDetailModalOpen}
+        />
+      )}
+    </>
+  );
 };
 
 export default SongList;
