@@ -2,17 +2,19 @@ import "./SongList.css";
 import React, { useState } from 'react';
 import DeleteSongModal from "../DeleteSongModal/DeleteSongModal"; // Import the modal component
 import UpdateForm from "../UpdateForm/UpdateForm";
+import AddForm from "../AddForm/AddForm";
 
 const SongList = ({ songs }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedSong, setSelectedSongForDelete] = useState(null);
+    
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
-    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
+    // const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    // const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
 
-    const handleEditClick = (song) => {
-        setSelectedSongForUpdate(song);  // Set song to update
-        setIsUpdateModalOpen(true);     // Open the update modal
+    const handleEditClick = () => {// Set song to update
+        setIsAddModalOpen(true);     // Open the update modal
     };
 
     const handleDeleteClick = (song) => {
@@ -78,12 +80,20 @@ const SongList = ({ songs }) => {
                 />
             )}
 
-            {isUpdateModalOpen && selectedSongForUpdate && (
+            {/* {isUpdateModalOpen && selectedSongForUpdate && (
                 <UpdateForm
                     isOpen={isUpdateModalOpen}
                     setIsOpen={setIsUpdateModalOpen}
                     song={selectedSongForUpdate}
                     songid={selectedSongForUpdate?._id} // Correctly passing song ID
+                />
+            )} */}
+
+            {isAddModalOpen && (
+                <AddForm
+                    song={selectedSong}
+                    isOpen={isAddModalOpen}
+                    setIsOpen={setIsAddModalOpen}
                 />
             )}
         </div>
