@@ -51,7 +51,7 @@ const SongList = ({ songs }) => {
                         songs.map((song) => (
                             <tr key={song._id}>
                                 <td>
-                                    <span className="underlined" onClick={() => handleTitleClick(song._id)}>
+                                    <span className="underlined" onClick={() => handleTitleClick(song)}>
                                         {song.title || "N/A"}
                                     </span>
                                 </td>
