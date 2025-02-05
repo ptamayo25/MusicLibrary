@@ -7,13 +7,20 @@ const {
   updateAccess,
   getAllUsers,
   logoutUser,
+  googleLogin,
+  googleAuth,
+  googleGetUser,
 } = require("../controllers/userController");
 
 const router = express.Router();
 
 //public routes
 router.post("/register", register);
-//TODO: implement login
+
+//login
+router.get("/login", googleLogin);
+router.get("/auth/google", googleAuth);
+router.get("/auth/loggedin", googleGetUser);
 
 //protected routes
 router.post("/updateAccess", updateAccess);

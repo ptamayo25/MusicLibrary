@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 
 //mount routes
 app.use("/api/users", userRoutes);
+app.use("/auth", userRoutes);
 
 //connect to MongoDB
 mongoose
@@ -54,10 +55,11 @@ mongoose
 //Download OAuth2 configuration from Google
 // const keys = require('./oauth2.keys.json');
 
-async function main() {
-  const oAuth2Client = await getAutheticatedClient(); // Getting the OAuth2 client
-}
+// async function main() {
+//   const oAuth2Client = await getAutheticatedClient(); // Getting the OAuth2 client
+// }
 
+//In controller.
 // Test auth service is runing
 // app.get("/", (req, res) => {
 //   res.send("Auth Service is running.");

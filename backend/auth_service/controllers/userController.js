@@ -185,7 +185,51 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// TODO: Implement user login
+// Google login
+exports.googleLogin = async (req, res) => {
+  try {
+    const client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      process.env.GOOGLE_REDIRECT_URI
+    );
+    const authorizeUrl = client.generateAuthUrl({
+      access_type: "offline",
+      scope: [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "openid",
+      ],
+    });
+    res.redirect(authorizeUrl);
+  } catch (error) {
+    console.error("Error during Google login:", error);
+    res.status(500).json({ message: "Error during Google login" });
+  }
+};
+exports.googleAuth = async (req, res) => {
+  const { code } = req.query;
+  if (!code) return res.status(400).send("No code received");
+
+  try {
+    const { tokens } = await client.getToken(code);
+    req.session.tokens = tokens;
+
+    res.redirect("http://localhost:5173/musicLibrary"); // Redirect to frontend
+  } catch (error) {
+    res.status(500).send("Authentication failed");
+  }
+};
+exports.googleGetUser = async (req, res) => {
+  if (!req.session.tokens) {
+    return res.status(401).send("User not authenticated");
+  }
+  client.setCredentials(req.session.tokens);
+  const userInfo = await client.request({
+    url: "https://www.googleapis.com/oauth2/v2/userinfo",
+  });
+  res.json(userInfo.data);
+};
 
 // TODO: Implemet user logout
 exports.logout = async (req, res) => {
