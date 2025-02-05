@@ -34,11 +34,11 @@ const DeleteSongModal = ({ song, isOpen, setIsOpen }) => {
     <>
       {isOpen && (
         <div
-          className="modal"
+          className="delete-song-modal"
           style={{ display: isOpen ? "block" : "none" }}
           onClick={handleOutsideClick}
         >
-          <div className="modal-content">
+          <div className="delete-modal-content">
             <h2>Confirm Deletion</h2>
             <p>Are you sure you want to delete "{song.title}"?</p>
             <button onClick={handleDelete}>Yes</button>
