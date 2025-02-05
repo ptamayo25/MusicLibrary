@@ -56,7 +56,7 @@ const SongList = ({ songs }) => {
                                 <td>{song.keywords ? song.keywords.join(', ') : 'N/A'}</td>
                                 <td>{song.lastPerformed ? new Date(song.lastPerformed).toLocaleDateString() : 'N/A'}</td>
                                 <td>
-                                    <button onClick={() => handleEditClick(song._id)}>edit</button>
+                                    <button onClick={() => handleEditClick(song)}>edit</button>
                                 </td>
                                 <td>
                                     <button onClick={() => handleDeleteClick(song)}>delete</button>
@@ -80,12 +80,12 @@ const SongList = ({ songs }) => {
                 />
             )}
 
-            {/* Render DeleteSongModal */}
-            {selectedSongForUpdate && (
+            {isUpdateModalOpen && selectedSongForUpdate && (
                 <UpdateForm
-                    song={selectedSongForUpdate}
                     isOpen={isUpdateModalOpen}
                     setIsOpen={setIsUpdateModalOpen}
+                    song={selectedSongForUpdate}
+                    songid={selectedSongForUpdate?._id} // Correctly passing song ID
                 />
             )}
         </div>
