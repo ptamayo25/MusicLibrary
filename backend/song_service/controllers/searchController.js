@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Song = require("../models/song"); //update if Nancy changes name of schema
+const song = require("../models/song");
+// const { ObjectId } = mongoose.Types;
 
 //stretch goal: PJT to add fuzzy search capability (for misspelled words)
 
@@ -72,15 +74,25 @@ exports.getSongsBySearch = async (req, res) => {
       ...songsByKeywords,
     ];
 
-    console.log("Song matches found: ", songs);
+    const uniqueSongs = [];
 
-    if (songs.length === 0) {
-      return songs; //return empty array if no songs found
+    songs.forEach((song) => {
+      console.log("SongID: ", song._id);
+      for (let i = 0; i < uniqueSongs.length; i++) {
+        if (uniqueSongs[i]._id.equals(song._id)) {
+          return;
+        }
+      }
+      uniqueSongs.push(song);
+    });
+
+    console.log("Unique songs found: ", uniqueSongs);
+
+    if (uniqueSongs.length === 0) {
+      return uniqueSongs; //return empty array if no songs found
     }
 
-    console.log("Song matches found: ", songs);
-
-    return res.json(sortResults(songs, sortType));
+    return res.json(sortResults(uniqueSongs, sortType));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

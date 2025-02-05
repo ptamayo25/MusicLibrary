@@ -21,6 +21,7 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const PORT = process.env.PORT;
 
+//middleware
 app.use(cors());
 
 // const client = new OAuth2Client(
