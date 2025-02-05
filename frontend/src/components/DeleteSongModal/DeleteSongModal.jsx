@@ -1,3 +1,5 @@
+import "./deleteSongModal.css";
+
 const DeleteSongModal = ({ song, isOpen, setIsOpen }) => {
   const handleDelete = async () => {
     try {
