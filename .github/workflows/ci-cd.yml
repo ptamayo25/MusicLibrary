@@ -21,22 +21,39 @@ jobs:
         with:
           node-version: 20.x
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
 
-      - name: Build
-        run: npm run build
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm run test
+          
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm run test
 
-deploy:
-  needs: build
-  runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+        
+  # - name: Build
+  #   run: npm run build
 
-    - name: Deploy to Production
-      run: echo "Deploying to production (not really)"
+
+# deploy:
+#   needs: build
+#   runs-on: ubuntu-latest
+
+#   steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Deploy to Production
+#       run: echo "Deploying to production (not really)"
