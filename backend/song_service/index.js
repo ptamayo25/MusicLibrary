@@ -1,26 +1,33 @@
+// Package imports
 require("dotenv").config(); // Load environment variables from .env file
 const mongoose = require("mongoose");
-
+const swaggerUi = require("swagger-ui-express");
 const express = require("express");
-const songRoutes = require("./routes/songRoutes");
 const cors = require("cors"); //can remove once moved over to api gateway
 
+// File imports
+const swaggerDocument = require("./swagger.json");
+const songRoutes = require("./routes/songRoutes");
+
+// Initialize the app
 const app = express();
+const PORT = process.env.PORT;
 
-app.use(cors()); //can remove once moved over to api gateway
+// Middleware
 app.use(express.json()); //can remove once moved over to api gateway
+app.use(cors()); //can remove once moved over to api gateway
+app.use(cors());
 
+// Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Routes
 app.get("/", (req, res) => {
   res.send("Song Service is running.");
 });
-
-const PORT = process.env.PORT;
-
-app.use(express.json());
-// Routes
 app.use("/api/songs", songRoutes);
-app.use(cors());
 
+// Database connection
 mongoose
   .connect(process.env.MONGO_URI, {})
   .then(() => {
