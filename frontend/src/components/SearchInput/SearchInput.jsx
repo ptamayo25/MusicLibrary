@@ -59,7 +59,7 @@ function SearchInput() {
       }
     };
 
-    handleOnLoad();
+    handleOnLoad(); 
   }, []);
 
   // handleOnLoad();
