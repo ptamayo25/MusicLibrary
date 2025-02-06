@@ -17,6 +17,9 @@ const AddForm = ({ isOpen, setIsOpen }) => {
   const [keywords, setKeywords] = useState([]); // State for keywords
   const [keywordInput, setKeywordInput] = useState(""); // Input field state for keyword
 
+  const [themes, setThemes] = useState([]);
+  const [themeInput, setThemeInput] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -39,6 +42,18 @@ const AddForm = ({ isOpen, setIsOpen }) => {
     setKeywords(keywords.filter((keyword) => keyword !== keywordToRemove));
   };
 
+  const addTheme = (e) => {
+    e.preventDefault();
+    if (themeInput.trim() && !themes.includes(themeInput.trim())) {
+      setThemes([...themes, themeInput.trim()]);
+      setThemeInput("");
+    }
+  };
+
+  const removeTheme = (themeToRemove) => {
+    setThemes(themes.filter((theme) => theme !== themeToRemove));
+  };
+
   const handleClose = () => {
     setIsOpen(false);
     setFormData({
@@ -52,7 +67,8 @@ const AddForm = ({ isOpen, setIsOpen }) => {
       lastPerformed: "",
       comments: "",
     });
-    setKeywords([]); // Reset keywords as well
+    setKeywords([]),
+    setThemes([]); // Reset keywords as well
   };
 
   const handleSubmit = async (event) => {
@@ -76,7 +92,7 @@ const AddForm = ({ isOpen, setIsOpen }) => {
       const response = await fetch(`${apiUrl}/api/songs/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...updatedData, keywords }),
+        body: JSON.stringify({ ...updatedData, keywords, themes }),
       });
 
       const data = await response.json(); // Parse response JSON
@@ -105,13 +121,13 @@ const AddForm = ({ isOpen, setIsOpen }) => {
             <div className="form-layout">
               <div className="form-left">
                 {[
-                  { label: "* Title", name: "title", type: "text", required: true },
-                  { label: "* Composer", name: "composer", type: "text", required: true },
-                  { label: "Arranger", name: "arranger", type: "text" },
-                  { label: "Copies", name: "copies", type: "number" },
-                  { label: "Voicing", name: "voicing", type: "text" },
-                  { label: "Instrumentation", name: "instrumentation", type: "text" },
-                  { label: "Last Performed", name: "lastPerformed", type: "date" },
+                { label: "* Title", name: "title", type: "text", required: true },
+                { label: "* Composer", name: "composer", type: "text", required: true },
+                { label: "Arranger", name: "arranger", type: "text" },
+                { label: "Copies", name: "copies", type: "number" },
+                { label: "Voicing", name: "voicing", type: "text" },
+                { label: "Instrumentation", name: "instrumentation", type: "text" },
+                { label: "Last Performed", name: "lastPerformed", type: "date" },
                 ].map((field) => (
                   <div className="form-group" key={field.name}>
                     <label htmlFor={field.name}>{field.label}:</label>
@@ -121,34 +137,71 @@ const AddForm = ({ isOpen, setIsOpen }) => {
                       name={field.name}
                       value={formData[field.name]}
                       onChange={handleChange}
-                      required={field.required || false} 
+                      required={field.required || false}
                     />
                   </div>
                 ))}
 
-                <div className="form-group">
-                  <label>Keywords:</label>
-                  <div className="keyword-input">
-                    <input
-                      type="text"
-                      value={keywordInput}
-                      onChange={(e) => setKeywordInput(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && addKeyword(e)}
-                      placeholder="Type a keyword and press Enter"
-                    />
-                    <button type="button" onClick={addKeyword}>Add</button>
-                  </div>
+    {/* Keywords Input Field */}
+    <div className="form-group">
+                <label>Keywords:</label>
+                <div className="keyword-input">
+                  <input
+                    type="text"
+                    value={keywordInput}
+                    onChange={(e) => setKeywordInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addKeyword(e)}
+                    placeholder="Type a keyword and press Enter"
+                  />
+                  <button type="button" onClick={addKeyword}>Add</button>
+                </div>
 
-                  <div className="keyword-list">
-                    {keywords.map((keyword, index) => (
-                      <span key={index} className="keyword">
-                        {keyword}
-                        <button type="button" onClick={() => removeKeyword(keyword)}>x</button>
-                      </span>
-                    ))}
-                  </div>
+                {/* Display Added Keywords */}
+                <div className="keyword-list">
+                  {keywords.map((keyword, index) => (
+                    <span key={index} className="keyword">
+                      {keyword}
+                      <button type="button" onClick={() => removeKeyword(keyword)}>x</button>
+                    </span>
+                  ))}
                 </div>
               </div>
+
+              {/* Theme Input Field */}
+              <div className="form-group">
+                <label>Themes:</label>
+                <div className="theme-input">
+                  <input
+                    type="text"
+                    value={themeInput}
+                    onChange={(e) => setThemeInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addTheme(e)}
+                    placeholder="Type a theme and press Enter"
+                  />
+                  <button type="button" onClick={addTheme}>Add</button>
+                </div>
+
+                {/* Display Added Themes */}
+                <div className="theme-list">
+                  {themes.map((theme, index) => (
+                    <span key={index} className="theme">
+                      {theme}
+                      <button type="button" onClick={() => removeTheme(theme)}>x</button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="comments">Comments:</label>
+                <textarea
+                  id="comments"
+                  name="comments"
+                  value={formData.comments}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
 
               <div className="form-right">
                 <label htmlFor="lyrics">Lyrics:</label>
