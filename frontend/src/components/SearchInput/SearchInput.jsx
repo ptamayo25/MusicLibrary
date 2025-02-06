@@ -29,7 +29,7 @@ function SearchInput() {
         }
         const data = await themesResponse.json();
 
-        const themes = data.uniqueThemes.filter((theme) => theme !== null);
+        const themes = data.themes;
 
         setThemesDisplayed(themes);
 

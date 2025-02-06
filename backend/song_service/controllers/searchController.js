@@ -162,8 +162,11 @@ exports.getThemes = async (req, res) => {
   console.log("Getting themes...");
   try {
     const uniqueThemes = await Song.distinct("themes");
-    console.log("Unique themes found: ", uniqueThemes);
-    res.json({ uniqueThemes });
+    const themes = uniqueThemes.filter(
+      (theme) => theme !== null && theme !== undefined
+    );
+    console.log("Themes found: ", themes);
+    res.json({ themes });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

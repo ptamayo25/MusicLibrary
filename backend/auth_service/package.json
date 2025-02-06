@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.3",
+    "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -19,6 +20,8 @@
     "http": "^0.0.1-security",
     "mongoose": "^8.9.6",
     "open": "^10.1.0",
+    "passport": "^0.5.3",
+    "passport-google-oauth20": "^2.0.0",
     "server-destroy": "^1.0.1",
     "url": "^0.11.4"
   }

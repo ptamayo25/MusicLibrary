@@ -18,15 +18,15 @@ const {
 } = require("../controllers/songController");
 
 // Correct: Define a POST route for /song
-router.post("/", createSong);
-router.post("/bulkadd", createManySongs);
-router.get("/", getSongs);
-router.get("/:id", getSongById);
-router.patch("/:id", updateSong);
-router.delete("/:id", deleteSong);
+router.post("/", createSong); //added to swagger UI
+router.post("/bulkadd", createManySongs); //just used for bulk adding fake songs for testing did not add to swagger UI
+router.get("/", getSongs); //added to swagger UI
+router.get("/:id", getSongById); //added to swagger UI
+router.patch("/:id", updateSong); //added to swagger UI
+router.delete("/:id", deleteSong); //added to swagger UI
 
 // Route for searching songs
-router.post("/search", getSongsBySearch);
-router.post("/themes", getThemes);
+router.post("/search", getSongsBySearch); //added to swagger UI
+router.post("/themes", getThemes); //added to swagger UI
 
 module.exports = router;
