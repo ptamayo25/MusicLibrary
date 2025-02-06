@@ -18,7 +18,7 @@ function SearchInput() {
     const handleOnLoad = async () => {
       try {
         //Grab themes from backend
-        const apiUrl = import.meta.env.VITE_SONG_SERVICE_URL;
+        const apiUrl = "http://localhost:4002"
         const themesResponse = await fetch(`${apiUrl}/api/songs/themes`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
