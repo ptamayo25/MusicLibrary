@@ -20,7 +20,7 @@
     "http": "^0.0.1-security",
     "mongoose": "^8.9.6",
     "open": "^10.1.0",
-    "passport": "^0.7.0",
+    "passport": "^0.5.3",
     "passport-google-oauth20": "^2.0.0",
     "server-destroy": "^1.0.1",
     "url": "^0.11.4"

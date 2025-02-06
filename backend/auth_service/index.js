@@ -7,9 +7,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const url = require("url");
 const cors = require("cors");
-const passport = require('passport');
-const cookieSession = require('cookie-session');
-require('./passport');
+const passport = require("passport");
+const cookieSession = require("cookie-session");
 // const open = require("open");
 // const destroyer = require("server-destroy");
 // const { OAuth2Client } = require("google-auth-library");
@@ -19,6 +18,7 @@ require('./passport');
 
 //file imports
 const userRoutes = require("./routes/userRoutes");
+require("./passport");
 
 //initialize express app
 const app = express();
@@ -88,10 +88,12 @@ app.listen(PORT, () => {
 });
 
 // Google Auth
-app.use(cookieSession({
-  name: 'google-auth-session',
-  keys: ['key1', 'key2']
-}))
+app.use(
+  cookieSession({
+    name: "google-auth-session",
+    keys: ["key1", "key2"],
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -101,25 +103,25 @@ app.use(passport.session());
 // })
 
 app.get("/failed", (req, res) => {
-    res.send("Failed")
-})
+  res.send("Failed");
+});
 app.get("/success", (req, res) => {
-    res.send(`Welcome ${req.user.email}`)
-})
+  res.send(`Welcome ${req.user.email}`);
+});
 
-app.get('/google',
-    passport.authenticate('google', {
-            scope:
-                ['email', 'profile']
-        }
-    ));
+app.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+  })
+);
 
-app.get('/google/callback',
-    passport.authenticate('google', {
-        failureRedirect: '/failed',
-    }),
-    function (req, res) {
-        res.redirect('/success')
-
-    }
+app.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/failed",
+  }),
+  function (req, res) {
+    res.redirect("/success");
+  }
 );

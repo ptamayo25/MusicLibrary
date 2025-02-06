@@ -1,17 +1,20 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy; //breadcrumb
 
-//Medium Article walkthrough on passport.js
+//Medium Article walkthrough on passport.js used for reference
 //https://medium.com/nerd-for-tech/google-oauth2-0-authentication-using-node-js-and-passportjs-1a77f42b1111
 
+//Serialize and Deserialize user
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
 
+//Deserialize user
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
+//Use Google Strategy
 passport.use(
   new GoogleStrategy(
     {
