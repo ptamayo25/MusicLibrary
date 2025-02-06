@@ -22,6 +22,8 @@ services:
       - PORT=${AUTH_PORT}
       - MONGO_URI=${MONGO_URI}
       - SONG_SERVICE_URL=${SONG_SERVICE_URL}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
   song_service:
     build: 
       context: ./backend/song_service
