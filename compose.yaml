@@ -1,0 +1,36 @@
+services: 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_AUTH_SERVICE_URL=${VITE_AUTH_SERVICE_URL}
+      - VITE_SONG_SERVICE_URL=${VITE_SONG_SERVICE_URL}
+    depends_on:
+      - auth_service
+      - song_service
+  auth_service:
+    build:
+      context: ./backend/auth_service
+      dockerfile: Dockerfile
+    ports:
+      - 4001:4001
+    environment:
+      - PORT=${AUTH_PORT}
+      - MONGO_URI=${MONGO_URI}
+      - SONG_SERVICE_URL=${SONG_SERVICE_URL}
+  song_service:
+    build: 
+      context: ./backend/song_service
+      dockerfile: Dockerfile
+    ports:
+      - 4002:4002
+    environment: 
+      - PORT=${SONG_PORT}
+      - MONGO_URI=${MONGO_URI}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+
+      
