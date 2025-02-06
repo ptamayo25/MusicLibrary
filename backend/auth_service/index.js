@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const url = require("url");
 const cors = require("cors");
+const passport = require("passport");
+const cookieSession = require("cookie-session");
 // const open = require("open");
 // const destroyer = require("server-destroy");
 // const { OAuth2Client } = require("google-auth-library");
@@ -16,6 +18,7 @@ const cors = require("cors");
 
 //file imports
 const userRoutes = require("./routes/userRoutes");
+require("./passport");
 
 //initialize express app
 const app = express();
@@ -83,3 +86,42 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Auth Service running on port ${PORT}`);
 });
+
+// Google Auth
+app.use(
+  cookieSession({
+    name: "google-auth-session",
+    keys: ["key1", "key2"],
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// app.get("/", (req, res) => {
+//     res.json({message: "You are not logged in"})
+// })
+
+app.get("/failed", (req, res) => {
+  res.send("Failed");
+});
+app.get("/success", (req, res) => {
+  res.send(`Welcome ${req.user.email}`);
+});
+
+app.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+  })
+);
+
+app.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/failed",
+  }),
+  function (req, res) {
+    res.redirect("/success");
+  }
+);
