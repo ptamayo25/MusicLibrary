@@ -9,15 +9,10 @@ const url = require("url");
 const cors = require("cors");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
-// const open = require("open");
-// const destroyer = require("server-destroy");
-// const { OAuth2Client } = require("google-auth-library");
-// const url = require("url");
-// const open = require("open");
-// const destroyer = require("server-destroy");
 
 //file imports
 const userRoutes = require("./routes/userRoutes");
+const authRoutes = require("./routes/authRoutes.js");
 require("./passport");
 
 //initialize express app
@@ -26,49 +21,12 @@ const PORT = process.env.PORT;
 
 //middleware
 app.use(cors());
-
-// const client = new OAuth2Client(
-//   process.env.GOOGLE_CLIENT_ID,
-//   process.env.GOOGLE_CLIENT_SECRET,
-//   process.env.GOOGLE_REDIRECT_URI
-// );
-
-//Download OAuth2 configuration from Google
-// const keys = require('./oauth2.keys.json');
-
-// async function main() {
-// Getting the OAuth2 client
-// const oAuth2Client = await getAutheticatedClient();
-// Get the user's profile
-// }
+app.use(bodyParser.json());
 
 // Test auth service is runing
 app.get("/", (req, res) => {
   res.send("Auth Service is running.");
 });
-
-//Documentation for your reference
-//1. Protocol for OAuth2 - Guide to using OAuth2
-// https://developers.google.com/identity/protocols/oauth2
-//2. Scopes - define of access to user data for Google APIs
-// https://developers.google.com/identity/protocols/oauth2/scopes
-//3. Send access token to an API in a Authorization request header
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization
-
-// app.get("/auth/google", (req, res) => {
-//   const authorizeUrl = client.generateAuthUrl({
-//     access_type: "offline",
-//     scope: [
-//       "https://www.googleapis.com/auth/userinfo.email",
-//       "https://www.googleapis.com/auth/userinfo.profile",
-//       "openid",
-//     ],
-//   });
-//   res.redirect(authorizeUrl);
-// });
-
-//mount routes
-app.use("/api/users", userRoutes);
 
 //connect to MongoDB
 mongoose
@@ -87,6 +45,10 @@ app.listen(PORT, () => {
   console.log(`Auth Service running on port ${PORT}`);
 });
 
+//mount routes
+app.use("/api/users", userRoutes);
+app.use("/auth/")
+
 // Google Auth
 app.use(
   cookieSession({
@@ -94,26 +56,20 @@ app.use(
     keys: ["key1", "key2"],
   })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
-
-// app.get("/", (req, res) => {
-//     res.json({message: "You are not logged in"})
-// })
 
 app.get("/failed", (req, res) => {
   res.send("Failed");
 });
 app.get("/success", (req, res) => {
-  res.send(`Welcome ${req.user.email}`);
+  console.log(req.user);
+  res.send(`Welcome ${req.user.name.givenName}!`);
 });
 
 app.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
-  })
+  "/login", 
+  
 );
 
 app.get(
