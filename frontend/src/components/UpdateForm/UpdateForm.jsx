@@ -17,6 +17,8 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
   const [keywords, setKeywords] = useState([]);
   const [keywordInput, setKeywordInput] = useState("");
 
+  const [themes, setThemes] = useState([]);
+  const [themeInput, setThemeInput] = useState("");
   // Prefill form 
   useEffect(() => {
     if (song) {
@@ -33,6 +35,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
       });
       setKeywords(song.keywords || []);
     }
+    setThemes(song.themes || []);
   }, [song]);
 
   const handleChange = (e) => {
@@ -52,6 +55,19 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
     setKeywords(keywords.filter((keyword) => keyword !== keywordToRemove));
   };
 
+  const addTheme = (e) => {
+    e.preventDefault();
+    if (themeInput.trim() && !themes.includes(themeInput.trim())) {
+      setThemes([...themes, themeInput.trim()]);
+      setThemeInput("");
+    }
+  };
+
+  const removeTheme = (themeToRemove) => {
+    setThemes(themes.filter((theme) => theme !== themeToRemove));
+  };
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -62,7 +78,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
       }
 
       console.log("📤 Sending PATCH request to:", `${apiUrl}/api/songs/${song._id}`);
-      console.log("📤 Payload:", JSON.stringify({ ...formData, keywords }));
+      console.log("📤 Payload:", JSON.stringify({ ...formData, keywords, themes }));
 
       if (!songid) {
         alert("Invalid song ID.");
@@ -80,7 +96,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
       const response = await fetch(`${apiUrl}/api/songs/${songid}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...updatedData, keywords }),
+        body: JSON.stringify({ ...updatedData, keywords, themes }),
       });
 
       const responseData = await response.json(); // Parse response
@@ -108,7 +124,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
         <button className="close-button" type="button" onClick={() => setIsOpen(false)}>X</button>
         <form onSubmit={handleSubmit}>
           <div className="form-layout">
-            {/* Left Side - Standard Inputs & Keywords */}
+            {/* Left Side - Standard Inputs & Keywords & Themes */}
             <div className="form-left">
               {[
                 { label: "* Title", name: "title", type: "text", required: true },
@@ -152,6 +168,31 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                     <span key={index} className="keyword">
                       {keyword}
                       <button type="button" onClick={() => removeKeyword(keyword)}>x</button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Theme Input Field */}
+              <div className="form-group">
+                <label>Themes:</label>
+                <div className="theme-input">
+                  <input
+                    type="text"
+                    value={themeInput}
+                    onChange={(e) => setThemeInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addTheme(e)}
+                    placeholder="Type a theme and press Enter"
+                  />
+                  <button type="button" onClick={addTheme}>Add</button>
+                </div>
+
+                {/* Display Added Themes */}
+                <div className="theme-list">
+                  {themes.map((theme, index) => (
+                    <span key={index} className="theme">
+                      {theme}
+                      <button type="button" onClick={() => removeTheme(theme)}>x</button>
                     </span>
                   ))}
                 </div>
