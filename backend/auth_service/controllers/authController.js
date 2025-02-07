@@ -14,9 +14,9 @@ exports.failed = async (req, res) => {
   res.send("Failed");
 };
 
-exports.success = async (req, res) => {
-  res.send(`Welcome!`);
-};
+// exports.success = async (req, res) => {
+//   res.send(`Welcome!`);
+// };
 
 exports.callback = (req, res, next) => {
   passport.authenticate(
