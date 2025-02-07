@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "./UpdateForm.css";
 
 const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
@@ -19,7 +19,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
 
   const [themes, setThemes] = useState([]);
   const [themeInput, setThemeInput] = useState("");
-  // Prefill form 
+  // Prefill form
   useEffect(() => {
     if (song) {
       setFormData({
@@ -67,7 +67,6 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
     setThemes(themes.filter((theme) => theme !== themeToRemove));
   };
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -77,8 +76,14 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
         return;
       }
 
-      console.log("📤 Sending PATCH request to:", `${apiUrl}/api/songs/${song._id}`);
-      console.log("📤 Payload:", JSON.stringify({ ...formData, keywords, themes }));
+      console.log(
+        "📤 Sending PATCH request to:",
+        `${apiUrl}/api/songs/${song._id}`
+      );
+      console.log(
+        "📤 Payload:",
+        JSON.stringify({ ...formData, keywords, themes })
+      );
 
       if (!songid) {
         alert("Invalid song ID.");
@@ -88,10 +93,11 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
       // Filter out unchanged fields
       const updatedData = Object.fromEntries(
         Object.entries(formData).filter(([_, value]) =>
-          typeof value === "string" ? value.trim() !== "" : value !== null && value !== undefined
+          typeof value === "string"
+            ? value.trim() !== ""
+            : value !== null && value !== undefined
         )
       );
-
 
       const response = await fetch(`${apiUrl}/api/songs/${songid}`, {
         method: "PATCH",
@@ -121,19 +127,43 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
     <div className="modal-overlay">
       <div className="form-container" onClick={(e) => e.stopPropagation()}>
         <h2>Update Song</h2>
-        <button className="close-button" type="button" onClick={() => setIsOpen(false)}>X</button>
+        <button
+          className="close-button"
+          type="button"
+          onClick={() => setIsOpen(false)}
+        >
+          X
+        </button>
         <form onSubmit={handleSubmit}>
           <div className="form-layout">
             {/* Left Side - Standard Inputs & Keywords & Themes */}
             <div className="form-left">
               {[
-                { label: "* Title", name: "title", type: "text", required: true },
-                { label: "* Composer", name: "composer", type: "text", required: true },
+                {
+                  label: "* Title",
+                  name: "title",
+                  type: "text",
+                  required: true,
+                },
+                {
+                  label: "* Composer",
+                  name: "composer",
+                  type: "text",
+                  required: true,
+                },
                 { label: "Arranger", name: "arranger", type: "text" },
                 { label: "Copies", name: "copies", type: "number" },
                 { label: "Voicing", name: "voicing", type: "text" },
-                { label: "Instrumentation", name: "instrumentation", type: "text" },
-                { label: "Last Performed", name: "lastPerformed", type: "date" },
+                {
+                  label: "Instrumentation",
+                  name: "instrumentation",
+                  type: "text",
+                },
+                {
+                  label: "Last Performed",
+                  name: "lastPerformed",
+                  type: "date",
+                },
               ].map((field) => (
                 <div className="form-group" key={field.name}>
                   <label htmlFor={field.name}>{field.label}:</label>
@@ -159,7 +189,9 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                     onKeyDown={(e) => e.key === "Enter" && addKeyword(e)}
                     placeholder="Type a keyword and press Enter"
                   />
-                  <button type="button" onClick={addKeyword}>Add</button>
+                  <button type="button" onClick={addKeyword}>
+                    Add
+                  </button>
                 </div>
 
                 {/* Display Added Keywords */}
@@ -167,7 +199,10 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                   {keywords.map((keyword, index) => (
                     <span key={index} className="keyword">
                       {keyword}
-                      <button type="button" onClick={() => removeKeyword(keyword)}>x</button>
+                      <button
+                        type="button"
+                        onClick={() => removeKeyword(keyword)}
+                      ></button>
                     </span>
                   ))}
                 </div>
@@ -184,7 +219,9 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                     onKeyDown={(e) => e.key === "Enter" && addTheme(e)}
                     placeholder="Type a theme and press Enter"
                   />
-                  <button type="button" onClick={addTheme}>Add</button>
+                  <button type="button" onClick={addTheme}>
+                    Add
+                  </button>
                 </div>
 
                 {/* Display Added Themes */}
@@ -192,7 +229,9 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
                   {themes.map((theme, index) => (
                     <span key={index} className="theme">
                       {theme}
-                      <button type="button" onClick={() => removeTheme(theme)}>x</button>
+                      <button type="button" onClick={() => removeTheme(theme)}>
+                        x
+                      </button>
                     </span>
                   ))}
                 </div>
@@ -223,8 +262,12 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
 
           {/* Submit Button - At the Bottom & Centered */}
           <div className="submit-container">
-            <button type="submit" className="submit-button">Submit Song</button>
-            <button type="button" onClick={() => setIsOpen(false)}>Cancel</button>
+            <button type="submit" className="submit-button">
+              Submit Song
+            </button>
+            <button type="button" onClick={() => setIsOpen(false)}>
+              Cancel
+            </button>
           </div>
         </form>
       </div>

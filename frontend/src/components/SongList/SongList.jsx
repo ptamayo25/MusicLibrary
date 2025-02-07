@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import DeleteSongModal from "../DeleteSongModal/DeleteSongModal"; // Import the modal component
 import UpdateForm from "../UpdateForm/UpdateForm";
 import SongDetailsNoLyrics from "../SongDetailsLyrics/SongDetails";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const SongList = ({ songs }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -74,11 +76,21 @@ const SongList = ({ songs }) => {
                       : "N/A"}
                   </td>
                   <td>
-                    <button onClick={() => handleEditClick(song)}>edit</button>
+                    <button
+                      className="hover-button"
+                      onClick={() => handleEditClick(song)}
+                    >
+                      {/* edit */}
+                      <EditIcon />
+                    </button>
                   </td>
                   <td>
-                    <button onClick={() => handleDeleteClick(song)}>
-                      delete
+                    <button
+                      className="hover-button"
+                      onClick={() => handleDeleteClick(song)}
+                    >
+                      {/* delete */}
+                      <DeleteIcon />
                     </button>
                   </td>
                 </tr>
