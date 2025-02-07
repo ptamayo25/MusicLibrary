@@ -47,7 +47,7 @@ app.listen(PORT, () => {
 
 //mount routes
 app.use("/api/users", userRoutes);
-app.use("/auth/")
+app.use("/auth", authRoutes);
 
 // Google Auth
 app.use(
@@ -59,25 +59,27 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/failed", (req, res) => {
-  res.send("Failed");
-});
-app.get("/success", (req, res) => {
-  console.log(req.user);
-  res.send(`Welcome ${req.user.name.givenName}!`);
-});
+// app.get("/failed", (req, res) => {
+//   res.send("Failed");
+// });
+// app.get("/success", (req, res) => {
+//   console.log(req.user);
+//   res.send(`Welcome ${req.user.name.givenName}!`);
+// });
 
-app.get(
-  "/login", 
-  
-);
+// app.get(
+//   "/login",
+//   passport.authenticate("google", {
+//     scope: ["email", "profile"],
+//   })
+// );
 
-app.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/failed",
-  }),
-  function (req, res) {
-    res.redirect("/success");
-  }
-);
+// app.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     failureRedirect: "/failed",
+//   }),
+//   function (req, res) {
+//     res.redirect("/success");
+//   }
+// );
