@@ -63,6 +63,8 @@ const SongDetailsNoLyrics = ({ song, isModalOpen, setIsModalOpen }) => {
 };
 
 SongDetailsNoLyrics.propTypes = {
+  isModalOpen: PropTypes.bool,
+  setIsModalOpen: PropTypes.bool,
   song: PropTypes.shape({
     title: PropTypes.string.isRequired,
     composer: PropTypes.string.isRequired,
