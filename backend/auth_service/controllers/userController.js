@@ -38,8 +38,9 @@ exports.getUserById = async (req, res) => {
 };
 
 // Handle user registration TODO: implement oauth and token generation
-exports.register = async (req, res) => {
-  const { firstName, lastName, email, access } = req.body; // Extract name, email, and access from request
+exports.register = async (newUser, res) => {
+  // console.log("Request passed to Register", req);
+  const { googleID, firstName, lastName, email, access, loggedIn } = newUser; // Extract name, email, and access from request
 
   try {
     const existingUser = await User.findOne({ email }); // Check if the user already exists
@@ -48,12 +49,27 @@ exports.register = async (req, res) => {
         .status(409)
         .json({ message: "User already exists. Verify email." }); // Return error if user exists
     }
-    const user = new User({ firstName, lastName, email, access }); // Create a new user instance
+    const user = new User({
+      googleID,
+      firstName,
+      lastName,
+      email,
+      access,
+      loggedIn,
+    }); // Create a new user instance
     await user.save(); // Save the user to the database
 
     res.status(201).json({
       message: "User registered successfully",
-      user: { id: user._id, firstName, lastName, email, access }, // Send user details in response
+      user: {
+        id: user._id,
+        googleID,
+        firstName,
+        lastName,
+        email,
+        access,
+        loggedIn,
+      }, // Send user details in response
     });
   } catch (error) {
     console.error("Error during registration:", error);
@@ -134,6 +150,20 @@ exports.updateAccessMany = async (req, res) => {
 };
 
 // TODO: Implement user login
+exports.login = async (user, res) => {
+  try {
+    if (!user) {
+      return res.status(400).json({ message: "User not found" }); // Return error if user not found
+    }
+    await User.findOneAndUpdate(
+      { email: user.emails[0].value }, // Find the user by email
+      { loggedIn: true } // Update the user's loggedIn status
+    );
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    res.status(500).json({ message: "Internal server error with login" }); // Return error
+  }
+};
 
 // TODO: Implemet user logout
 

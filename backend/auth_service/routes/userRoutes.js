@@ -5,7 +5,7 @@ const express = require("express");
 const {
   getAllUsers,
   getUserById,
-  register,
+  // register,
   updateAccessOne,
   updateAccessMany,
   registerMany,
@@ -15,7 +15,7 @@ const {
 const router = express.Router();
 
 //public routes
-router.post("/register", register);
+// router.post("/register", register);
 router.post("/registerMany", registerMany); //used to populate database with fake users
 //TODO: implement login
 
