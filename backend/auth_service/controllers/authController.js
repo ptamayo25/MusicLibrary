@@ -2,8 +2,10 @@ require("dotenv").config();
 const passport = require("passport");
 require("../passport");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const { register, login } = require("../controllers/userController");
+const { max } = require("pg/lib/defaults");
 
 exports.login = passport.authenticate("google", {
   scope: ["email", "profile"],
@@ -24,10 +26,6 @@ exports.callback = (req, res, next) => {
     async (err, user, info) => {
       if (err) return next(err);
       if (!user) return res.redirect("/auth/failed");
-
-      console.log("=============user=======================");
-      console.log(user);
-      console.log("====================================");
       try {
         //Check if user exists in database
         const userExists = await User.findOne({ email: user.emails[0].value });
@@ -43,6 +41,25 @@ exports.callback = (req, res, next) => {
           };
           await register(newUser, res);
         }
+
+        //Generate JWT token and send it to the client
+        userInDatabase = await User.findOne({ email: user.emails[0].value });
+
+        console.log("id", userInDatabase._id);
+        const token = jwt.sign(
+          { userId: userInDatabase._id }, // Use the user ID from the database
+          process.env.JWT_SECRET, // Use a secret key from your environment variables
+          { expiresIn: "14d" } // Token expires in 14 days
+        );
+
+        console.log("JWT Token generated:", token); // Log the token for debugging
+
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
+        }); // Set the cookie with the token
 
         //Log user in on database
         await login(user, res);

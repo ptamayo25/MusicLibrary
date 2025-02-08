@@ -159,13 +159,16 @@ exports.login = async (user, res) => {
       { email: user.emails[0].value }, // Find the user by email
       { loggedIn: true } // Update the user's loggedIn status
     );
+
+    //add jwt token in response as header?
+ 
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ message: "Internal server error with login" }); // Return error
   }
 };
 
-// TODO: Implemet user logout
+// TODO: Implement user logout
 
 // Handle deleting a single user by ID
 exports.deleteOne = async (req, res) => {
