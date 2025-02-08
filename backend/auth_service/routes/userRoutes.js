@@ -14,7 +14,7 @@ const {
 //middleware imports
 const verifyJWT = require("../middlewares/verifyJWT");
 
-const { checkAdmin } = require("../middlewares/checkUserAccess");
+const checkAdmin = require("../middlewares/checkAdmin");
 
 const router = express.Router();
 

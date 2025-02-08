@@ -21,6 +21,7 @@ function SearchInput() {
         const apiUrl = import.meta.env.VITE_SONG_SERVICE_URL;
         const themesResponse = await fetch(`${apiUrl}/api/songs/themes`, {
           method: "POST",
+          credentials: "include", // Include credentials to send cookies
           headers: { "Content-Type": "application/json" },
         });
         console.log("response", themesResponse);
@@ -38,6 +39,7 @@ function SearchInput() {
         const songsResponse = await fetch(`${apiUrl}/api/songs/search`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include", // Include credentials to send cookies
           body: JSON.stringify({
             words: searchTerm,
             sortType,
@@ -98,6 +100,7 @@ function SearchInput() {
 
       const response = await fetch(`${apiUrl}/api/songs/search`, {
         method: "POST",
+        credentials: "include", // Include credentials to send cookies
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           words: searchTerm,
