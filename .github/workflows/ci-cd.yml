@@ -34,35 +34,39 @@ jobs:
       - name: Set up Docker Build
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push Docker Image
+      - name: Login to Docker Hub
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+      - name: Build and push Frontend Image
         uses: docker/build-push-action@v6
         with:
-          target: test
-          load: true
+          context: ./frontend
+          push: true
+          tag: ptamayo25/uucnh-music-library:frontend
 
-      - name: Pull Frontend Docker Image
-        run: |
-          docker pull ptamayo25/uucnh-music-library:frontend
+      - name: Build and push Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tag: ptamayo25/uucnh-music-library:frontend
 
-      - name: Pull Auth Service Docker Image
-        run: |
-          docker pull ptamayo25/uucnh-music-library:auth-service
+      - name: Build and push Auth Service Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend/auth-service
+          push: true
+          tag: ptamayo25/uucnh-music-library:auth-service
 
-      - name: Pull Song Service Docker Image
-        run: |
-          docker pull ptamayo25/uucnh-music-library:song-service
-
-      - name: Push Frontend Docker Image
-        run: |
-          docker push ptamayo25/uucnh-music-library:frontend
-
-      - name: Push Auth Service Docker Image
-        run: |
-          docker push ptamayo25/uucnh-music-library:auth-service
-
-      - name: Push Song Service Docker Image
-        run: |
-          docker push ptamayo25/uucnh-music-library:song-service
+      - name: Build and push Song Service Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend/song-service
+          push: true
+          tag: ptamayo25/uucnh-music-library:song-service
 
       # - name: Run frontend tests
       #   run: |
@@ -74,7 +78,6 @@ jobs:
       #     cd backend
       #     npm run test
       # - name: Build
-
 # deploy:
 #   needs: build
 #   runs-on: ubuntu-latest
