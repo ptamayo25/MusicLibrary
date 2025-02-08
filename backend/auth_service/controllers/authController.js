@@ -3,16 +3,21 @@ const passport = require("passport");
 require("../passport");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-
 const { register, login } = require("../controllers/userController");
-const { max } = require("pg/lib/defaults");
 
 exports.login = passport.authenticate("google", {
   scope: ["email", "profile"],
 });
 
 exports.logout = async (req, res) => {
-  res.send("Logout route");
+  try {
+    await req.logout();
+    res.clearCookie("token"); // Clear the token from cookies
+    res.status(200).json({ message: "Logged out" });
+  } catch (error) {
+    console.error("Error during logout:", error);
+    res.status(500).json({ message: "Internal server error during logout" });
+  }
 };
 
 exports.failed = async (req, res) => {
