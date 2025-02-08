@@ -9,7 +9,7 @@ const {
   failed,
 } = require("../controllers/authController");
 
-const { verifyJWT } = require("../middlewares/verifyJWT");
+const verifyJWT = require("../middlewares/verifyJWT");
 
 //routes
 router.get("/login", login);

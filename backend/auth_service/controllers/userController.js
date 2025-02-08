@@ -4,6 +4,7 @@ const User = require("../models/user"); // Import the User model
 // Handle getting all users
 exports.getAllUsers = async (req, res) => {
   try {
+    console.log("Getting all users");
     const allUsers = await User.find(); // Find all users in the database
     if (!allUsers || allUsers.length === 0) {
       return res.status(404).json({ message: "No users found" }); // Return error if no users found
@@ -161,7 +162,6 @@ exports.login = async (user, res) => {
     );
 
     //add jwt token in response as header?
- 
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ message: "Internal server error with login" }); // Return error

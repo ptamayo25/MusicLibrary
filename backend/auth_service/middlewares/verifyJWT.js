@@ -4,6 +4,8 @@ const User = require("../models/user");
 const verifyJWT = async (req, res, next) => {
   const token = req.cookies.token; // Get token from cookie
 
+  console.log("Token received:", token); // Log the token for debugging
+
   if (!token)
     return res
       .status(401)

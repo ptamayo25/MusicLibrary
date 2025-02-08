@@ -26,6 +26,7 @@ const AdminUserAccess = () => {
 
       const response = await fetch(`${authUrl}/api/users`, {
         method: "GET",
+        credentials: "include", // Include cookies in requests
         headers: {
           "Content-Type": "application/json",
         },
@@ -62,6 +63,7 @@ const AdminUserAccess = () => {
 
       const response = await fetch(`${authUrl}/api/users/updateOne`, {
         method: "POST",
+        credentials: "include", // Include cookies in requests
         headers: {
           "Content-Type": "application/json",
         },

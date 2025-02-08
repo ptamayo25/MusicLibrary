@@ -32,12 +32,10 @@ exports.callback = (req, res, next) => {
         if (!userExists) {
           //If not, register user
           const newUser = {
-            googleID: user.id,
             firstName: user.name.givenName,
             lastName: user.name.familyName,
             email: user.emails[0].value,
-            access: "user",
-            loggedIn: true,
+            access: "User",
           };
           await register(newUser, res);
         }
