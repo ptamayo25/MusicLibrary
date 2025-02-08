@@ -1,4 +1,4 @@
-import LogoImage from "../../assets/uucnhlogo.png";
+// import LogoImage from "../../assets/uucnhlogo.png";
 import { Link } from "react-router-dom";
 import "./AdminUserAccess.css";
 import "../styles/buttons.css";
@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
 import CheckIcon from "@mui/icons-material/Check";
 import Navigation from "../Navigation/Navigation";
+import "../../components/SongList/SongList.css";
 
 const AdminUserAccess = () => {
   const [users, setUsers] = useState([]);
@@ -90,72 +91,69 @@ const AdminUserAccess = () => {
       console.error("Error updating user access:", error);
     }
   };
-  console.log(users);
+
   return (
     <>
-      {/* <section className="header-container">
-        <header className="header">
-          <img className="uucnhlogo" src={LogoImage} alt="Logo" />
-          <Link className="links" to="/">
-            Back to Music Library
-          </Link>
-        </header>
-      </section> */}
       <Navigation />
-      <section>
-        <h3> UUCNH Music Library User Privilege Update</h3>
+      <h3> UUCNH Music Library User Privilege Update</h3>
 
+      <div className="table-container">
+        <table className="table">
+          <thead>
+            <th className="grid-title grid-item table-header">First Name</th>
+            <th className="grid-title grid-item table-header">Last Name</th>
+            <th className="grid-title grid-item table-header">Email</th>
+            <th className="grid-title grid-item table-header">User Access</th>
+          </thead>
+
+          <tbody>
+            {users.map((user) => (
+              <tr
+                key={user._id}
+                className="useraccess-grid-container selected-user"
+                onClick={() => handleUserClick(user)}
+              >
+                <td className="grid-item">{user.firstName}</td>
+                <td className="grid-item">{user.lastName}</td>
+                <td className="grid-item">{user.email}</td>
+                <td className="grid-item">
+                  {selectedUserEmail === user.email && isDropdownVisible ? (
+                    <select
+                      id="user-role"
+                      value={temporarySelectedUser}
+                      onChange={(e) => setTemporarySelectedUser(e.target.value)}
+                      onBlur={() => setIsDropDownVisible(false)}
+                      autoFocus
+                    >
+                      <option value="" disabled selected>
+                        Select one
+                      </option>
+                      <option value="Admin">Admin</option>
+                      <option value="Subadmin">Subadmin</option>
+                      <option value="User">User</option>
+                    </select>
+                  ) : (
+                    <span>
+                      {user.access.charAt(0).toUpperCase() +
+                        user.access.slice(1)}
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <div className="success-notification">
           {isSuccessNotification && (
-            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+            <Alert variant="filled" icon={<CheckIcon fontSize="inherit" />}>
               User access has been updated successfully!
             </Alert>
           )}
         </div>
-
-        <div className="useraccess-grid-container">
-          <div className="grid-title grid-item">First Name</div>
-          <div className="grid-title grid-item">Last Name</div>
-          <div className="grid-title grid-item">Email</div>
-          <div className="grid-title grid-item">User Access</div>
-        </div>
-        {users.map((user) => (
-          <div
-            key={user._id}
-            className="useraccess-grid-container selected-user"
-            onClick={() => handleUserClick(user)}
-          >
-            <div className="grid-item">{user.firstName}</div>
-            <div className="grid-item">{user.lastName}</div>
-            <div className="grid-item">{user.email}</div>
-            <div className="grid-item">
-              {selectedUserEmail === user.email && isDropdownVisible ? (
-                <select
-                  id="user-role"
-                  value={temporarySelectedUser}
-                  onChange={(e) => setTemporarySelectedUser(e.target.value)}
-                  onBlur={() => setIsDropDownVisible(false)}
-                  autoFocus
-                >
-                  <option value="" disabled selected>
-                    Select one
-                  </option>
-                  <option value="Admin">Admin</option>
-                  <option value="Subadmin">Subadmin</option>
-                  <option value="User">User</option>
-                </select>
-              ) : (
-                <span>
-                  {user.access.charAt(0).toUpperCase() + user.access.slice(1)}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
-      </section>
-      <button onClick={handleSave} className="save-button hover-button">
-        Save
-      </button>
+        <button onClick={handleSave} className="save-button hover-button">
+          Save
+        </button>
+      </div>
     </>
   );
 };

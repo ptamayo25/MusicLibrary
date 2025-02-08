@@ -24,7 +24,7 @@
     background-color: #6ca7dd;
     color: black;
     border: none;
-    position: fixed;
+    margin: 0.5rem;
     bottom: 2rem;
 }
 
@@ -65,8 +65,15 @@
     border-radius: 5px;
 }
 
-.close-button:hover {
-    font-weight: bold;
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #000;
 }
 .close-button:active {
     font-weight: bold;

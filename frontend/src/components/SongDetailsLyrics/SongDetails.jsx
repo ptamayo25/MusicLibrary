@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import "./SongDetails.css";
+import "../styles/buttons.css";
 // import { useState } from "react";
 
 const SongDetailsNoLyrics = ({ song, isModalOpen, setIsModalOpen }) => {
@@ -28,7 +29,7 @@ const SongDetailsNoLyrics = ({ song, isModalOpen, setIsModalOpen }) => {
         >
           <div className="song-details-container">
             <button
-              className="close-button"
+              className="close-button hover-button"
               onClick={() => setIsModalOpen(false)}
             >
               X
