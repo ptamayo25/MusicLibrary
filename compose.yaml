@@ -3,10 +3,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - 80:80
     environment:
-      - VITE_API_URL=${VITE_API_URL}
       - VITE_AUTH_SERVICE_URL=${VITE_AUTH_SERVICE_URL}
       - VITE_SONG_SERVICE_URL=${VITE_SONG_SERVICE_URL}
     depends_on:
