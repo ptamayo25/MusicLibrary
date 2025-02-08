@@ -46,21 +46,21 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tag: ptamayo25/uucnh-music-library:frontend
+          tags: ptamayo25/uucnh-music-library:frontend
 
       - name: Build and push Auth Service Image
         uses: docker/build-push-action@v6
         with:
           context: ./backend/auth-service
           push: true
-          tag: ptamayo25/uucnh-music-library:auth-service
+          tags: ptamayo25/uucnh-music-library:auth-service
 
       - name: Build and push Song Service Image
         uses: docker/build-push-action@v6
         with:
           context: ./backend/song-service
           push: true
-          tag: ptamayo25/uucnh-music-library:song-service
+          tags: ptamayo25/uucnh-music-library:song-service
 
       # - name: Run frontend tests
       #   run: |
