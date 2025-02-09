@@ -87,6 +87,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout code
@@ -117,4 +118,31 @@ jobs:
 
             aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
             aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
+          fi
+
+      - name: Create lambda functions.
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
+          SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
+
+          # Create or update the Lambda function that serves the API
+          if aws lambda get-function --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              # Lambda function exists
+              echo "$AUTH_LAMBDA_FUNCTION existence confirmed, updating to new image..."
+              aws lambda update-function-code --function-name "$AUTH_LAMBDA_FUNCTION" --image-uri "$AUTH_REPO_URI"
+          else
+              # Lambda function does not exist
+              echo "$AUTH_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
+              aws lambda create-function --function-name "$AUTH_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$AUTH_REPO_URI" --role "$AUTH_LAMBDA_IAM_ROLE"
+          fi
+
+          if aws lambda get-function --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              # Lambda function exists
+              echo "$SONG_LAMBDA_FUNCTION existence confirmed, updating to new image..."
+              aws lambda update-function-code --function-name "$SONG_LAMBDA_FUNCTION" --image-uri "$SONG_REPO_URI"
+          else
+              # Lambda function does not exist
+              echo "$SONG_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
+              aws lambda create-function --function-name "$SONG_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$SONG_REPO_URI" --role "$SONG_LAMBDA_IAM_ROLE"
           fi
