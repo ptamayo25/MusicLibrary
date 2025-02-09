@@ -2,7 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  background-color: #697cb3;
+  border-radius: 10px;
   padding: 1rem;
   color: white;
   position: sticky; 
@@ -80,7 +81,7 @@
 }
 
 .logoutButton {
-  background-color: #3370e2;
+  background-color: #22b7ad;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -91,7 +92,7 @@
 }
 
 .logoutButton:hover {
-  background-color: #3370e2; 
+  background-color: #5e53c6; 
 }
 
 /* Responsive Design */
