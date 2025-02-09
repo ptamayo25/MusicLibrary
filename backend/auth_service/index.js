@@ -56,7 +56,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-if (process.env.DEPLOY_AWS_LAMBDA === true) {
+if (process.env.DEPLOY_AWS_LAMBDA == true) {
   //Deploy to AWS Lambda
   const serverless = require("serverless-http");
   module.exports.handler = serverless(app);
