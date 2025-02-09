@@ -1,3 +1,6 @@
+# 🐳 Building docker images
+# 🎼🎵🎶🎹🎷🎧
+
 name: Test CI/CD Pipeline
 
 on:
@@ -12,6 +15,10 @@ on:
 env:
   AUTH_SERVICE_IMAGE: "musiclibrary/auth_service"
   SONG_SERVICE_IMAGE: "musiclibrary/song_service"
+  AUTH_LAMBDA_FUNCTION: "auth_service_api"
+  SONG_LAMBDA_FUNCTION: "song_service_api"
+  AUTH_LAMBDA_IAM_ROLE: "auth_service_api-role"
+  SONG_LAMBDA_IAM_ROLE: "song_service_api-role"
 
 jobs:
   build:
@@ -78,48 +85,17 @@ jobs:
           docker tag music_library:latest $SONG_REPO_URI:latest
           docker push $SONG_REPO_URI:latest
 
-      # - name: Login to Docker Hub
-      #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    deploy:
+      runs-on: ubuntu-latest
 
-      # - name: Build and push Frontend Image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./frontend
-      #     push: true
-      #     tags: ptamayo25/uucnh-music-library:frontend
+      steps:
+        - name: Create roles if it does not exist.
+          run: |
+            aws iam create-role --role-name "$AUTH_LAMBDA_IAM_ROLE" --assume-role-policy-document file://cicd/aws/lambda-role-policy.json
+            aws iam create-role --role-name "$SONG_LAMBDA_IAM_ROLE" --assume-role-policy-document file://cicd/aws/lambda-role-policy.json
 
-      # - name: Build and push Auth Service Image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./backend/auth-service
-      #     push: true
-      #     tags: ptamayo25/uucnh-music-library:auth-service
+            aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite 
 
-      # - name: Build and push Song Service Image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: ./backend/song-service
-      #     push: true
-      #     tags: ptamayo25/uucnh-music-library:song-service
-
-      # - name: Run frontend tests
-      #   run: |
-      #     cd frontend
-      #     npm run test
-
-      # - name: Run backend tests
-      #   run: |
-      #     cd backend
-      #     npm run test
-      # - name: Build
-
-# deploy:
-#   needs: build
-#   runs-on: ubuntu-latest
-
-#   steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
-
-#     - name: Deploy to Production
-#       run: echo "Deploying to production (not really)"
+            aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
