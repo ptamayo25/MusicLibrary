@@ -11,8 +11,8 @@ exports.login = passport.authenticate("google", {
 
 exports.logout = async (req, res) => {
   try {
-    await req.logout();
     res.clearCookie("token"); // Clear the token from cookies
+    console.log("JWT token cleared from cookies");
     res.status(200).json({ message: "Logged out" });
   } catch (error) {
     console.error("Error during logout:", error);
