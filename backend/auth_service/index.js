@@ -28,7 +28,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  // Test auth service is runing
   res.send("Auth Service is running.");
 });
 
