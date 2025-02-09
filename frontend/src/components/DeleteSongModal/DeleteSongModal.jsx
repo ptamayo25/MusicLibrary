@@ -11,13 +11,18 @@ const DeleteSongModal = ({ song, isOpen, setIsOpen }) => {
 
       const response = await fetch(`${apiUrl}/api/songs/${song._id}`, {
         method: "DELETE",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setIsOpen(false);
+        alert("Song deleted successfully");
       } else {
         console.error("Failed to delete song");
+        alert("Error deleting song: " + data.message || "Unknown error");
       }
     } catch (error) {
       console.error("Error deleting song", error);

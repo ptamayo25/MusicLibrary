@@ -1,9 +1,10 @@
-const user = require("../models/user");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // Import the User model
 
 // Handle getting all users
 exports.getAllUsers = async (req, res) => {
   try {
+    console.log("Getting all users");
     const allUsers = await User.find(); // Find all users in the database
     if (!allUsers || allUsers.length === 0) {
       return res.status(404).json({ message: "No users found" }); // Return error if no users found
@@ -38,8 +39,9 @@ exports.getUserById = async (req, res) => {
 };
 
 // Handle user registration TODO: implement oauth and token generation
-exports.register = async (req, res) => {
-  const { firstName, lastName, email, access } = req.body; // Extract name, email, and access from request
+exports.register = async (newUser, res) => {
+  // console.log("Request passed to Register", req);
+  const { firstName, lastName, email, access } = newUser; // Extract name, email, and access from request
 
   try {
     const existingUser = await User.findOne({ email }); // Check if the user already exists
@@ -48,18 +50,17 @@ exports.register = async (req, res) => {
         .status(409)
         .json({ message: "User already exists. Verify email." }); // Return error if user exists
     }
-    const user = new User({ firstName, lastName, email, access }); // Create a new user instance
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      access,
+    }); // Create a new user instance
     await user.save(); // Save the user to the database
-
-    res.status(201).json({
-      message: "User registered successfully",
-      user: { id: user._id, firstName, lastName, email, access }, // Send user details in response
-    });
+    return true;
   } catch (error) {
-    console.error("Error during registration:", error);
-    res
-      .status(500)
-      .json({ message: "Error registering user", error: error.message }); // Return error
+    console.error("Error registering user:", error);
+    return false;
   }
 };
 
@@ -134,8 +135,21 @@ exports.updateAccessMany = async (req, res) => {
 };
 
 // TODO: Implement user login
-
-// TODO: Implemet user logout
+exports.login = async (user, res) => {
+  try {
+    if (!user) {
+      return res.status(400).json({ message: "User not found" }); // Return error if user not found
+    }
+    await User.findOneAndUpdate(
+      { email: user.emails[0].value }, // Find the user by email
+      { loggedIn: true } // Update the user's loggedIn status
+    );
+    return true;
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    return false;
+  }
+};
 
 // Handle deleting a single user by ID
 exports.deleteOne = async (req, res) => {
@@ -152,5 +166,29 @@ exports.deleteOne = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting user", error: error.message }); // Return error
+  }
+};
+
+// Handle getting a user's access level from decoding jwt token in cookie to get user ID and finding user in database
+exports.getAccess = async (req, res) => {
+  const token = req.cookies.token; // Get token from cookie
+
+  if (!token)
+    return res
+      .status(401)
+      .json({ message: "Unauthorized. Token missing in request" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
+    const user = await User.findById(decoded.userId); // Find the user by ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" }); // Return error if user not found
+    }
+    res.status(200).json({ access: user.access }); // Send response with user's access level
+  } catch (error) {
+    console.error("Error getting user access:", error);
+    res
+      .status(500)
+      .json({ message: "Error getting user access", error: error.message }); // Return error
   }
 };

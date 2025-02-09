@@ -9,6 +9,7 @@ const url = require("url");
 const cors = require("cors");
 const passport = require("passport");
 const cookieSession = require("cookie-session");
+const cookieParser = require("cookie-parser");
 
 //file imports
 const userRoutes = require("./routes/userRoutes");
@@ -20,8 +21,14 @@ const app = express();
 const PORT = process.env.PORT;
 
 //middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // ✅ Allow only your frontend
+    credentials: true, // ✅ Allow cookies to be sent
+  })
+);
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Test auth service is runing
 app.get("/", (req, res) => {
@@ -58,28 +65,3 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-// app.get("/failed", (req, res) => {
-//   res.send("Failed");
-// });
-// app.get("/success", (req, res) => {
-//   console.log(req.user);
-//   res.send(`Welcome ${req.user.name.givenName}!`);
-// });
-
-// app.get(
-//   "/login",
-//   passport.authenticate("google", {
-//     scope: ["email", "profile"],
-//   })
-// );
-
-// app.get(
-//   "/google/callback",
-//   passport.authenticate("google", {
-//     failureRedirect: "/failed",
-//   }),
-//   function (req, res) {
-//     res.redirect("/success");
-//   }
-// );

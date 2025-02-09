@@ -102,6 +102,7 @@ const UpdateForm = ({ isOpen, setIsOpen, song, songid }) => {
       const response = await fetch(`${apiUrl}/api/songs/${songid}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // Include credentials to send cookies
         body: JSON.stringify({ ...updatedData, keywords, themes }),
       });
 

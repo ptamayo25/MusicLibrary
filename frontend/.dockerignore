@@ -6,7 +6,10 @@
 
 **/.classpath
 **/.dockerignore
+<<<<<<< HEAD
+=======
 
+>>>>>>> 6c74504383ed06ddb78f3ac4760a8ba4678834e0
 **/.git
 **/.gitignore
 **/.project

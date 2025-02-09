@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const swaggerUi = require("swagger-ui-express");
 const express = require("express");
 const cors = require("cors"); //can remove once moved over to api gateway
+const cookieParser = require("cookie-parser");
 
 // File imports
 const swaggerDocument = require("./swagger.json");
@@ -15,8 +16,18 @@ const PORT = process.env.PORT;
 
 // Middleware
 app.use(express.json()); //can remove once moved over to api gateway
-app.use(cors()); //can remove once moved over to api gateway
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // ✅ Allow only your frontend
+    credentials: true, // ✅ Allow cookies to be sent
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Allow only specific HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // ✅ Allow only specific headers
+  })
+);
+app.use(cookieParser());
+
+// ✅ Handle preflight requests
+app.options("*", cors());
 
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -29,7 +40,10 @@ app.use("/api/songs", songRoutes);
 
 // Database connection
 mongoose
-  .connect(process.env.MONGO_URI, {})
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("Song Service connected to MongoDB");
   })

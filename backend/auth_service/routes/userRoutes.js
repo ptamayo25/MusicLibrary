@@ -5,26 +5,30 @@ const express = require("express");
 const {
   getAllUsers,
   getUserById,
-  register,
   updateAccessOne,
   updateAccessMany,
-  registerMany,
+  // registerMany,
   deleteOne,
+  getAccess,
 } = require("../controllers/userController");
+
+//middleware imports
+const verifyJWT = require("../middlewares/verifyJWT");
+
+const checkAdmin = require("../middlewares/checkAdmin");
 
 const router = express.Router();
 
 //public routes
-router.post("/register", register);
-router.post("/registerMany", registerMany); //used to populate database with fake users
-//TODO: implement login
+// router.post("/register", register); //now only used in auth/google/callback
+// router.post("/registerMany", registerMany); //used to populate database with fake users
 
 //protected routes
-router.get("/", getAllUsers);
-router.get("/:id", getUserById);
-router.post("/updateOne", updateAccessOne);
-router.post("/updateMany", updateAccessMany);
-router.delete("/:id", deleteOne);
-//TODO: implement logout
+router.get("/", verifyJWT, checkAdmin, getAllUsers);
+router.get("/:id", verifyJWT, checkAdmin, getUserById);
+router.delete("/:id", verifyJWT, checkAdmin, deleteOne);
+router.post("/updateOne", verifyJWT, checkAdmin, updateAccessOne);
+router.post("/updateMany", verifyJWT, checkAdmin, updateAccessMany);
+router.get("/checkAuth", verifyJWT, getAccess);
 
 module.exports = router;
