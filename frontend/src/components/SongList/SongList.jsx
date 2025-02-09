@@ -5,8 +5,9 @@ import UpdateForm from "../UpdateForm/UpdateForm";
 import SongDetailsNoLyrics from "../SongDetailsLyrics/SongDetails";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useEffect } from "react";
 
-const SongList = ({ songs }) => {
+const SongList = ({ songs, access }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedSong, setSelectedSongForDelete] = useState(null);
 
@@ -15,6 +16,15 @@ const SongList = ({ songs }) => {
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedSongForUpdate, setSelectedSongForUpdate] = useState(null);
+
+  const [showEditDeleteButtons, setShowEditDeleteButtons] = useState(false);
+
+  //handle setting if edit and delete button show depending on user access in useEffect
+  useEffect(() => {
+    if (access !== "User") {
+      setShowEditDeleteButtons(true);
+    }
+  }, []);
 
   const handleEditClick = (song) => {
     setSelectedSongForUpdate(song); // Set song to update
@@ -32,15 +42,9 @@ const SongList = ({ songs }) => {
     setIsDetailModalOpen(true);
   };
 
-  const headers = [
-    "Title",
-    "Composer",
-    "Arranger",
-    "Keywords",
-    "Last Performed",
-    " ",
-    " ",
-  ];
+  const headers = showEditDeleteButtons
+    ? ["Title", "Composer", "Arranger", "Keywords", "Last Performed", " ", " "]
+    : ["Title", "Composer", "Arranger", "Keywords", "Last Performed"];
 
   return (
     <>
@@ -75,24 +79,30 @@ const SongList = ({ songs }) => {
                       ? new Date(song.lastPerformed).toLocaleDateString()
                       : "N/A"}
                   </td>
-                  <td>
-                    <button
-                      className="hover-button"
-                      onClick={() => handleEditClick(song)}
-                    >
-                      {/* edit */}
-                      <EditIcon />
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="hover-button"
-                      onClick={() => handleDeleteClick(song)}
-                    >
-                      {/* delete */}
-                      <DeleteIcon />
-                    </button>
-                  </td>
+
+                  {showEditDeleteButtons && (
+                    <td>
+                      <button
+                        className="hover-button"
+                        onClick={() => handleEditClick(song)}
+                      >
+                        {/* edit */}
+                        <EditIcon />
+                      </button>
+                    </td>
+                  )}
+
+                  {showEditDeleteButtons && (
+                    <td>
+                      <button
+                        className="hover-button"
+                        onClick={() => handleDeleteClick(song)}
+                      >
+                        {/* delete */}
+                        <DeleteIcon />
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))
             ) : (

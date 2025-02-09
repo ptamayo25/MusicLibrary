@@ -6,13 +6,14 @@ import "./searchInput.css";
 import SongList from "../SongList/SongList";
 import AddForm from "../AddForm/AddForm";
 
-function SearchInput() {
+function SearchInput({ access }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortType, setSortType] = useState("default");
   const [themeSelected, setThemeSelected] = useState([]);
   const [themesDisplayed, setThemesDisplayed] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
+  const [showAddSongButton, setShowAddSongButton] = useState(false);
 
   useEffect(() => {
     const handleOnLoad = async () => {
@@ -24,7 +25,7 @@ function SearchInput() {
           credentials: "include", // Include credentials to send cookies
           headers: { "Content-Type": "application/json" },
         });
-        console.log("response", themesResponse);
+
         if (!themesResponse.ok) {
           console.error("Failed to fetch themes");
         }
@@ -55,6 +56,10 @@ function SearchInput() {
           setSearchResults(data);
         } else {
           console.error("Failed to fetch songs");
+        }
+        //show add song button only to admin or subadmin
+        if (access !== "User") {
+          setShowAddSongButton(true);
         }
       } catch (error) {
         console.error("Error fetching themes", error);
@@ -192,11 +197,13 @@ function SearchInput() {
               </option>
             </select>
           </div>
-          <div className="add-song">
-            <button className="add-song-button" onClick={handleAddSong}>
-              Add Song
-            </button>
-          </div>
+          {showAddSongButton && (
+            <div className="add-song">
+              <button className="add-song-button" onClick={handleAddSong}>
+                Add Song
+              </button>
+            </div>
+          )}
         </div>
         <div className="theme-container">
           {/* checkboxes for themes */}
@@ -226,7 +233,7 @@ function SearchInput() {
         </div>
       </div>
       <AddForm isOpen={isAddSongModalOpen} setIsOpen={setIsAddSongModalOpen} />
-      <SongList songs={searchResults} />
+      <SongList songs={searchResults} access={access} />
     </>
   );
 }

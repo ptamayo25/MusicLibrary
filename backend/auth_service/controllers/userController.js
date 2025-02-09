@@ -181,6 +181,7 @@ exports.getAccess = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
     const user = await User.findById(decoded.userId); // Find the user by ID
+    console.log("USER", user); // Log the user
     if (!user) {
       return res.status(404).json({ message: "User not found" }); // Return error if user not found
     }

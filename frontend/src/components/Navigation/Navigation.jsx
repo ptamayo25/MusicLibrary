@@ -3,20 +3,33 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import LogoImage from "../../assets/uucnhlogo.png";
 // import { useAuthContext } from "../contexts/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Define the Navigation functional component
-function Navigation() {
+function Navigation({ access }) {
   const navigate = useNavigate(); // useNavigate hook for programmatic navigation within the application
   // const { logout } = useAuthContext(); // Access the logout function from the AuthContext
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Use useState to manage whether the navigation menu is open (for mobile view)
+  const [showUserAccess, setShowUserAccess] = useState(false);
+
+  // useEffect to check the user's access level and determine if the User Access link should be shown
+  useEffect(() => {
+    if (access === "Admin") {
+      setShowUserAccess(true);
+    }
+  }, []);
 
   // Define an array of navigation items, each with a path and a label to display
-  const navItems = [
-    { path: "/musicLibrary", label: "Music Library" }, //links to song library page
-    // { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page STRETCH GOAL
-    { path: "/adminuserAccess", label: "User Access" }, // links to admin user access page
-  ];
+  const navItems = showUserAccess
+    ? [
+        { path: "/musicLibrary", label: "Music Library" }, //links to song library page
+        // { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page STRETCH GOAL
+        { path: "/adminuserAccess", label: "User Access" }, // links to admin user access page
+      ]
+    : [
+        { path: "/musicLibrary", label: "Music Library" }, //links to song library page
+        // { path: "/musicPrograms", label: "Music Programs" }, //links to program manager page STRETCH GOAL
+      ];
 
   // Function to toggle the menu's open/closed state
   const toggleMenu = () => {
