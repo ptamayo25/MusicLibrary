@@ -66,7 +66,7 @@ jobs:
         run: |
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
-          docker build -t music_library -f ./aws.dockerfile ./backend/auth_service
+          docker build -t music_library -f ./backend/auth_service/aws.dockerfile ./backend/auth_service
           docker tag music_library:latest $AUTH_REPO_URI:latest
           docker push $AUTH_REPO_URI:latest
 
@@ -74,7 +74,7 @@ jobs:
         run: |
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
-          docker build -t music_library -f ./aws.dockerfile ./backend/song_service
+          docker build -t music_library -f ./backend/song_service/aws.dockerfile ./backend/song_service
           docker tag music_library:latest $SONG_REPO_URI:latest
           docker push $SONG_REPO_URI:latest
 
