@@ -123,8 +123,8 @@ jobs:
       - name: Create lambda functions.
         run: |
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-          AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
-          SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
+          AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE:latest"
+          SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE:latest"
           AUTH_IAM_ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$AUTH_LAMBDA_IAM_ROLE"
           SONG_IAM_ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$SONG_LAMBDA_IAM_ROLE"
 
