@@ -67,7 +67,7 @@ jobs:
                   "BlockPublicPolicy": false,
                   "RestrictPublicBuckets": false
               }'
-              aws s3api put-bucket-policy --bucket $S3_BUCKET_NAME --policy file://cicd/s3-bucket-policy.json
+              aws s3api put-bucket-policy --bucket $S3_BUCKET_NAME --policy file://frontend/ci_cd/s3-bucket-policy.json
           fi
 
   build-backend:
