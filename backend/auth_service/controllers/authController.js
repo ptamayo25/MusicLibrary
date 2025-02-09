@@ -42,7 +42,11 @@ exports.callback = (req, res, next) => {
             email: user.emails[0].value,
             access: "User",
           };
-          await register(newUser, res);
+          const didRegister = await register(newUser, res);
+          if (!didRegister) {
+            console.log("Registration failed");
+            new Error("Registration failed");
+          }
         }
 
         //Generate JWT token and send it to the client
@@ -65,7 +69,11 @@ exports.callback = (req, res, next) => {
         }); // Set the cookie with the token
 
         //Log user in on database
-        await login(user, res);
+        const didLogin = await login(user, res);
+        if (!didLogin) {
+          console.log("Login failed");
+          new Error("Login failed");
+        }
       } catch (error) {
         console.error("Error logging in user:", error);
         res.status(500).json({ message: "Internal server error with login" });

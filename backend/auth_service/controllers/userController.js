@@ -41,7 +41,7 @@ exports.getUserById = async (req, res) => {
 // Handle user registration TODO: implement oauth and token generation
 exports.register = async (newUser, res) => {
   // console.log("Request passed to Register", req);
-  const { googleID, firstName, lastName, email, access, loggedIn } = newUser; // Extract name, email, and access from request
+  const { firstName, lastName, email, access } = newUser; // Extract name, email, and access from request
 
   try {
     const existingUser = await User.findOne({ email }); // Check if the user already exists
@@ -51,32 +51,16 @@ exports.register = async (newUser, res) => {
         .json({ message: "User already exists. Verify email." }); // Return error if user exists
     }
     const user = new User({
-      googleID,
       firstName,
       lastName,
       email,
       access,
-      loggedIn,
     }); // Create a new user instance
     await user.save(); // Save the user to the database
-
-    res.status(201).json({
-      message: "User registered successfully",
-      user: {
-        id: user._id,
-        googleID,
-        firstName,
-        lastName,
-        email,
-        access,
-        loggedIn,
-      }, // Send user details in response
-    });
+    return true;
   } catch (error) {
-    console.error("Error during registration:", error);
-    res
-      .status(500)
-      .json({ message: "Error registering user", error: error.message }); // Return error
+    console.error("Error registering user:", error);
+    return false;
   }
 };
 
@@ -160,11 +144,10 @@ exports.login = async (user, res) => {
       { email: user.emails[0].value }, // Find the user by email
       { loggedIn: true } // Update the user's loggedIn status
     );
-
-    //add jwt token in response as header?
+    return true;
   } catch (error) {
     console.error("Error logging in user:", error);
-    res.status(500).json({ message: "Internal server error with login" }); // Return error
+    return false;
   }
 };
 
