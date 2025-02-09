@@ -17,10 +17,10 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # User is not needed since image comes with a default user.
 
-COPY controllers/ ${LAMBDA_TASK_ROOT}
-COPY middlewares/ ${LAMBDA_TASK_ROOT}
-COPY models/ ${LAMBDA_TASK_ROOT}
-COPY routes/ ${LAMBDA_TASK_ROOT}
+COPY controllers/ ${LAMBDA_TASK_ROOT}/controllers
+COPY middlewares/ ${LAMBDA_TASK_ROOT}/middlewares
+COPY models/ ${LAMBDA_TASK_ROOT}/models
+COPY routes/ ${LAMBDA_TASK_ROOT}/routes
 COPY index.js ${LAMBDA_TASK_ROOT}
 COPY swagger.json ${LAMBDA_TASK_ROOT}
 
