@@ -66,16 +66,16 @@ jobs:
         run: |
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
-          docker build -t my-app .
-          docker tag my-app:latest $AUTH_REPO_URI:latest
+          docker build -t music_library -f backend/auth_service/aws.dockerfile .
+          docker tag music_library:latest $AUTH_REPO_URI:latest
           docker push $AUTH_REPO_URI:latest
 
       - name: Build, tag, and push Docker Song image
         run: |
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
-          docker build -t my-app .
-          docker tag my-app:latest $SONG_REPO_URI:latest
+          docker build -t music_library -f backend/song_service/aws.dockerfile .
+          docker tag music_library:latest $SONG_REPO_URI:latest
           docker push $SONG_REPO_URI:latest
 
       # - name: Login to Docker Hub
