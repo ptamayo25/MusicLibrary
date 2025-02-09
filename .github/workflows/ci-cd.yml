@@ -9,6 +9,10 @@ on:
     branches:
       - main
 
+env:
+  AUTH_SERVICE_IMAGE: "musiclibrary/auth_service"
+  SONG_SERVICE_IMAGE: "musiclibrary/song_service"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -40,14 +44,39 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1 # Change to your AWS region
+          aws-region: us-east-1
 
-      #ECR is Amazon's Docker Hub
+      #Images
+      - name: Login to Amazon ECR
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+
       - name: Create ECR repository for Auth Service
         run: |
-          AUTH_SERVICE_IMAGE="musiclibrary/auth_service"
           aws ecr describe-repositories --repository-names $AUTH_SERVICE_IMAGE || \
           aws ecr create-repository --repository-name $AUTH_SERVICE_IMAGE
+
+      - name: Create ECR repository for Song Service
+        run: |
+          aws ecr describe-repositories --repository-names $SONG_SERVICE_IMAGE || \
+          aws ecr create-repository --repository-name $SONG_SERVICE_IMAGE
+
+      - name: Build, tag, and push Docker Auth image
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
+          docker build -t my-app .
+          docker tag my-app:latest $AUTH_REPO_URI:latest
+          docker push $AUTH_REPO_URI:latest
+
+      - name: Build, tag, and push Docker Song image
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
+          docker build -t my-app .
+          docker tag my-app:latest $SONG_REPO_URI:latest
+          docker push $SONG_REPO_URI:latest
 
       # - name: Login to Docker Hub
       #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
