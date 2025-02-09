@@ -89,6 +89,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Create roles if it does not exist.
         run: |
           aws iam create-role --role-name "$AUTH_LAMBDA_IAM_ROLE" --assume-role-policy-document file://backend/ci_cd/lambda_role_policy.json
