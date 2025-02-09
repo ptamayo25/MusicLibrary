@@ -148,3 +148,21 @@ jobs:
               echo "$SONG_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
               aws lambda create-function --function-name "$SONG_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$SONG_REPO_URI" --role "$SONG_IAM_ROLE_ARN"
           fi
+
+          sleep 3
+
+          if aws lambda get-function-url-config --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$AUTH_LAMBDA_FUNCTION URL existence confirmed. No action needed."
+          else
+
+              echo "$AUTH_LAMBDA_FUNCTION 'URL' does not exist. Creating..."
+              aws lambda create-function-url-config --function-name "$AUTH_LAMBDA_FUNCTION" --auth-type NONE
+          fi
+
+          if aws lambda get-function-url-config --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$SONG_LAMBDA_FUNCTION URL existence confirmed. No action needed."
+          else
+
+              echo "$SONG_LAMBDA_FUNCTION 'URL' does not exist. Creating..."
+              aws lambda create-function-url-config --function-name "$SONG_LAMBDA_FUNCTION" --auth-type NONE
+          fi
