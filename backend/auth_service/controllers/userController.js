@@ -1,4 +1,4 @@
-const user = require("../models/user");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user"); // Import the User model
 
 // Handle getting all users
@@ -151,8 +151,6 @@ exports.login = async (user, res) => {
   }
 };
 
-// TODO: Implement user logout
-
 // Handle deleting a single user by ID
 exports.deleteOne = async (req, res) => {
   const { id } = req.params; // Extract user ID from request
@@ -168,5 +166,29 @@ exports.deleteOne = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting user", error: error.message }); // Return error
+  }
+};
+
+// Handle getting a user's access level from decoding jwt token in cookie to get user ID and finding user in database
+exports.getAccess = async (req, res) => {
+  const token = req.cookies.token; // Get token from cookie
+
+  if (!token)
+    return res
+      .status(401)
+      .json({ message: "Unauthorized. Token missing in request" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
+    const user = await User.findById(decoded.userId); // Find the user by ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" }); // Return error if user not found
+    }
+    res.status(200).json({ access: user.access }); // Send response with user's access level
+  } catch (error) {
+    console.error("Error getting user access:", error);
+    res
+      .status(500)
+      .json({ message: "Error getting user access", error: error.message }); // Return error
   }
 };

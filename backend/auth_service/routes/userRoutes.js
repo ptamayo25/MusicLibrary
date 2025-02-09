@@ -9,6 +9,7 @@ const {
   updateAccessMany,
   // registerMany,
   deleteOne,
+  getAccess,
 } = require("../controllers/userController");
 
 //middleware imports
@@ -28,5 +29,6 @@ router.get("/:id", verifyJWT, checkAdmin, getUserById);
 router.delete("/:id", verifyJWT, checkAdmin, deleteOne);
 router.post("/updateOne", verifyJWT, checkAdmin, updateAccessOne);
 router.post("/updateMany", verifyJWT, checkAdmin, updateAccessMany);
+router.get("/checkAuth", verifyJWT, getAccess);
 
 module.exports = router;
