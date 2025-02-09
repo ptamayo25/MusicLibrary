@@ -22,6 +22,6 @@ COPY middlewares/ ${LAMBDA_TASK_ROOT}
 COPY models/ ${LAMBDA_TASK_ROOT}
 COPY routes/ ${LAMBDA_TASK_ROOT}
 COPY index.js ${LAMBDA_TASK_ROOT}
-COPY passport.js ${LAMBDA_TASK_ROOT}
+COPY swagger.json ${LAMBDA_TASK_ROOT}
 
 CMD [ "index.handler" ]
