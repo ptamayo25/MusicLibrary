@@ -29,6 +29,6 @@ router.get("/:id", verifyJWT, checkAdmin, getUserById);
 router.delete("/:id", verifyJWT, checkAdmin, deleteOne);
 router.post("/updateOne", verifyJWT, checkAdmin, updateAccessOne);
 router.post("/updateMany", verifyJWT, checkAdmin, updateAccessMany);
-router.get("/checkAuth", verifyJWT, getAccess);
+router.get("/checkAccess", verifyJWT, getAccess);
 
 module.exports = router;
