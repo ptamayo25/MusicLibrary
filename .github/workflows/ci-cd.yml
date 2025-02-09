@@ -105,11 +105,15 @@ jobs:
             echo "Role already exists."
           else
             aws iam create-role --role-name "$AUTH_LAMBDA_IAM_ROLE" --assume-role-policy-document file://backend/ci_cd/lambda_role_policy.json
-            aws iam create-role --role-name "$SONG_LAMBDA_IAM_ROLE" --assume-role-policy-document file://backend/ci_cd/lambda_role_policy.json
 
             aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
             aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite 
+          fi
 
+          if aws iam get-role --role-name "$SONG_LAMBDA_IAM_ROLE" > /dev/null 2>&1; then
+            echo "Role already exists."
+          else
+            aws iam create-role --role-name "$SONG_LAMBDA_IAM_ROLE" --assume-role-policy-document file://backend/ci_cd/lambda_role_policy.json
 
             aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
             aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
