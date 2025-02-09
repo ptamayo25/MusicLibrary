@@ -44,7 +44,7 @@ mongoose
     console.error("Database connection error:", err);
   });
 
-if (process.env.DEPLOY_AWS_LAMBDA == true) {
+if (process.env.DEPLOY_AWS_LAMBDA) {
   //Deploy to AWS Lambda
   const serverless = require("serverless-http");
   module.exports.handler = serverless(app);
