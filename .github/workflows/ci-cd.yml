@@ -85,17 +85,17 @@ jobs:
           docker tag music_library:latest $SONG_REPO_URI:latest
           docker push $SONG_REPO_URI:latest
 
-    deploy:
-      runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Create roles if it does not exist.
-          run: |
-            aws iam create-role --role-name "$AUTH_LAMBDA_IAM_ROLE" --assume-role-policy-document file://cicd/aws/lambda-role-policy.json
-            aws iam create-role --role-name "$SONG_LAMBDA_IAM_ROLE" --assume-role-policy-document file://cicd/aws/lambda-role-policy.json
+    steps:
+      - name: Create roles if it does not exist.
+        run: |
+          aws iam create-role --role-name "$AUTH_LAMBDA_IAM_ROLE" --assume-role-policy-document file://cicd/aws/lambda-role-policy.json
+          aws iam create-role --role-name "$SONG_LAMBDA_IAM_ROLE" --assume-role-policy-document file://cicd/aws/lambda-role-policy.json
 
-            aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-            aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite 
+          aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite 
 
-            aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-            aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
+          aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
