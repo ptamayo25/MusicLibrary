@@ -7,10 +7,10 @@ const {
   getThemes,
 } = require("../controllers/searchController");
 
-//Import CRTUD functions from songController
+//Import CRUD functions from songController
 const {
   createSong,
-  createManySongs,
+  // createManySongs,
   getSongs,
   getSongById,
   updateSong,
