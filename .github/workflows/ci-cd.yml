@@ -125,6 +125,8 @@ jobs:
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
           AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
           SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
+          AUTH_IAM_ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$AUTH_LAMBDA_IAM_ROLE"
+          SONG_IAM_ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$SONG_LAMBDA_IAM_ROLE"
 
           # Create or update the Lambda function that serves the API
           if aws lambda get-function --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
@@ -134,7 +136,7 @@ jobs:
           else
               # Lambda function does not exist
               echo "$AUTH_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
-              aws lambda create-function --function-name "$AUTH_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$AUTH_REPO_URI" --role "$AUTH_LAMBDA_IAM_ROLE"
+              aws lambda create-function --function-name "$AUTH_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$AUTH_REPO_URI" --role "$AUTH_IAM_ROLE_ARN"
           fi
 
           if aws lambda get-function --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
@@ -144,5 +146,5 @@ jobs:
           else
               # Lambda function does not exist
               echo "$SONG_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
-              aws lambda create-function --function-name "$SONG_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$SONG_REPO_URI" --role "$SONG_LAMBDA_IAM_ROLE"
+              aws lambda create-function --function-name "$SONG_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$SONG_REPO_URI" --role "$SONG_IAM_ROLE_ARN"
           fi
