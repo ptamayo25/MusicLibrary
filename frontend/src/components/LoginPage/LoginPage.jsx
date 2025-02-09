@@ -10,17 +10,24 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
+    // console.log("Email:", email, "Password:", password);
+    const apiURL = import.meta.env.VITE_AUTH_SERVICE_URL;
+    window.location.href = `${apiURL}/auth/login`;
   };
+  // const handleGoogleLogin = () => {
+  //   const apiURL = import.meta.env.VITE_AUTH_SERVICE_URL;
+  //   window.location.href = `${apiURL}/auth/login`;
+  // };
 
   return (
-    <div className="login-page"> {/* Wrapper class */}
+    <div className="login-page">
+      {" "}
+      {/* Wrapper class */}
       <div className="login-container">
         <form className="login-form" onSubmit={handleSubmit}>
           <img className="uucnhlogo" src={LogoImage} alt="Logo" />
           <h2>Welcome!</h2>
-          <h2>Please Login</h2>
-
+          <h2>Please Login or Register</h2>
 
           {/* <div className="login-input-group">
             <label>Email</label>
@@ -42,7 +49,7 @@ const Login = () => {
               required
             />
           </div> */}
-          <button type="submit">Login with Google</button>
+          <button type="submit">Login or Register with Google</button>
         </form>
       </div>
     </div>

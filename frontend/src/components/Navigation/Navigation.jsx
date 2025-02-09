@@ -1,5 +1,5 @@
 // Imports
-import { NavLink, useNavigate } from "react-router-dom";
+import { data, NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import LogoImage from "../../assets/uucnhlogo.png";
 // import { useAuthContext } from "../contexts/AuthContext";
@@ -49,6 +49,12 @@ function Navigation({ access }) {
           "Content-Type": "application/json",
         },
       });
+
+      const data = await response.json(); // Parse the JSON response
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to logout"); // Throw an error if the response is not OK
+      }
 
       // await logout(); // Call the logout function from AuthContext
       console.log("User state cleared successfully."); // Log successful logout
