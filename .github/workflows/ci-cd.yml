@@ -166,3 +166,27 @@ jobs:
               echo "$SONG_LAMBDA_FUNCTION 'URL' does not exist. Creating..."
               aws lambda create-function-url-config --function-name "$SONG_LAMBDA_FUNCTION" --auth-type NONE
           fi
+
+          if aws lambda get-policy --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$AUTH_LAMBDA_FUNCTION policy existence confirmed. No action needed."
+          else
+              echo "$AUTH_LAMBDA_FUNCTION 'policy' does not exist. Creating..."
+              aws lambda add-permission \
+                  --function-name "$AUTH_LAMBDA_FUNCTION" \
+                  --principal '*' \
+                  --statement-id FunctionUrlAllowPublicAccess \
+                  --action lambda:InvokeFunctionUrl \
+                  --function-url-auth-type NONE
+          fi
+
+          if aws lambda get-policy --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$SONG_LAMBDA_FUNCTION policy existence confirmed. No action needed."
+          else
+              echo "$SONG_LAMBDA_FUNCTION 'policy' does not exist. Creating..."
+              aws lambda add-permission \
+                  --function-name "$SONG_LAMBDA_FUNCTION" \
+                  --principal '*' \
+                  --statement-id FunctionUrlAllowPublicAccess \
+                  --action lambda:InvokeFunctionUrl \
+                  --function-url-auth-type NONE
+          fi
