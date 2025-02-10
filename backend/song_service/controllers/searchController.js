@@ -89,7 +89,7 @@ exports.getSongsBySearch = async (req, res) => {
     console.log("Unique songs found: ", uniqueSongs);
 
     if (uniqueSongs.length === 0) {
-      return uniqueSongs; //return empty array if no songs found
+      return res.json(uniqueSongs); //return empty array if no songs found
     }
 
     return res.json(sortResults(uniqueSongs, sortType));
