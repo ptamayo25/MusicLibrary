@@ -52,7 +52,7 @@ header {
 }
 
 .selected-user:hover {
-  background-color: #5E53C6;
+  background-color: rgba(82, 6, 245, 0.5);
 }
 .selected-user:active {
   background-color: rgb(203, 201, 201);

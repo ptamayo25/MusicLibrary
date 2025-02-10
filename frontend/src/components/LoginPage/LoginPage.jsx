@@ -49,7 +49,7 @@ const Login = () => {
               required
             />
           </div> */}
-          
+
           <button type="submit">Login or Register with Google</button>
         </form>
       </div>
