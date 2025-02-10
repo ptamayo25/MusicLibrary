@@ -81,7 +81,7 @@ exports.callback = (req, res, next) => {
       //Log user in on session and redirect to frontend
       req.logIn(user, (err) => {
         if (err) return next(err);
-        return res.redirect(process.env.FRONTEND_URL);
+        return res.redirect(`${process.env.FRONTEND_URL}/musicLibrary`);
       });
     }
   )(req, res, next);

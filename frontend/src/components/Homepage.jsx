@@ -1,23 +1,42 @@
+import { useEffect, useState } from "react";
 import Navigation from "../components/Navigation/Navigation";
 import SearchInput from "./SearchInput/SearchInput";
+import { data } from "react-router-dom";
 
 const Homepage = () => {
   //TODO: ADD ACCESS CHECK WITH A FETCH SIMILAR TO THE ONE BELOW
-  // try {
-  //   const api_url = import.meta.env.VITE_AUTH_SERVICE_URL
-  //   const response = await fetch(`${api_url}/api/users/access`, {
-  //     method: "GET",
-  //     credentials: "include", // include cookies with request
-  //   });
+  const [access, setAccess] = useState(null);
 
-  // } catch (error) {
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        const api_url = import.meta.env.VITE_AUTH_SERVICE_URL;
+        const response = await fetch(`${api_url}/api/users/checkAccess`, {
+          method: "POST",
+          credentials: "include", // include cookies with request
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-  // }
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error("Failed to check access");
+        }
+
+        setAccess(data.access);
+      } catch (error) {
+        console.error("Error checking access:", error);
+      }
+    };
+
+    checkAccess();
+  }, []);
 
   return (
     <div>
-      <Navigation />
-      <SearchInput />
+      {access === null ? <p>Loading...</p> : <Navigation access={access} />}
+      {access === null ? <p>Loading...</p> : <SearchInput access={access} />}
     </div>
   );
 };

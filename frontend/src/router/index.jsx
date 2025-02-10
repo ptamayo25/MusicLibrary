@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/musicLibrary" />,
+        element: <Navigate to="/login" />,
       },
       {
         path: "musicLibrary",
