@@ -101,41 +101,31 @@ exports.getSongsBySearch = async (req, res) => {
 function sortResults(songs, sortType) {
   switch (sortType) {
     case "composerA-Z":
-      console.log("composerA-Z");
       return songs.sort((a, b) => {
         if (a.composer === "N/A") return 1;
         if (b.composer === "N/A") return -1;
-        return a.composer.localeCompare(b.composer, undefined, {
-          sensitivity: "base",
-        });
+        return a.composer.toLowerCase() > b.composer.toLowerCase() ? 1 : -1;
       });
 
     case "composerZ-A":
       return songs.sort((a, b) => {
         if (a.composer === "N/A") return 1;
         if (b.composer === "N/A") return -1;
-        return b.composer.localeCompare(a.composer, undefined, {
-          sensitivity: "base",
-        });
+        return a.composer.toLowerCase() < b.composer.toLowerCase() ? 1 : -1;
       });
 
     case "titleA-Z":
       return songs.sort((a, b) => {
         if (a.title === "N/A") return 1;
         if (b.title === "N/A") return -1;
-        console.log("titleA-Z");
-        return a.title.localeCompare(b.title, undefined, {
-          sensitivity: "base",
-        });
+        return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
       });
 
     case "titleZ-A":
       return songs.sort((a, b) => {
         if (a.title === "N/A") return 1;
         if (b.title === "N/A") return -1;
-        return b.title.localeCompare(a.title, undefined, {
-          sensitivity: "base",
-        });
+        return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
       });
 
     case "mostRecent":
@@ -156,6 +146,7 @@ function sortResults(songs, sortType) {
       return songs;
   }
 }
+
 
 //function for returning all themes in the database
 exports.getThemes = async (req, res) => {
