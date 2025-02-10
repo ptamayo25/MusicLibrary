@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL, // ✅ Allow only your frontend
     credentials: true, // ✅ Allow cookies to be sent
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Allow only specific HTTP methods
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"], // ✅ Allow only specific HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // ✅ Allow only specific headers
   })
 );
