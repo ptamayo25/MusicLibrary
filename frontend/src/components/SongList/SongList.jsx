@@ -56,50 +56,51 @@ const SongList = ({ songs }) => {
             </tr>
           </thead>
           <tbody>
-            {songs.length > 0 ? (
-              songs.map((song) => (
-                <tr key={song._id}>
-                  <td>
-                    <span
-                      className="underlined"
-                      onClick={() => handleTitleClick(song)}
-                    >
-                      {song.title || "N/A"}
-                    </span>
-                  </td>
-                  <td>{song.composer || "N/A"}</td>
-                  <td>{song.arranger || "N/A"}</td>
-                  <td>{song.keywords ? song.keywords.join(", ") : "N/A"}</td>
-                  <td>
-                    {song.lastPerformed
-                      ? new Date(song.lastPerformed).toLocaleDateString()
-                      : "N/A"}
-                  </td>
-                  <td>
-                    <button
-                      className="hover-button"
-                      onClick={() => handleEditClick(song)}
-                    >
-                      {/* edit */}
-                      <EditIcon />
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="hover-button"
-                      onClick={() => handleDeleteClick(song)}
-                    >
-                      {/* delete */}
-                      <DeleteIcon />
-                    </button>
-                  </td>
+            {(!songs || songs.length == 0) ?
+              (
+                < tr >
+                  <td colSpan={headers.length}>No songs available</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={headers.length}>No songs available</td>
-              </tr>
-            )}
+              ) :
+              (
+                songs.map((song) => (
+                  <tr key={song._id}>
+                    <td>
+                      <span
+                        className="underlined"
+                        onClick={() => handleTitleClick(song)}
+                      >
+                        {song.title || "N/A"}
+                      </span>
+                    </td>
+                    <td>{song.composer || "N/A"}</td>
+                    <td>{song.arranger || "N/A"}</td>
+                    <td>{song.keywords ? song.keywords.join(", ") : "N/A"}</td>
+                    <td>
+                      {song.lastPerformed
+                        ? new Date(song.lastPerformed).toLocaleDateString()
+                        : "N/A"}
+                    </td>
+                    <td>
+                      <button
+                        className="hover-button"
+                        onClick={() => handleEditClick(song)}
+                      >
+                        {/* edit */}
+                        <EditIcon />
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="hover-button"
+                        onClick={() => handleDeleteClick(song)}
+                      >
+                        {/* delete */}
+                        <DeleteIcon />
+                      </button>
+                    </td>
+                  </tr>
+                )))}
           </tbody>
         </table>
 
@@ -120,7 +121,7 @@ const SongList = ({ songs }) => {
             songid={selectedSongForUpdate?._id} // Correctly passing song ID
           />
         )}
-      </div>
+      </div >
 
       {isDetailModalOpen && setSelectedSongForDetail && (
         <SongDetailsNoLyrics
@@ -128,7 +129,8 @@ const SongList = ({ songs }) => {
           isModalOpen={isDetailModalOpen}
           setIsModalOpen={setIsDetailModalOpen}
         />
-      )}
+      )
+      }
     </>
   );
 };
