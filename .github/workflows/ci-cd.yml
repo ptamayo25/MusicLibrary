@@ -1,3 +1,6 @@
+# 🐳 Building docker images
+# 🎼🎵🎶🎹🎷🎧
+
 name: Test CI/CD Pipeline
 
 on:
@@ -8,77 +11,220 @@ on:
     branches:
       - main
 
+env:
+  AUTH_SERVICE_IMAGE: "musiclibrary/auth_service"
+  SONG_SERVICE_IMAGE: "musiclibrary/song_service"
+  AUTH_LAMBDA_FUNCTION: "auth_service_api"
+  SONG_LAMBDA_FUNCTION: "song_service_api"
+  AUTH_LAMBDA_IAM_ROLE: "auth_service_api-role"
+  SONG_LAMBDA_IAM_ROLE: "song_service_api-role"
+  S3_BUCKET_NAME: "musiclibrary.jqjacq.dev"
+
 jobs:
-  build:
+  build-frontend:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: "lts/*"
 
-      - name: Install frontend dependencies
+      - name: Install dependencies
         run: |
           cd frontend
           npm install
 
-      - name: Install backend dependencies
+      - name: Build frontend
         run: |
-          cd backend
-          npm install
+          cd frontend
+          npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Create S3 bucket
+        run: |
+          if aws s3 ls "s3://$S3_BUCKET_NAME" 2>&1; then
+              echo "Bucket $S3_BUCKET_NAME already exists"
+
+              aws s3api put-bucket-policy --bucket $S3_BUCKET_NAME --policy file://frontend/ci_cd/s3-bucket-policy.json
+          else
+              echo "Bucket $S3_BUCKET_NAME does not exist, creating..."
+              aws s3 mb s3://$S3_BUCKET_NAME --region $AWS_REGION
+              aws s3 website s3://$S3_BUCKET_NAME/ --index-document index.html
+              aws s3api put-public-access-block \
+              --bucket "$S3_BUCKET_NAME" \
+              --public-access-block-configuration '{
+                  "BlockPublicAcls": true,
+                  "IgnorePublicAcls": true,
+                  "BlockPublicPolicy": false,
+                  "RestrictPublicBuckets": false
+              }'
+          fi
+
+      - name: Uploading files to S3
+        run: |
+          aws s3 sync frontend/dist/ s3://$S3_BUCKET_NAME --delete
+
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Docker Build
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub
-        # env:
-        # DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
-        #   DOCKER_PASS: ${{ secrets.DOCKER_PASSWORD }}
-        # run: echo "${{ secrets.DOCKER_USERNAME }}"
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Build and push Frontend Image
-        uses: docker/build-push-action@v6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          context: ./frontend
-          push: true
-          tags: ptamayo25/uucnh-music-library:frontend
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-      - name: Build and push Auth Service Image
-        uses: docker/build-push-action@v6
+      #Images
+      - name: Login to Amazon ECR
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+
+      - name: Create ECR repository for Auth Service
+        run: |
+          aws ecr describe-repositories --repository-names $AUTH_SERVICE_IMAGE || \
+          aws ecr create-repository --repository-name $AUTH_SERVICE_IMAGE
+
+      - name: Create ECR repository for Song Service
+        run: |
+          aws ecr describe-repositories --repository-names $SONG_SERVICE_IMAGE || \
+          aws ecr create-repository --repository-name $SONG_SERVICE_IMAGE
+
+      - name: Build, tag, and push Docker Auth image
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE"
+          docker build -t music_library -f ./backend/auth_service/aws.dockerfile ./backend/auth_service
+          docker tag music_library:latest $AUTH_REPO_URI:latest
+          docker push $AUTH_REPO_URI:latest
+
+      - name: Build, tag, and push Docker Song image
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE"
+          docker build -t music_library -f ./backend/song_service/aws.dockerfile ./backend/song_service
+          docker tag music_library:latest $SONG_REPO_URI:latest
+          docker push $SONG_REPO_URI:latest
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    needs: build-backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          context: ./backend/auth-service
-          push: true
-          tags: ptamayo25/uucnh-music-library:auth-service
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-      - name: Build and push Song Service Image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./backend/song-service
-          push: true
-          tags: ptamayo25/uucnh-music-library:song-service
+      - name: Create roles if it does not exist.
+        run: |
+          if aws iam get-role --role-name "$AUTH_LAMBDA_IAM_ROLE" > /dev/null 2>&1; then
+            echo "Role already exists."
+          else
+            aws iam create-role --role-name "$AUTH_LAMBDA_IAM_ROLE" --assume-role-policy-document file://backend/ci_cd/lambda_role_policy.json
 
-      # - name: Run frontend tests
-      #   run: |
-      #     cd frontend
-      #     npm run test
+            aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            aws iam attach-role-policy --role-name "$AUTH_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite 
+          fi
 
-      # - name: Run backend tests
-      #   run: |
-      #     cd backend
-      #     npm run test
-      # - name: Build
-# deploy:
-#   needs: build
-#   runs-on: ubuntu-latest
+          if aws iam get-role --role-name "$SONG_LAMBDA_IAM_ROLE" > /dev/null 2>&1; then
+            echo "Role already exists."
+          else
+            aws iam create-role --role-name "$SONG_LAMBDA_IAM_ROLE" --assume-role-policy-document file://backend/ci_cd/lambda_role_policy.json
 
-#   steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
+            aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+            aws iam attach-role-policy --role-name "$SONG_LAMBDA_IAM_ROLE" --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
+          fi
 
-#     - name: Deploy to Production
-#       run: echo "Deploying to production (not really)"
+      - name: Create lambda functions.
+        run: |
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          AUTH_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$AUTH_SERVICE_IMAGE:latest"
+          SONG_REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$SONG_SERVICE_IMAGE:latest"
+          AUTH_IAM_ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$AUTH_LAMBDA_IAM_ROLE"
+          SONG_IAM_ROLE_ARN="arn:aws:iam::$AWS_ACCOUNT_ID:role/$SONG_LAMBDA_IAM_ROLE"
+
+          # Create or update the Lambda function that serves the API
+          if aws lambda get-function --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              # Lambda function exists
+              echo "$AUTH_LAMBDA_FUNCTION existence confirmed, updating to new image..."
+              aws lambda update-function-code --function-name "$AUTH_LAMBDA_FUNCTION" --image-uri "$AUTH_REPO_URI"
+          else
+              # Lambda function does not exist
+              echo "$AUTH_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
+              aws lambda create-function --function-name "$AUTH_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$AUTH_REPO_URI" --role "$AUTH_IAM_ROLE_ARN"
+          fi
+
+          if aws lambda get-function --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              # Lambda function exists
+              echo "$SONG_LAMBDA_FUNCTION existence confirmed, updating to new image..."
+              aws lambda update-function-code --function-name "$SONG_LAMBDA_FUNCTION" --image-uri "$SONG_REPO_URI"
+          else
+              # Lambda function does not exist
+              echo "$SONG_LAMBDA_FUNCTION 'lambda' does not exist. Creating..."
+              aws lambda create-function --function-name "$SONG_LAMBDA_FUNCTION" --package-type Image --code ImageUri="$SONG_REPO_URI" --role "$SONG_IAM_ROLE_ARN"
+          fi
+
+          sleep 3
+
+          if aws lambda get-function-url-config --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$AUTH_LAMBDA_FUNCTION URL existence confirmed. No action needed."
+          else
+
+              echo "$AUTH_LAMBDA_FUNCTION 'URL' does not exist. Creating..."
+              aws lambda create-function-url-config --function-name "$AUTH_LAMBDA_FUNCTION" --auth-type NONE
+          fi
+
+          if aws lambda get-function-url-config --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$SONG_LAMBDA_FUNCTION URL existence confirmed. No action needed."
+          else
+
+              echo "$SONG_LAMBDA_FUNCTION 'URL' does not exist. Creating..."
+              aws lambda create-function-url-config --function-name "$SONG_LAMBDA_FUNCTION" --auth-type NONE
+          fi
+
+          if aws lambda get-policy --function-name "$AUTH_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$AUTH_LAMBDA_FUNCTION policy existence confirmed. No action needed."
+          else
+              echo "$AUTH_LAMBDA_FUNCTION 'policy' does not exist. Creating..."
+              aws lambda add-permission \
+                  --function-name "$AUTH_LAMBDA_FUNCTION" \
+                  --principal '*' \
+                  --statement-id FunctionUrlAllowPublicAccess \
+                  --action lambda:InvokeFunctionUrl \
+                  --function-url-auth-type NONE
+          fi
+
+          if aws lambda get-policy --function-name "$SONG_LAMBDA_FUNCTION" > /dev/null 2>&1; then
+              echo "$SONG_LAMBDA_FUNCTION policy existence confirmed. No action needed."
+          else
+              echo "$SONG_LAMBDA_FUNCTION 'policy' does not exist. Creating..."
+              aws lambda add-permission \
+                  --function-name "$SONG_LAMBDA_FUNCTION" \
+                  --principal '*' \
+                  --statement-id FunctionUrlAllowPublicAccess \
+                  --action lambda:InvokeFunctionUrl \
+                  --function-url-auth-type NONE
+          fi

@@ -6,7 +6,8 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG NODE_VERSION=23.5.0
+# Changing this to version 22 because AWS Lambda is current at Nodejs 22.
+ARG NODE_VERSION=22
 
 FROM node:${NODE_VERSION}-alpine
 
