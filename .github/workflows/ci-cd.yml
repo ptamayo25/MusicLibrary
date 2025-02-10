@@ -19,6 +19,8 @@ env:
   AUTH_LAMBDA_IAM_ROLE: "auth_service_api-role"
   SONG_LAMBDA_IAM_ROLE: "song_service_api-role"
   S3_BUCKET_NAME: "musiclibrary.jqjacq.dev"
+  VITE_AUTH_SERVICE_URL: "https://musiclibrary.jqjacq.dev"
+  VITE_SONG_SERVICE_URL: "https://musiclibrary.jqjacq.dev"
 
 jobs:
   build-frontend:
