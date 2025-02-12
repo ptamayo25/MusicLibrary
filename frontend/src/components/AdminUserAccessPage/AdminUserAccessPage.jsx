@@ -18,7 +18,7 @@ const AdminUserAccess = () => {
   const fetchAllUsers = async () => {
     try {
       const authUrl = import.meta.env.VITE_AUTH_SERVICE_URL;
-
+      console.log(authUrl);
       if (!authUrl) {
         console.log("URL not found.");
         return;
