@@ -172,7 +172,7 @@ function SearchInput({ access }) {
           <div className="search-bar">
             <input
               type="text"
-              placeholder="Search by title, composer, lyrics or artist"
+              placeholder="Search by title, composer, keywords, or lyrics"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -185,10 +185,10 @@ function SearchInput({ access }) {
             <label htmlFor="sort">Sort by:</label>
             <select value={sortType} id="sortBy" onChange={handleSort}>
               <option value="default">Select Sorting</option>
-              <option value="composerA-Z">Composer A to Z</option>
-              <option value="composerZ-A">Composer Z to A</option>
               <option value="titleA-Z">Title A to Z</option>
               <option value="titleZ-A">Title Z to A</option>
+              <option value="composerA-Z">Composer A to Z</option>
+              <option value="composerZ-A">Composer Z to A</option>
               <option value="mostRecent">
                 Most to Least Recent Performance
               </option>
