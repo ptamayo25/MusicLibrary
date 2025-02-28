@@ -27,72 +27,66 @@ exports.getSongsBySearch = async (req, res) => {
       return res.json(sortResults(allSongsThemes, sortType));
     }
 
-    const titleQuery =
-      themes.length === 0
-        ? { title: { $regex: words.trim(), $options: "i" } }
-        : {
-            title: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
-    const composerQuery =
-      themes.length === 0
-        ? {
-            composer: { $regex: words.trim(), $options: "i" },
-          }
-        : {
-            composer: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
-    const lyricsQuery =
-      themes.length === 0
-        ? {
-            lyrics: { $regex: words.trim(), $options: "i" },
-          }
-        : {
-            lyrics: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
-    const keywordsQuery =
-      themes.length === 0
-        ? {
-            keywords: { $regex: words.trim(), $options: "i" },
-          }
-        : {
-            keywords: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
+    const excludedIdValues = [];
 
-    const songsByTitle = await Song.find(titleQuery).exec();
-    const songsByComposer = await Song.find(composerQuery).exec();
-    const songsByLyrics = await Song.find(lyricsQuery).exec();
-    const songsByKeywords = await Song.find(keywordsQuery).exec();
-
-    const songs = [
-      ...songsByTitle,
-      ...songsByComposer,
-      ...songsByLyrics,
-      ...songsByKeywords,
-    ];
-
-    const uniqueSongs = [];
-
-    songs.forEach((song) => {
-      console.log("SongID: ", song._id);
-      for (let i = 0; i < uniqueSongs.length; i++) {
-        if (uniqueSongs[i]._id.equals(song._id)) {
-          return;
-        }
+    const buildQuery = (field) => {
+      const query = {
+        [field]: { $regex: words.trim(), $options: "i" },
+        _id: { $nin: excludedIdValues }, //exclude songs already found
+      };
+      if (themes.length > 0) {
+        query.themes = { $in: themes };
       }
-      uniqueSongs.push(song);
-    });
+      return query;
+    };
 
-    console.log("Unique songs found: ", uniqueSongs);
+    const searchFields = ["title", "composer", "lyrics", "keywords"];
 
-    if (uniqueSongs.length === 0) {
-      return res.json(uniqueSongs); //return empty array if no songs found
+    const songsResults = [];
+
+    for (const field of searchFields) {
+      const songs = await Song.find(buildQuery(field)).exec();
+      excludedIdValues.push(...songs.map((song) => song._id.toString()));
+      songsResults.push(...songs);
     }
 
-    return res.json(sortResults(uniqueSongs, sortType));
+    // const songsByTitle = await Song.find(buildQuery("title")).exec();
+    // excludedIdValues.push(...songsByTitle.map((song) => song._id));
+
+    // const songsByComposer = await Song.find(query("composer")).exec();
+    // excludedIdValues.push(...songsByComposer.map((song) => song._id));
+
+    // const songsByLyrics = await Song.find(query("lyrics")).exec();
+    // excludedIdValues.push(...songsByLyrics.map((song) => song._id));
+
+    // const songsByKeywords = await Song.find(query("keywords")).exec();
+
+    // const songs = [
+    //   ...songsByTitle,
+    //   ...songsByComposer,
+    //   ...songsByLyrics,
+    //   ...songsByKeywords,
+    // ];
+
+    // const uniqueSongs = [];
+
+    // songs.forEach((song) => {
+    //   console.log("SongID: ", song._id);
+    //   for (let i = 0; i < uniqueSongs.length; i++) {
+    //     if (uniqueSongs[i]._id.equals(song._id)) {
+    //       return;
+    //     }
+    //   }
+    //   uniqueSongs.push(song);
+    // });
+
+    // console.log("Unique songs found: ", uniqueSongs);
+
+    // if (uniqueSongs.length === 0) {
+    //   return res.json(uniqueSongs); //return empty array if no songs found
+    // }
+    console.log("Songs found: ", songsResults);
+    return res.json(songsResults);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
