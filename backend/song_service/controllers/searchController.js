@@ -57,56 +57,6 @@ exports.getSongsBySearch = async (req, res) => {
   }
 };
 
-function sortResults(songs, sortType) {
-  switch (sortType) {
-    case "composerA-Z":
-      return songs.sort((a, b) => {
-        if (a.composer === "N/A") return 1;
-        if (b.composer === "N/A") return -1;
-        return a.composer.toLowerCase() > b.composer.toLowerCase() ? 1 : -1;
-      });
-
-    case "composerZ-A":
-      return songs.sort((a, b) => {
-        if (a.composer === "N/A") return 1;
-        if (b.composer === "N/A") return -1;
-        return a.composer.toLowerCase() < b.composer.toLowerCase() ? 1 : -1;
-      });
-
-    case "titleA-Z":
-      return songs.sort((a, b) => {
-        if (a.title === "N/A") return 1;
-        if (b.title === "N/A") return -1;
-        return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
-      });
-
-    case "titleZ-A":
-      return songs.sort((a, b) => {
-        if (a.title === "N/A") return 1;
-        if (b.title === "N/A") return -1;
-        return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
-      });
-
-    case "mostRecent":
-      return songs.sort((a, b) => {
-        if (!a.lastPerformed) return 1;
-        if (!b.lastPerformed) return -1;
-        return new Date(b.lastPerformed) - new Date(a.lastPerformed);
-      });
-
-    case "leastRecent":
-      return songs.sort((a, b) => {
-        if (!a.lastPerformed) return 1;
-        if (!b.lastPerformed) return -1;
-        return new Date(a.lastPerformed) - new Date(b.lastPerformed);
-      });
-
-    default:
-      return songs;
-  }
-}
-
-
 //function for returning all themes in the database
 exports.getThemes = async (req, res) => {
   console.log("Getting themes...");
@@ -121,3 +71,55 @@ exports.getThemes = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
+// function sortResults(songs, sortType) {
+//   switch (sortType) {
+//     case "composerA-Z":
+//       return songs.sort((a, b) => {
+//         if (a.composer === "N/A") return 1;
+//         if (b.composer === "N/A") return -1;
+//         return a.composer.toLowerCase() > b.composer.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "composerZ-A":
+//       return songs.sort((a, b) => {
+//         if (a.composer === "N/A") return 1;
+//         if (b.composer === "N/A") return -1;
+//         return a.composer.toLowerCase() < b.composer.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "titleA-Z":
+//       return songs.sort((a, b) => {
+//         if (a.title === "N/A") return 1;
+//         if (b.title === "N/A") return -1;
+//         return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "titleZ-A":
+//       return songs.sort((a, b) => {
+//         if (a.title === "N/A") return 1;
+//         if (b.title === "N/A") return -1;
+//         return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "mostRecent":
+//       return songs.sort((a, b) => {
+//         if (!a.lastPerformed) return 1;
+//         if (!b.lastPerformed) return -1;
+//         return new Date(b.lastPerformed) - new Date(a.lastPerformed);
+//       });
+
+//     case "leastRecent":
+//       return songs.sort((a, b) => {
+//         if (!a.lastPerformed) return 1;
+//         if (!b.lastPerformed) return -1;
+//         return new Date(a.lastPerformed) - new Date(b.lastPerformed);
+//       });
+
+//     default:
+//       return songs;
+//   }
+// }
+
+
