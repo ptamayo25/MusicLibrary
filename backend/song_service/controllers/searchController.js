@@ -8,23 +8,23 @@ const song = require("../models/song");
 //function returning all songs with words in title
 exports.getSongsBySearch = async (req, res) => {
   try {
-    const { sortType, words, themes } = req.body;
+    const { words, themes } = req.body;
     console.log("Request body: ", req.body);
 
-    if (words === null || !sortType || !themes) {
+    if (words === null || !themes) {
       return res.status(400).json({ message: "Missing search parameters" });
     }
 
     if (words.trim() === "" && themes.length === 0) {
       const allSongs = await Song.find();
-      return res.json(sortResults(allSongs, sortType));
+      return res.json(allSongs);
     }
 
     if (words.trim() === "" && themes.length !== 0) {
       const allSongsThemes = await Song.find({
         themes: { $in: themes },
       }).exec();
-      return res.json(sortResults(allSongsThemes, sortType));
+      return res.json(allSongsThemes);
     }
 
     const excludedIdValues = [];
@@ -50,41 +50,6 @@ exports.getSongsBySearch = async (req, res) => {
       songsResults.push(...songs);
     }
 
-    // const songsByTitle = await Song.find(buildQuery("title")).exec();
-    // excludedIdValues.push(...songsByTitle.map((song) => song._id));
-
-    // const songsByComposer = await Song.find(query("composer")).exec();
-    // excludedIdValues.push(...songsByComposer.map((song) => song._id));
-
-    // const songsByLyrics = await Song.find(query("lyrics")).exec();
-    // excludedIdValues.push(...songsByLyrics.map((song) => song._id));
-
-    // const songsByKeywords = await Song.find(query("keywords")).exec();
-
-    // const songs = [
-    //   ...songsByTitle,
-    //   ...songsByComposer,
-    //   ...songsByLyrics,
-    //   ...songsByKeywords,
-    // ];
-
-    // const uniqueSongs = [];
-
-    // songs.forEach((song) => {
-    //   console.log("SongID: ", song._id);
-    //   for (let i = 0; i < uniqueSongs.length; i++) {
-    //     if (uniqueSongs[i]._id.equals(song._id)) {
-    //       return;
-    //     }
-    //   }
-    //   uniqueSongs.push(song);
-    // });
-
-    // console.log("Unique songs found: ", uniqueSongs);
-
-    // if (uniqueSongs.length === 0) {
-    //   return res.json(uniqueSongs); //return empty array if no songs found
-    // }
     console.log("Songs found: ", songsResults);
     return res.json(songsResults);
   } catch (error) {

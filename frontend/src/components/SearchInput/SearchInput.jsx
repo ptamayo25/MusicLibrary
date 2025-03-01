@@ -43,7 +43,6 @@ function SearchInput({ access }) {
           credentials: "include", // Include credentials to send cookies
           body: JSON.stringify({
             words: searchTerm,
-            sortType,
             themes: themeSelected,
           }),
         });
