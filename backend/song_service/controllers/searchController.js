@@ -10,17 +10,30 @@ exports.getSongsBySearch = async (req, res) => {
   try {
     const { words, themes } = req.body;
     console.log("Request body: ", req.body);
+    console.log("Type of words: ", typeof words);
+
+    const allowedCharacters = /^[a-zA-Z0-9\s]+$/;
+
+    const sanitizedWords = words
+      .trim() // remove leading and trailing spaces
+      .split("") // split into characters
+      .filter((char) => allowedCharacters.test(char)) // remove characters that are not allowed
+      .join("") // join the characters back together
+      .replace(/\s+/g, " "); //replace multiple spaces with single space so tha query works for regex
+
+    console.log("Sanitized words: ", sanitizedWords);
+    console.log("Type of sanitized words: ", typeof sanitizedWords);
 
     if (words === null || !themes) {
       return res.status(400).json({ message: "Missing search parameters" });
     }
 
-    if (words.trim() === "" && themes.length === 0) {
+    if (sanitizedWords === "" && themes.length === 0) {
       const allSongs = await Song.find();
       return res.json(allSongs);
     }
 
-    if (words.trim() === "" && themes.length !== 0) {
+    if (sanitizedWords === "" && themes.length !== 0) {
       const allSongsThemes = await Song.find({
         themes: { $in: themes },
       }).exec();
@@ -31,7 +44,7 @@ exports.getSongsBySearch = async (req, res) => {
 
     const buildQuery = (field) => {
       const query = {
-        [field]: { $regex: words.trim(), $options: "i" },
+        [field]: { $regex: sanitizedWords, $options: "i" },
         _id: { $nin: excludedIdValues }, //exclude songs already found
       };
       if (themes.length > 0) {
@@ -56,6 +69,7 @@ exports.getSongsBySearch = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 //function for returning all themes in the database
 exports.getThemes = async (req, res) => {
