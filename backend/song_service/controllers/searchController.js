@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Song = require("../models/song"); //update if Nancy changes name of schema
 const Fuse = require("fuse.js");
 
-//function returning all songs with words in title
+//function returning all songs with words in title, composer, lyrics, or keywords
 exports.getSongsBySearch = async (req, res) => {
   try {
     const { words, themes } = req.body;

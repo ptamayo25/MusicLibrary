@@ -14,6 +14,32 @@ const AdminUserAccess = () => {
   const [isSuccessNotification, setIsSuccessNotification] = useState(false);
   const [isDropdownVisible, setIsDropDownVisible] = useState(false);
   const [selectedUserEmail, setSelectedUserEmail] = useState(null);
+  const [access, setAccess] = useState(null);
+  useEffect(() => {
+    const checkAccess = async () => {
+      try {
+        const api_url = import.meta.env.VITE_AUTH_SERVICE_URL;
+        const response = await fetch(`${api_url}/api/users/checkAccess`, {
+          method: "POST",
+          credentials: "include", // include cookies with request
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error("Failed to check access");
+        }
+
+        setAccess(data.access);
+      } catch (error) {
+        console.error("Error checking access:", error);
+      }
+    };
+
+    checkAccess();
+  }, []);
 
   const fetchAllUsers = async () => {
     try {
@@ -94,68 +120,72 @@ const AdminUserAccess = () => {
   };
 
   return (
-    <div className="admin-user-access">
-      <Navigation />
-      <h3> UUCNH Music Library User Privilege Update</h3>
+    <>
+      {access === null ? <p>Loading...</p> : <Navigation access={access} />}
+      <div className="admin-user-access">
+        <h3> UUCNH Music Library User Privilege Update</h3>
 
-      <div className="table-container">
-        <table className="table">
-          <thead>
-            <th className="grid-title grid-item table-header">First Name</th>
-            <th className="grid-title grid-item table-header">Last Name</th>
-            <th className="grid-title grid-item table-header">Email</th>
-            <th className="grid-title grid-item table-header">User Access</th>
-          </thead>
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <th className="grid-title grid-item table-header">First Name</th>
+              <th className="grid-title grid-item table-header">Last Name</th>
+              <th className="grid-title grid-item table-header">Email</th>
+              <th className="grid-title grid-item table-header">User Access</th>
+            </thead>
 
-          <tbody>
-            {users.map((user) => (
-              <tr
-                key={user._id}
-                className="useraccess-grid-container selected-user"
-                onClick={() => handleUserClick(user)}
-              >
-                <td className="grid-item">{user.firstName}</td>
-                <td className="grid-item">{user.lastName}</td>
-                <td className="grid-item">{user.email}</td>
-                <td className="grid-item">
-                  {selectedUserEmail === user.email && isDropdownVisible ? (
-                    <select
-                      id="user-role"
-                      value={temporarySelectedUser}
-                      onChange={(e) => setTemporarySelectedUser(e.target.value)}
-                      onBlur={() => setIsDropDownVisible(false)}
-                      autoFocus
-                    >
-                      <option value="" disabled selected>
-                        Select one
-                      </option>
-                      <option value="Admin">Admin</option>
-                      <option value="Subadmin">Subadmin</option>
-                      <option value="User">User</option>
-                    </select>
-                  ) : (
-                    <span>
-                      {user.access.charAt(0).toUpperCase() +
-                        user.access.slice(1)}
-                    </span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="success-notification">
-          {isSuccessNotification && (
-            <Alert variant="filled" icon={<CheckIcon fontSize="inherit" />}>
-              User access has been updated successfully!
-            </Alert>
-          )}
+            <tbody>
+              {users.map((user) => (
+                <tr
+                  key={user._id}
+                  className="useraccess-grid-container selected-user"
+                  onClick={() => handleUserClick(user)}
+                >
+                  <td className="grid-item">{user.firstName}</td>
+                  <td className="grid-item">{user.lastName}</td>
+                  <td className="grid-item">{user.email}</td>
+                  <td className="grid-item">
+                    {selectedUserEmail === user.email && isDropdownVisible ? (
+                      <select
+                        id="user-role"
+                        value={temporarySelectedUser}
+                        onChange={(e) =>
+                          setTemporarySelectedUser(e.target.value)
+                        }
+                        onBlur={() => setIsDropDownVisible(false)}
+                        autoFocus
+                      >
+                        <option value="" disabled selected>
+                          Select one
+                        </option>
+                        <option value="Admin">Admin</option>
+                        <option value="Subadmin">Subadmin</option>
+                        <option value="User">User</option>
+                      </select>
+                    ) : (
+                      <span>
+                        {user.access.charAt(0).toUpperCase() +
+                          user.access.slice(1)}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="success-notification">
+            {isSuccessNotification && (
+              <Alert variant="filled" icon={<CheckIcon fontSize="inherit" />}>
+                User access has been updated successfully!
+              </Alert>
+            )}
+          </div>
+          <button onClick={handleSave} className="save-button hover-button">
+            Save
+          </button>
         </div>
-        <button onClick={handleSave} className="save-button hover-button">
-          Save
-        </button>
       </div>
-    </div>
+    </>
   );
 };
 
