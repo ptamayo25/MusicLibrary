@@ -1,37 +1,25 @@
 const mongoose = require("mongoose");
 const Song = require("../models/song"); //update if Nancy changes name of schema
-const song = require("../models/song");
-// const { ObjectId } = mongoose.Types;
-
-//stretch goal: PJT to add fuzzy search capability (for misspelled words)
+const Fuse = require("fuse.js");
 
 //function returning all songs with words in title
 exports.getSongsBySearch = async (req, res) => {
   try {
     const { words, themes } = req.body;
-    console.log("Request body: ", req.body);
-    console.log("Type of words: ", typeof words);
+    console.log("Request: ", req.body);
 
+    if (words === null || !themes) {
+      return res.status(400).json({ message: "Missing search parameters" });
+    }
+
+    //sanitize input
     const allowedCharacters = /^[a-zA-Z0-9\s]+$/;
-
     const sanitizedWords = words
       .trim() // remove leading and trailing spaces
       .split("") // split into characters
       .filter((char) => allowedCharacters.test(char)) // remove characters that are not allowed
       .join("") // join the characters back together
       .replace(/\s+/g, " "); //replace multiple spaces with single space so tha query works for regex
-
-    console.log("Sanitized words: ", sanitizedWords);
-    console.log("Type of sanitized words: ", typeof sanitizedWords);
-
-    if (words === null || !themes) {
-      return res.status(400).json({ message: "Missing search parameters" });
-    }
-
-    if (sanitizedWords === "" && themes.length === 0) {
-      const allSongs = await Song.find();
-      return res.json(allSongs);
-    }
 
     if (sanitizedWords === "" && themes.length !== 0) {
       const allSongsThemes = await Song.find({
@@ -40,31 +28,51 @@ exports.getSongsBySearch = async (req, res) => {
       return res.json(allSongsThemes);
     }
 
-    const excludedIdValues = [];
+    let allSongs = await Song.find().exec();
 
-    const buildQuery = (field) => {
-      const query = {
-        [field]: { $regex: sanitizedWords, $options: "i" },
-        _id: { $nin: excludedIdValues }, //exclude songs already found
-      };
-      if (themes.length > 0) {
-        query.themes = { $in: themes };
-      }
-      return query;
-    };
-
-    const searchFields = ["title", "composer", "lyrics", "keywords"];
-
-    const songsResults = [];
-
-    for (const field of searchFields) {
-      const songs = await Song.find(buildQuery(field)).exec();
-      excludedIdValues.push(...songs.map((song) => song._id.toString()));
-      songsResults.push(...songs);
+    if (sanitizedWords === "" && themes.length === 0) {
+      return res.json(allSongs);
     }
 
-    console.log("Songs found: ", songsResults);
-    return res.json(songsResults);
+    //If themes are specified, filter the songs by themes
+    if (themes.length > 0) {
+      allSongs = allSongs.filter((song) =>
+        song.themes.some((theme) => themes.includes(theme))
+      );
+    }
+
+    const fuse = new Fuse(allSongs, {
+      keys: ["title", "composer", "lyrics", "keywords"],
+      threshold: 0.3,
+    });
+
+    const songs = fuse.search(sanitizedWords).map((result) => result.item);
+
+    // const excludedIdValues = [];
+
+    // const buildQuery = (field) => {
+    //   const query = {
+    //     [field]: { $regex: sanitizedWords, $options: "i" },
+    //     _id: { $nin: excludedIdValues }, //exclude songs already found
+    //   };
+    //   if (themes.length > 0) {
+    //     query.themes = { $in: themes };
+    //   }
+    //   return query;
+    // };
+
+    // const searchFields = ["title", "composer", "lyrics", "keywords"];
+
+    // const songsResults = [];
+
+    // for (const field of searchFields) {
+    //   const songs = await Song.find(buildQuery(field)).exec();
+    //   excludedIdValues.push(...songs.map((song) => song._id.toString()));
+    //   songsResults.push(...songs);
+    // }
+
+    console.log("Songs found: ", songs);
+    return res.json(songs);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
