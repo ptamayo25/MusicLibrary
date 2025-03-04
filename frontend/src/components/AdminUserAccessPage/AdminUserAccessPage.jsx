@@ -94,7 +94,7 @@ const AdminUserAccess = () => {
   };
 
   return (
-    <>
+    <div className="admin-user-access">
       <Navigation />
       <h3> UUCNH Music Library User Privilege Update</h3>
 
@@ -155,7 +155,7 @@ const AdminUserAccess = () => {
           Save
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

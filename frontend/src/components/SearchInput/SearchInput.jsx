@@ -264,7 +264,7 @@ function SearchInput({ access }) {
         </div>
       </div>
       <AddForm isOpen={isAddSongModalOpen} setIsOpen={setIsAddSongModalOpen} />
-      <SongList songs={sortedSearchResults} access={access} />
+      <SongList songs={searchResults} access={access} />
     </>
   );
 }

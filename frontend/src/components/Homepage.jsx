@@ -4,9 +4,7 @@ import SearchInput from "./SearchInput/SearchInput";
 import { data } from "react-router-dom";
 
 const Homepage = () => {
-  //TODO: ADD ACCESS CHECK WITH A FETCH SIMILAR TO THE ONE BELOW
   const [access, setAccess] = useState(null);
-
   useEffect(() => {
     const checkAccess = async () => {
       try {
@@ -34,7 +32,7 @@ const Homepage = () => {
   }, []);
 
   return (
-    <div>
+    <div className="homepage">
       {access === null ? <p>Loading...</p> : <Navigation access={access} />}
       {access === null ? <p>Loading...</p> : <SearchInput access={access} />}
     </div>

@@ -79,6 +79,7 @@ function Navigation({ access }) {
         <img src={LogoImage} alt="UUCNH Logo" key="logoImage" />
         Music Library
       </div>{" "}
+      <div className="spacer" style={{ width: window.innerWidth > 1280 ? window.innerWidth - 900 : 10 }}></div>
       {/* Button to toggle the mobile menu */}
       <button
         className={styles.navigation__toggle} // Apply styles for the toggle button
