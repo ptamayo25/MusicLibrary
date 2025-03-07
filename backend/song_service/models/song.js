@@ -10,7 +10,7 @@ const songSchema = new mongoose.Schema({
   keywords: [String],
   lyrics: { type: String },
   lastPerformed: { type: Date },
-  comments: { String },
+  comments: { type: String },
   themes: [String],
 });
 
