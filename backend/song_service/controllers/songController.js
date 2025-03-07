@@ -100,7 +100,7 @@ exports.getSongById = async (req, res) => {
       return res.status(404).json({ message: "Song not found." });
     }
 
-    res.json({ song });
+    res.status(200).json({ song });
   } catch (error) {
     res
       .status(500)
