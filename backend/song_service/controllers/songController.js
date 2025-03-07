@@ -75,7 +75,7 @@ exports.createManySongs = async (req, res) => {
 exports.getSongs = async (req, res) => {
   try {
     const songs = await Song.find();
-    res.json({
+    res.status(200).json({
       songs,
     });
   } catch (error) {

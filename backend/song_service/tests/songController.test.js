@@ -68,15 +68,25 @@ describe("Song Controller tests", () => {
     );
   });
 
-  //   test("should get all songs", async () => {
-  //     const req = {};
-  //     const res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn(),
-  //     };
+  test("should get all songs", async () => {
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
 
-  //     await getSongs(req, res);
-  //     expect(res.status).toHaveBeenCalledWith(200);
-  //     expect(res.json).toHaveBeenCalled();
-  //   });
+    await getSongs(req, res);
+    expect(res.json).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        songs: expect.arrayContaining([
+          expect.objectContaining({
+            title: "Test Song",
+            composer: "Test Composer",
+          }),
+        ]),
+      })
+    );
+  });
 });
