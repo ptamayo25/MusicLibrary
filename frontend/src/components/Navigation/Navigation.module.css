@@ -96,9 +96,7 @@
 .logoutButton:hover {
   background-color: #5e53c6; 
 }
-.spacer {
-  flex-grow: 1;
-}
+
 
 /* Responsive Design */
 /* @media (max-width: 768px) {
