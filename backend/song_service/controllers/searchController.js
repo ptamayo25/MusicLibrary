@@ -1,151 +1,82 @@
 const mongoose = require("mongoose");
 const Song = require("../models/song"); //update if Nancy changes name of schema
-const song = require("../models/song");
-// const { ObjectId } = mongoose.Types;
+const Fuse = require("fuse.js");
 
-//stretch goal: PJT to add fuzzy search capability (for misspelled words)
-
-//function returning all songs with words in title
+//function returning all songs with words in title, composer, lyrics, or keywords
 exports.getSongsBySearch = async (req, res) => {
   try {
-    const { sortType, words, themes } = req.body;
-    console.log("Request body: ", req.body);
+    const { words, themes } = req.body;
+    console.log("Request: ", req.body);
 
-    if (words === null || !sortType || !themes) {
+    if (words === null || !themes) {
       return res.status(400).json({ message: "Missing search parameters" });
     }
 
-    if (words.trim() === "" && themes.length === 0) {
-      const allSongs = await Song.find();
-      return res.json(sortResults(allSongs, sortType));
-    }
+    //sanitize input
+    const allowedCharacters = /^[a-zA-Z0-9\s]+$/;
+    const sanitizedWords = words
+      .trim() // remove leading and trailing spaces
+      .split("") // split into characters
+      .filter((char) => allowedCharacters.test(char)) // remove characters that are not allowed
+      .join("") // join the characters back together
+      .replace(/\s+/g, " "); //replace multiple spaces with single space so tha query works for regex
 
-    if (words.trim() === "" && themes.length !== 0) {
+    if (sanitizedWords === "" && themes.length !== 0) {
       const allSongsThemes = await Song.find({
         themes: { $in: themes },
       }).exec();
-      return res.json(sortResults(allSongsThemes, sortType));
+      return res.json(allSongsThemes);
     }
 
-    const titleQuery =
-      themes.length === 0
-        ? { title: { $regex: words.trim(), $options: "i" } }
-        : {
-            title: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
-    const composerQuery =
-      themes.length === 0
-        ? {
-            composer: { $regex: words.trim(), $options: "i" },
-          }
-        : {
-            composer: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
-    const lyricsQuery =
-      themes.length === 0
-        ? {
-            lyrics: { $regex: words.trim(), $options: "i" },
-          }
-        : {
-            lyrics: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
-    const keywordsQuery =
-      themes.length === 0
-        ? {
-            keywords: { $regex: words.trim(), $options: "i" },
-          }
-        : {
-            keywords: { $regex: words.trim(), $options: "i" },
-            themes: { $in: themes },
-          };
+    let allSongs = await Song.find().exec();
 
-    const songsByTitle = await Song.find(titleQuery).exec();
-    const songsByComposer = await Song.find(composerQuery).exec();
-    const songsByLyrics = await Song.find(lyricsQuery).exec();
-    const songsByKeywords = await Song.find(keywordsQuery).exec();
+    if (sanitizedWords === "" && themes.length === 0) {
+      return res.json(allSongs);
+    }
 
-    const songs = [
-      ...songsByTitle,
-      ...songsByComposer,
-      ...songsByLyrics,
-      ...songsByKeywords,
-    ];
+    //If themes are specified, filter the songs by themes
+    if (themes.length > 0) {
+      allSongs = allSongs.filter((song) =>
+        song.themes.some((theme) => themes.includes(theme))
+      );
+    }
 
-    const uniqueSongs = [];
-
-    songs.forEach((song) => {
-      console.log("SongID: ", song._id);
-      for (let i = 0; i < uniqueSongs.length; i++) {
-        if (uniqueSongs[i]._id.equals(song._id)) {
-          return;
-        }
-      }
-      uniqueSongs.push(song);
+    const fuse = new Fuse(allSongs, {
+      keys: ["title", "composer", "lyrics", "keywords"],
+      threshold: 0.3,
     });
 
-    console.log("Unique songs found: ", uniqueSongs);
+    const songs = fuse.search(sanitizedWords).map((result) => result.item);
 
-    if (uniqueSongs.length === 0) {
-      return res.json(uniqueSongs); //return empty array if no songs found
-    }
+    // const excludedIdValues = [];
 
-    return res.json(sortResults(uniqueSongs, sortType));
+    // const buildQuery = (field) => {
+    //   const query = {
+    //     [field]: { $regex: sanitizedWords, $options: "i" },
+    //     _id: { $nin: excludedIdValues }, //exclude songs already found
+    //   };
+    //   if (themes.length > 0) {
+    //     query.themes = { $in: themes };
+    //   }
+    //   return query;
+    // };
+
+    // const searchFields = ["title", "composer", "lyrics", "keywords"];
+
+    // const songsResults = [];
+
+    // for (const field of searchFields) {
+    //   const songs = await Song.find(buildQuery(field)).exec();
+    //   excludedIdValues.push(...songs.map((song) => song._id.toString()));
+    //   songsResults.push(...songs);
+    // }
+
+    console.log("Songs found: ", songs);
+    return res.json(songs);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
-
-function sortResults(songs, sortType) {
-  switch (sortType) {
-    case "composerA-Z":
-      return songs.sort((a, b) => {
-        if (a.composer === "N/A") return 1;
-        if (b.composer === "N/A") return -1;
-        return a.composer.toLowerCase() > b.composer.toLowerCase() ? 1 : -1;
-      });
-
-    case "composerZ-A":
-      return songs.sort((a, b) => {
-        if (a.composer === "N/A") return 1;
-        if (b.composer === "N/A") return -1;
-        return a.composer.toLowerCase() < b.composer.toLowerCase() ? 1 : -1;
-      });
-
-    case "titleA-Z":
-      return songs.sort((a, b) => {
-        if (a.title === "N/A") return 1;
-        if (b.title === "N/A") return -1;
-        return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
-      });
-
-    case "titleZ-A":
-      return songs.sort((a, b) => {
-        if (a.title === "N/A") return 1;
-        if (b.title === "N/A") return -1;
-        return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
-      });
-
-    case "mostRecent":
-      return songs.sort((a, b) => {
-        if (!a.lastPerformed) return 1;
-        if (!b.lastPerformed) return -1;
-        return new Date(b.lastPerformed) - new Date(a.lastPerformed);
-      });
-
-    case "leastRecent":
-      return songs.sort((a, b) => {
-        if (!a.lastPerformed) return 1;
-        if (!b.lastPerformed) return -1;
-        return new Date(a.lastPerformed) - new Date(b.lastPerformed);
-      });
-
-    default:
-      return songs;
-  }
-}
 
 
 //function for returning all themes in the database
@@ -162,3 +93,55 @@ exports.getThemes = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
+// function sortResults(songs, sortType) {
+//   switch (sortType) {
+//     case "composerA-Z":
+//       return songs.sort((a, b) => {
+//         if (a.composer === "N/A") return 1;
+//         if (b.composer === "N/A") return -1;
+//         return a.composer.toLowerCase() > b.composer.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "composerZ-A":
+//       return songs.sort((a, b) => {
+//         if (a.composer === "N/A") return 1;
+//         if (b.composer === "N/A") return -1;
+//         return a.composer.toLowerCase() < b.composer.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "titleA-Z":
+//       return songs.sort((a, b) => {
+//         if (a.title === "N/A") return 1;
+//         if (b.title === "N/A") return -1;
+//         return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "titleZ-A":
+//       return songs.sort((a, b) => {
+//         if (a.title === "N/A") return 1;
+//         if (b.title === "N/A") return -1;
+//         return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
+//       });
+
+//     case "mostRecent":
+//       return songs.sort((a, b) => {
+//         if (!a.lastPerformed) return 1;
+//         if (!b.lastPerformed) return -1;
+//         return new Date(b.lastPerformed) - new Date(a.lastPerformed);
+//       });
+
+//     case "leastRecent":
+//       return songs.sort((a, b) => {
+//         if (!a.lastPerformed) return 1;
+//         if (!b.lastPerformed) return -1;
+//         return new Date(a.lastPerformed) - new Date(b.lastPerformed);
+//       });
+
+//     default:
+//       return songs;
+//   }
+// }
+
+

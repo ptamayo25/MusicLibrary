@@ -1,5 +1,7 @@
 .navigation {
   display: flex;
+  max-width: 1280px;
+  min-width: 100%;
   justify-content: space-between;
   align-items: center;
   background-color: #2e3053;
@@ -95,8 +97,9 @@
   background-color: #5e53c6; 
 }
 
+
 /* Responsive Design */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .navigation__toggle {
     display: block;
   }
@@ -116,4 +119,4 @@
     margin-top: 1rem;
     align-self: center; 
   }
-}
+} */

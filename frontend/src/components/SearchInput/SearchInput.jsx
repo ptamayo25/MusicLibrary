@@ -14,6 +14,7 @@ function SearchInput({ access }) {
   const [searchResults, setSearchResults] = useState([]);
   const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
   const [showAddSongButton, setShowAddSongButton] = useState(false);
+  const [sortedSearchResults, setSortedSearchResults] = useState([]);
 
   useEffect(() => {
     const handleOnLoad = async () => {
@@ -43,7 +44,6 @@ function SearchInput({ access }) {
           credentials: "include", // Include credentials to send cookies
           body: JSON.stringify({
             words: searchTerm,
-            sortType,
             themes: themeSelected,
           }),
         });
@@ -54,6 +54,8 @@ function SearchInput({ access }) {
             console.log("No results found");
           }
           setSearchResults(data);
+          const sortedResults = sortResults(data, sortType);
+          setSortedSearchResults(sortedResults);
         } else {
           console.error("Failed to fetch songs");
         }
@@ -68,29 +70,6 @@ function SearchInput({ access }) {
 
     handleOnLoad();
   }, []);
-
-  // handleOnLoad();
-
-  // faking themes for now
-  // const themesDisplayed = [
-  //   "Christmas",
-  //   "Easter",
-  //   "Pentecost",
-  //   "Advent",
-  //   "Lent",
-  //   "Thanksgiving",
-  //   "Patriotic",
-  //   "Wedding",
-  //   "Funeral",
-  //   "Baptism",
-  //   "Communion",
-  //   "General",
-  //   "Children",
-  //   "Youth",
-  //   "Adult",
-  //   "Community",
-  //   "Peace",
-  // ];
 
   const handleSearch = async (event) => {
     if (event) {
@@ -109,7 +88,6 @@ function SearchInput({ access }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           words: searchTerm,
-          sortType,
           themes: themeSelected,
         }),
       });
@@ -120,6 +98,8 @@ function SearchInput({ access }) {
           console.log("No results found");
         }
         setSearchResults(data);
+        const sortedResults = sortResults(data, sortType);
+        setSortedSearchResults(sortedResults);
       } else {
         console.error("Failed to fetch data");
       }
@@ -128,8 +108,59 @@ function SearchInput({ access }) {
     }
   };
 
+  function sortResults(songs, sortType) {
+    switch (sortType) {
+      case "composerA-Z":
+        return songs.sort((a, b) => {
+          if (a.composer === "N/A") return 1;
+          if (b.composer === "N/A") return -1;
+          return a.composer.toLowerCase() > b.composer.toLowerCase() ? 1 : -1;
+        });
+
+      case "composerZ-A":
+        return songs.sort((a, b) => {
+          if (a.composer === "N/A") return 1;
+          if (b.composer === "N/A") return -1;
+          return a.composer.toLowerCase() < b.composer.toLowerCase() ? 1 : -1;
+        });
+
+      case "titleA-Z":
+        return songs.sort((a, b) => {
+          if (a.title === "N/A") return 1;
+          if (b.title === "N/A") return -1;
+          return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
+        });
+
+      case "titleZ-A":
+        return songs.sort((a, b) => {
+          if (a.title === "N/A") return 1;
+          if (b.title === "N/A") return -1;
+          return a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1;
+        });
+
+      case "mostRecent":
+        return songs.sort((a, b) => {
+          if (!a.lastPerformed) return 1;
+          if (!b.lastPerformed) return -1;
+          return new Date(b.lastPerformed) - new Date(a.lastPerformed);
+        });
+
+      case "leastRecent":
+        return songs.sort((a, b) => {
+          if (!a.lastPerformed) return 1;
+          if (!b.lastPerformed) return -1;
+          return new Date(a.lastPerformed) - new Date(b.lastPerformed);
+        });
+
+      default:
+        return songs;
+    }
+  }
+
   const handleSort = (event) => {
     setSortType(event.target.value);
+    const sortedResults = sortResults(searchResults, event.target.value);
+    setSortedSearchResults(sortedResults);
   };
 
   const handleKeyDown = (event) => {
